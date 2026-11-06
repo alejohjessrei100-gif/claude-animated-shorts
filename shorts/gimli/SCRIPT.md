@@ -32,5 +32,10 @@ A pound is less than half a kilo, so the plane took off with less than half the 
 First, the airline punished both pilots.
 Then they got an international award, for some of the best flying anyone had ever seen.
 
+## Voice
+The user records the narration themselves (the ElevenLabs draft was dropped). Read `voice/voice.txt` in one steady tone,
+fast (~3.7 words/s, about 60 s), with almost no pauses between sentences. Deliver `voice/voice.wav` (48 kHz preferred),
+then make `voice/words.json` (word start/end times) with speech-to-text and hand-fix it. Everything is timed to it.
+
 ## Light plan
 day (gate, cruise) → golden (engines out, glide, landing, explanation) → day (punishment / award ending).

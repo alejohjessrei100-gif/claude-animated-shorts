@@ -1,6 +1,7 @@
 import { Composition, staticFile } from "remotion";
 import { Scene, myCompSchema } from "./Scene";
 import { getMediaMetadata } from "./helpers/get-media-metadata";
+import { GimliShort, GIMLI_FRAMES } from "./videos/gimli/Bridge";
 
 // Welcome to the Remotion Three Starter Kit!
 // Two compositions have been created, showing how to use
@@ -20,6 +21,8 @@ import { getMediaMetadata } from "./helpers/get-media-metadata";
 export const RemotionRoot: React.FC = () => {
   return (
     <>
+      {/* The Gimli Glider: cartoon 3D story short (starts as a copy of the bridge template) */}
+      <Composition id="GimliShort" component={GimliShort} durationInFrames={GIMLI_FRAMES} fps={30} width={1080} height={1920} />
       <Composition
         id="Scene"
         component={Scene}
