@@ -1,6 +1,6 @@
 ---
 name: cartoon-3d-short
-description: Make a ~55-70 s vertical cartoon story short in the "2D characters in a colourful 3D world" style (flat bean-head cartoon cards with ink outlines, painted 3D town/world with black ink lines, saturated sky, depth-of-field backgrounds, gliding cameras, voice narration, synthesized SFX + march-style music), rendered with three.js inside Remotion. Proven on "The Bridge That Fell for a Song" (2026-10-31). Use when the user asks for another video "like the bridge video", "like the soldiers/bridge short", "in that cartoon 3D style", a history/science story short with cartoon characters in 3D, or says "use the cartoon short skill".
+description: Make a 20-30 s vertical cartoon story short in the "2D characters in a colourful 3D world" style (flat bean-head cartoon cards with ink outlines, painted 3D town/world with black ink lines, saturated sky, depth-of-field backgrounds, gliding cameras, voice narration, synthesized SFX + march-style music), rendered with three.js inside Remotion. Proven on "The Bridge That Fell for a Song" (2026-10-31). Use when the user asks for another video "like the bridge video", "like the soldiers/bridge short", "in that cartoon 3D style", a history/science story short with cartoon characters in 3D, or says "use the cartoon short skill".
 ---
 
 # Cartoon 3D story short (three.js + Remotion)
@@ -16,6 +16,7 @@ The style reference is a channel studied privately (`references/`: STYLE_BIBLE.m
 - Never say the channel's name in a voice-over or description.
 
 User rules that apply:
+- Length: 20-30 s (about 75-110 words at ~3.7 words/s). The bridge short (67 s) predates this rule.
 - No captions or labels in the video.
 - English only.
 - Voice: one steady tone.
@@ -29,7 +30,7 @@ User rules that apply:
 ## Pipeline
 1. **Topic and facts.** Pick one surprising true story with a physical cause and effect (it should be visual), plus a simple everyday analogy that explains it.
    - Write the facts with their source at the top of `SCRIPT.md`.
-2. **Script** (~3.7 words/s, 55-70 s). Beat formula from the bridge short:
+2. **Script** (~3.7 words/s, 20-30 s = 75-110 words). Beat formula from the bridge short, each beat one line (setting and action can merge into one line; cut the setting first if long):
    - **Hook:** the absurd fact in one line ("Seventy-four soldiers knocked down an iron bridge just by walking across it.").
    - **Setting:** year, place, pride.
    - **Action:** escalation over three or four beats, each a little bigger.
