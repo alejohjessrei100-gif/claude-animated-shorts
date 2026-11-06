@@ -18,6 +18,8 @@ export type Outfit = {
   jacket: string; pants: string; boots: string; hat?: string | null; belt?: string | null; buttons?: string; rifle?: boolean;
   sash?: string; sword?: boolean; moustache?: string; skin?: string; head?: number; cap?: string; hair?: string; dress?: string;
   build?: Build;
+  /** Gimli cast: necktie colour, gold medal on the chest, hi-vis vest colour, shirt collar colour */
+  tie?: string; medal?: boolean; vest?: string; collar?: string;
 };
 type P2 = [number, number];
 
@@ -55,6 +57,21 @@ export const OFFICER: Outfit = { ...RIFLEMAN, hat: "shako_tall", buttons: "#e8c4
 export const KID: Outfit = { jacket: "#f08a2c", pants: "#3b5b9a", boots: "#f4f1ea", hat: "cap", cap: "#e2453c", build: "kid" };
 export const PARENT: Outfit = { jacket: "#7b5ac9", pants: "#3b3f52", boots: "#5a3b2a", hat: "hair", hair: "#5a3b2a" };
 export const SKINS = [SKIN, "#f5c9a0", "#ecd0b6", "#c99067"];
+// ---- The Gimli Glider cast (1983) ----
+export const CAPTAIN: Outfit = { jacket: "#25365e", pants: "#1f2a44", boots: "#1b1b20", hat: "cap", cap: "#1f2b4a", buttons: "#e8c45a", tie: "#1b1f2b", collar: "#f4f4f2", skin: "#f5c9a0" };
+export const FIRST_OFFICER: Outfit = { ...CAPTAIN, skin: SKIN, moustache: "#5a3b2a" };
+export const BOSS: Outfit = { jacket: "#5d6470", pants: "#3e434c", boots: "#2a2a30", hat: "hair", hair: "#d8d8d8", tie: "#b0303a", collar: "#f4f4f2", moustache: "#bfbfbf", build: "stout", skin: SKIN };
+export const CREW: Outfit = { jacket: "#2f5f9a", pants: "#2f3e5a", boots: "#2a2a30", hat: "cap", cap: "#f2b233", vest: "#ff8a1e", skin: "#ecd0b6" };
+const SHIRTS = ["#e8604c", "#3f8fd0", "#f2c14e", "#5fae6a", "#c86fb0", "#f08a2c", "#4c6fbf", "#e86e8a"];
+const HAIR = ["#5a3b2a", "#2a201a", "#c99a52", "#8a4b2a", "#3a3036", "#b5651d"];
+/** 1983 family day: t-shirts, jeans, feathered hair, ball caps, sundresses */
+export const folk = (v = 0): Outfit => {
+  const o: Outfit = { jacket: SHIRTS[v % 8], pants: v % 3 === 1 ? "#6b5a48" : "#3b5b9a", boots: ["#f4f1ea", "#4a3426", "#2a2a30"][v % 3], skin: SKINS[(v * 3) % 4] };
+  if (v % 5 === 2) return { ...o, hat: "cap", cap: ["#e2453c", "#2f6fbf", "#f2c14e"][v % 3] };
+  if (v % 4 === 3) return { ...o, hat: "hair", hair: HAIR[v % 6], dress: ["#f2b8c6", "#9fd3e6", "#f7e08a"][v % 3] };
+  return { ...o, hat: "hair", hair: HAIR[v % 6], moustache: v % 7 === 0 ? HAIR[(v + 1) % 6] : undefined };
+};
+export const kid = (v = 0): Outfit => ({ ...folk(v + 3), build: "kid", dress: undefined, moustache: undefined });
 
 export const soldier = (v = 0, extra: Partial<Outfit> = {}): Outfit => {
   const o: Outfit = { ...RIFLEMAN, skin: SKINS[v % 4] };
@@ -424,7 +441,7 @@ const hatOn = (p: Pen, o: Outfit, hp: P2[], H: Blob, cx: number, hc: number, lig
 // ---------------- bodies ----------------
 export type Arms = [P2[], P2[]];
 /** held prop; for the hammer the number is the strike 0 (raised) .. 1 (struck) */
-export type Prop = null | "icecream" | "shako" | ["hammer", number];
+export type Prop = null | "icecream" | "shako" | ["hammer", number] | "clipboard" | "spatula";
 
 const BUILD: Record<Build, { a: number; torso: number; legs: number; tw: number }> = {
   adult: { a: 118, torso: 1.1, legs: 1.4, tw: 0.8 },
@@ -520,6 +537,12 @@ export const bodyFront = (p: Pen, o: Outfit, opts: FrontOpts) => {
     } else if (wave !== undefined) {
       const S = sh(1);
       arms.push({ pts: [S, [tcx + 1.1 * T.a + 10 * u + 3 * u * wave, S[1] - 0.22 * HH], [tcx + 1.18 * T.a + 16 * u + 12 * u * wave, S[1] - 0.6 * HH]], front: false });
+    } else if (prop === "clipboard") {
+      const S = sh(1);
+      arms.push({ pts: [S, [tcx + 1.05 * T.a + 4 * u, S[1] + 0.42 * HH], [tcx + 0.15 * T.a, S[1] + 0.5 * HH]], front: true });
+    } else if (prop === "spatula") {
+      const S = sh(1);
+      arms.push({ pts: [S, [tcx + 1.15 * T.a + 8 * u, S[1] + 0.2 * HH], [tcx + 1.2 * T.a + 14 * u, S[1] - 0.25 * HH]], front: true });
     } else if (prop === "icecream") {
       const S = sh(1);
       arms.push({ pts: [S, [tcx + 1.05 * T.a + 4 * u, S[1] + 0.45 * HH], [tcx + 0.5 * T.a, S[1] + 0.4 * HH]], front: true });
@@ -563,9 +586,24 @@ export const bodyFront = (p: Pen, o: Outfit, opts: FrontOpts) => {
       for (let i = 0; i < 4; i++) {
         const y = chin + 0.12 * HH + i * 0.2 * HH;
         if (o.sash && Math.abs(y - (torsoBot - 0.32 * HH)) < 0.08 * HH) continue;
+        if (o.tie || o.vest) continue;
         p.dot(tcx + 2 * u * facing, y, 2.2 * u + 0.8 * u, INK); p.dot(tcx + 2 * u * facing, y, 2.2 * u, o.buttons ?? shade(o.jacket, 0.7));
       }
+      if (o.vest) for (const s of [-1, 1]) p.poly([[tcx + s * 6 * u, chin - 0.05 * HH], [tcx + s * 1.3 * T.a, chin - 0.05 * HH], [tcx + s * 1.3 * T.a, torsoBot + 0.1 * HH], [tcx + s * 9 * u, torsoBot + 0.1 * HH]], o.vest, 1.6 * u);
+      if (o.vest) for (const s of [-1, 1]) p.band([[tcx + s * 0.45 * T.a, chin + 0.1 * HH], [tcx + s * 0.45 * T.a, torsoBot]], "#e9eef2", 3.2 * u, 1 * u);
+      if (o.collar || o.tie) {
+        const cc = o.collar ?? "#f4f4f2";
+        p.poly([[tcx - 13 * u, chin - 0.02 * HH], [tcx + 13 * u, chin - 0.02 * HH], [tcx, chin + 0.2 * HH]], cc, 1.6 * u);
+      }
+      if (o.tie) p.poly([[tcx - 3.5 * u, chin + 0.02 * HH], [tcx + 3.5 * u, chin + 0.02 * HH], [tcx + 5 * u, chin + 0.42 * HH], [tcx, chin + 0.5 * HH], [tcx - 5 * u, chin + 0.42 * HH]], o.tie, 1.4 * u);
+      if (o.buttons && o.tie) for (const s of [-1, 1]) p.dot(tcx + s * 0.55 * T.a, torsoBot - 0.2 * HH, 2.4 * u, o.buttons);
     });
+    if (o.medal) {
+      const mx = tcx - 0.42 * T.a, my = chin + 0.36 * HH;
+      p.poly([[mx - 7 * u, chin + 0.05 * HH], [mx + 7 * u, chin + 0.05 * HH], [mx + 5 * u, my - 6 * u], [mx - 5 * u, my - 6 * u]], "#c8313a", 1.4 * u);
+      p.ell(mx, my + 3 * u, 11 * u, 11 * u, "#f2c84b", 2 * u);
+      p.ell(mx, my + 3 * u, 6 * u, 6 * u, "#ffe08a", 0);
+    }
     if (o.sash) { const s = facing || 1; p.poly([[tcx + s * 0.55 * T.a, torsoBot - 0.3 * HH], [tcx + s * 0.75 * T.a, torsoBot + 0.05 * HH], [tcx + s * 0.45 * T.a, torsoBot + 0.02 * HH]], o.sash, 1.6 * u); }
     p.inkRing(tp, ow, thick);
   }
@@ -573,7 +611,17 @@ export const bodyFront = (p: Pen, o: Outfit, opts: FrontOpts) => {
   for (const a of arms) if (a.front) {
     drawArm(a);
     const [hx, hy] = a.pts[2];
-    if (prop === "icecream") {
+    if (prop === "clipboard") {
+      p.poly([[hx - 26 * u, hy - 30 * u], [hx + 14 * u, hy - 34 * u], [hx + 18 * u, hy + 18 * u], [hx - 22 * u, hy + 22 * u]], "#b88a52", 2.2 * u);
+      p.poly([[hx - 21 * u, hy - 24 * u], [hx + 10 * u, hy - 27 * u], [hx + 13 * u, hy + 13 * u], [hx - 17 * u, hy + 16 * u]], "#f6f3ea", 1.4 * u);
+      for (let i = 0; i < 4; i++) p.stroke([[hx - 15 * u, hy - 16 * u + i * 8 * u], [hx + 6 * u, hy - 18 * u + i * 8 * u]], 1.2 * u, "#8a93a6");
+      p.poly([[hx - 9 * u, hy - 36 * u], [hx + 3 * u, hy - 37 * u], [hx + 3 * u, hy - 29 * u], [hx - 9 * u, hy - 28 * u]], "#9aa2ad", 1.4 * u);
+      p.dot(hx, hy, 5.5 * u);
+    } else if (prop === "spatula") {
+      p.band([[hx, hy + 6 * u], [hx + 4 * u, hy - 40 * u]], "#3b3036", 4 * u, 1.4 * u, "round");
+      p.poly([[hx - 7 * u, hy - 40 * u], [hx + 15 * u, hy - 42 * u], [hx + 16 * u, hy - 62 * u], [hx - 6 * u, hy - 60 * u]], "#c3c8cf", 2 * u);
+      p.dot(hx, hy, 5.5 * u);
+    } else if (prop === "icecream") {
       p.poly([[hx - 8 * u, hy - 12 * u], [hx + 8 * u, hy - 12 * u], [hx, hy + 7 * u]], "#e0a35a", 1.8 * u);
       p.ell(hx, hy - 19 * u, 11 * u, 10 * u, "#f7c6d9", 2.2 * u);
       p.dot(hx, hy, 5.5 * u);

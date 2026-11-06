@@ -1,24 +1,27 @@
-// The whole place as one three.js scene: sky, river, banks, town, the chain bridge (deck, rails, hangers, chains,
-// backstays, anchors, bunting, flags) deformed every frame from the story physics, the park swing, smoke, clouds
-// and the cast. update(id, f, camera) poses everything for shot `id` at frame f (pure function of id + f).
+// "The Gimli Glider" as one three.js scene: sky + clouds (a sea of cloud tops under the cruising jet), the Boeing 767
+// (procedural, no livery), the cockpit set, the Gimli strip on race day (asphalt, guard rail, karts, tents, grills,
+// parked cars, trees), the Montreal apron (fuel truck), a hangar and the award podium. update(id, f, camera) poses
+// everything for shot `id` at frame f (pure function of id + f). Sky, light rig, fog and the cast plumbing follow
+// the bridge template (lighting / ink / lens / grade unchanged).
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { staticFile } from "remotion";
-import { Batch, Strand, boxGeo, V, lam, buildTown, flagTex, Kit, Ray, kitClone } from "./build";
-import { beam, bed, rep, ctex, planksHD, beamHD, stoneHD, cobbleHD, grassHD, chainHD, waterNear, waterFar, cloudHD } from "./paint";
-import { Pen, fxSign } from "./toon";
+import { Batch, boxGeo, V, lam, Kit, Ray, kitClone, prop, setSight, quad } from "./build";
+import { ctex, cloudHD, grassHD } from "./paint";
 import { LIGHTS, LOOK, LightPreset } from "./lights";
-import { TONE, CHAR, LFB, twoTone, untone } from "./shade";
+import { TONE, CHAR, untone, twoTone } from "./shade";
 import { NOINK } from "./ink";
-import { Pool, Actor, Fx, stage, snapFx, splashFx, creakFx, SIGN_AT, SU_SWING } from "./cast";
-import { FPS, D0, SHOTS, PARK, ANCHOR, SNAP, camAt, bridgeState, deckY, dropW, shapeZ, snapEnd, front, BridgeState, V3, smooth, FOREGROUND, ShotDef } from "./story";
+import { Pool, Actor, Fx, stage } from "./cast";
+import { fuselageTex, runwayTex, screenTex, cloudSeaTex } from "./gfx";
+import {
+  FPS, SHOTS, camAt, planeAt, PlaneState, V3, FOREGROUND, ShotDef, COCKPIT, APRON, GRILL, PODIUM, SKY, smooth,
+} from "./story";
 
 // ---------------- assets ----------------
-const KENNEY = ["tree_oak", "tree_default", "tree_detailed", "tree_fat", "tree_cone", "tree-high-round", "tree", "plant_bushLarge", "plant_bushDetailed",
-  "plant_bush", "hedge", "flower_redA", "flower_yellowA", "flower_purpleA", "grass_large", "grass", "lily_large", "lantern", "cart", "stall-red",
-  "stall-green", "stall-bench", "banner-red", "banner-green", "windmill", "canoe"];
-/** Kenney kits live in public/kenney/<kit>/ (nature, car, town, buildings). Nature Kit names use "_", the
- *  Fantasy Town Kit uses "-" (plus "tree", "hedge"); canoe and grass are Nature Kit models. Prefix "car:" / "buildings:" for the others. */
+const KENNEY = ["tree_oak", "tree_default", "tree_detailed", "tree_fat", "tree_cone", "plant_bushLarge", "plant_bushDetailed", "plant_bush",
+  "stall-red", "stall-green", "stall-bench", "car:kart-oobi", "car:kart-oodi", "car:kart-ooli", "car:kart-oopi", "car:sedan", "car:suv",
+  "car:van", "car:hatchback-sports", "car:sedan-sports", "car:truck", "car:cone", "car:delivery-flat", "car:ambulance", "car:firetruck"];
+/** Kenney kits live in public/kenney/<kit>/. Names with "kit:" pick the kit; Nature Kit names use "_", Fantasy Town "-". */
 const kenneyPath = (n: string) => {
   const m = /^(nature|car|town|buildings):(.+)$/.exec(n);
   if (m) return `kenney/${m[1]}/${m[2]}.glb`;
@@ -35,28 +38,7 @@ export const loadKit = () => {
   return kitP;
 };
 
-// ---------------- bridge geometry constants ----------------
-const NZ = 121; // deck samples every 0.5 m from z = -30 to 30
-const ZS = Array.from({ length: NZ }, (_, j) => -30 + j * 0.5);
-const POSTS = Array.from({ length: 41 }, (_, k) => -30 + k * 1.5);
-const HANG = Array.from({ length: 35 }, (_, k) => -25.5 + k * 1.5);
-const CZ = Array.from({ length: 73 }, (_, k) => -27 + k * 0.75);
-const FLAGS = Array.from({ length: 47 }, (_, k) => -25.3 + k * 1.1);
-const catY = (z: number) => 8.5 + 8.1 * (z / 27) ** 2; // lowest link 2.5 m over the planks, clear of the faces
-export const chainY = (z: number, b: BridgeState) => {
-  const intact = catY(z) + b.bounce * shapeZ(z) * 0.85, k = b.drop * dropW(z);
-  return intact + (deckY(z, b) + 0.3 - intact) * k;
-};
-export const BOLT: V3 = [ANCHOR[0], ANCHOR[1] + 0.24, ANCHOR[2]];
-const TOP = 16.6;
-
-const beamBetween = (a: THREE.Vector3, b: THREE.Vector3, th: number) => {
-  const g = new THREE.BoxGeometry(th, a.distanceTo(b), th);
-  const m = new THREE.Matrix4().compose(a.clone().add(b).multiplyScalar(0.5),
-    new THREE.Quaternion().setFromUnitVectors(V(0, 1, 0), b.clone().sub(a).normalize()), V(1, 1, 1));
-  return g.applyMatrix4(m);
-};
-/** sun disc (solid, soft rim) and the flat golden halo (lighting.md 6 / depth.md 6.4: r50 13-26 % of the frame width) */
+// ---------------- helpers ----------------
 const discTex = () => ctex("sunDisc", 128, 128, (g) => {
   const gr = g.createRadialGradient(64, 64, 58, 64, 64, 64); gr.addColorStop(0, "rgba(255,255,255,1)"); gr.addColorStop(1, "rgba(255,255,255,0)");
   g.fillStyle = gr; g.fillRect(0, 0, 128, 128);
@@ -70,60 +52,195 @@ const haloTex = () => ctex("sunHalo", 256, 256, (g) => {
   }
   g.putImageData(im, 0, 0);
 });
-/** per-shot sun override (lighting.md 9.1 notes: front-light the town wide); story.ts ShotDef sunAz/sunEl win if present */
-// shot 12: the park is ringed by trees and houses, so a low sun ahead-right puts the whole lawn in their shadow
-const SUN_SHOT: Record<number, { az?: number; el?: number }> = { 2: { az: 120 }, 11: { az: -70, el: 8 }, 12: { az: -30, el: 18 } };
-const smokeTex = () => ctex("smoke", 256, 256, (g) => {
-  const p = new Pen(g);
-  for (const [x, y, r, c] of [[90, 150, 60, "#8f8d96"], [150, 120, 70, "#a3a1aa"], [170, 165, 55, "#8f8d96"], [120, 100, 50, "#b4b2ba"]] as const) p.ell(x, y, r, r * 0.85, c, 0);
+const doorTex = () => ctex("hangarDoor", 1024, 512, (g, r) => {
+  g.fillStyle = "#b9c0c4"; g.fillRect(0, 0, 1024, 512);
+  for (let x = 0; x < 1024; x += 128) {
+    g.fillStyle = r() < 0.5 ? "#b2b9be" : "#c0c7cb"; g.fillRect(x + 3, 0, 122, 512);
+    g.fillStyle = "#7f878d"; g.fillRect(x, 0, 6, 512);
+    for (let y = 16; y < 512; y += 22) { g.fillStyle = "rgba(120,128,134,0.35)"; g.fillRect(x + 6, y, 122, 3); }
+  }
+  g.fillStyle = "#e9c46a"; g.fillRect(0, 470, 1024, 42);
 });
+const concreteTex = () => {
+  const t = ctex("apronConcrete", 512, 512, (g, r) => {
+    g.fillStyle = "#a9a7a1"; g.fillRect(0, 0, 512, 512);
+    for (let i = 0; i < 900; i++) { const v = 150 + r() * 40; g.fillStyle = `rgba(${v},${v - 2},${v - 8},0.4)`; g.fillRect(r() * 512, r() * 512, 3, 3); }
+    g.fillStyle = "#8a8882"; g.fillRect(0, 0, 512, 4); g.fillRect(0, 0, 4, 512);
+  });
+  t.wrapS = t.wrapT = THREE.RepeatWrapping; return t;
+};
+/** horizontal quad at height y covering x0..x1, z0..z1 with uv repeats (u, v) */
+const flat = (x0: number, x1: number, z0: number, z1: number, y: number, u = 1, v = 1) => quad(V(x0, y, z1), V(x1, y, z1), V(x1, y, z0), V(x0, y, z0), u, v);
+const cyl = (r0: number, r1: number, h: number, n = 20) => new THREE.CylinderGeometry(r0, r1, h, n);
+const at = (x: number, y: number, z: number, rx = 0, ry = 0, rz = 0, s = 1) =>
+  new THREE.Matrix4().compose(V(x, y, z), new THREE.Quaternion().setFromEuler(new THREE.Euler(rx, ry, rz)), V(s, s, s));
 
-/** every lens position of the film looking at its subject: centre, sides and top of frame (houses there are left out) */
+// ---------------- the jet (local: nose toward -z, x = right wing, y up, centre 4.05 m over the wheels) ----------------
+type Jet = { root: THREE.Group; noseGear: THREE.Group; mains: THREE.Group[]; fans: THREE.Group[] };
+const WHITE = () => twoTone(new THREE.MeshPhongMaterial({ color: "#f4f4f2", specular: "#9a9a9a", shininess: 50 }), 0.3);
+const buildJet = (): Jet => {
+  const root = new THREE.Group(), b = new Batch();
+  const skin = twoTone(new THREE.MeshPhongMaterial({ color: "#ffffff", map: fuselageTex(), specular: "#8a8a8a", shininess: 45 }), 0.3);
+  const white = WHITE(), grey = lam("jetGrey", () => ({ color: "#c3c8d0" })), dark = lam("jetDark", () => ({ color: "#2a2e38" }));
+  const red = lam("jetRed", () => ({ color: "#d6352f" })), metal = lam("jetMetal", () => ({ color: "#8d939c" })), tyre = lam("tyre", () => ({ color: "#23242a" }));
+  // fuselage: lathe profile tail (-24) .. nose (+24) in lathe y, turned so lathe +y = local -z
+  const prof: THREE.Vector2[] = [];
+  for (let i = 0; i <= 60; i++) {
+    const y = -24 + (48 * i) / 60;
+    let r = 2.5;
+    if (y < -11) { const u = (y + 24) / 13; r = 0.35 + 2.15 * Math.sin((u * Math.PI) / 2) ** 0.9; }
+    if (y > 13) { const u = (y - 13) / 11; r = 2.5 * Math.sqrt(Math.max(0, 1 - u ** 2.2)); }
+    prof.push(new THREE.Vector2(Math.max(0.02, r), y));
+  }
+  const fus = new THREE.LatheGeometry(prof, 40);
+  fus.rotateX(-Math.PI / 2);
+  fus.translate(0, 0.25, 0); // tail upsweep is in the profile; lift the body a touch
+  b.add(fus, skin);
+  // wings (low, swept, dihedral): top/bottom/front/back/tip quads per side
+  const wingY = (x: number) => -1.35 + 0.085 * Math.max(0, Math.abs(x) - 2.3);
+  for (const s of [-1, 1]) {
+    const R = { x: 2.3, le: -10, te: 2.2, t: 0.62 }, T = { x: 23.6, le: 2.4, te: 5.6, t: 0.16 };
+    const p = (q: typeof R, z: number, top: boolean) => V(s * q.x, wingY(q.x) + (top ? q.t / 2 : -q.t / 2), z);
+    const faces = [
+      [p(R, R.le, true), p(T, T.le, true), p(T, T.te, true), p(R, R.te, true)],
+      [p(R, R.te, false), p(T, T.te, false), p(T, T.le, false), p(R, R.le, false)],
+      [p(R, R.le, false), p(T, T.le, false), p(T, T.le, true), p(R, R.le, true)],
+      [p(R, R.te, true), p(T, T.te, true), p(T, T.te, false), p(R, R.te, false)],
+      [p(T, T.le, false), p(T, T.te, false), p(T, T.te, true), p(T, T.le, true)],
+    ];
+    for (const f of faces) { const [a, c, d, e] = s > 0 ? f : [f[0], f[3], f[2], f[1]]; b.add(quad(a, c, d, e), white); }
+    // horizontal tail
+    const hr = { x: 0.8, le: 16.6, te: 22.2, t: 0.36 }, ht = { x: 9.2, le: 22.0, te: 24.4, t: 0.1 };
+    const hp = (q: typeof hr, z: number, top: boolean) => V(s * q.x, 0.9 + 0.06 * q.x + (top ? q.t / 2 : -q.t / 2), z);
+    const hf = [
+      [hp(hr, hr.le, true), hp(ht, ht.le, true), hp(ht, ht.te, true), hp(hr, hr.te, true)],
+      [hp(hr, hr.te, false), hp(ht, ht.te, false), hp(ht, ht.le, false), hp(hr, hr.le, false)],
+      [hp(hr, hr.le, false), hp(ht, ht.le, false), hp(ht, ht.le, true), hp(hr, hr.le, true)],
+      [hp(ht, ht.le, false), hp(ht, ht.te, false), hp(ht, ht.te, true), hp(ht, ht.le, true)],
+    ];
+    for (const f of hf) { const [a, c, d, e] = s > 0 ? f : [f[0], f[3], f[2], f[1]]; b.add(quad(a, c, d, e), white); }
+    // engine nacelle, intake lip, exhaust cone, pylon
+    const ex = s * 8.6, ey = -1.6;
+    const nac = cyl(1.35, 1.12, 5.4, 28); nac.rotateX(Math.PI / 2); b.add(nac, white, at(ex, ey, -6.2 + 0.5));
+    const lip = new THREE.TorusGeometry(1.33, 0.12, 8, 28); b.add(lip, metal, at(ex, ey, -9.15));
+    const back = cyl(0.75, 0.35, 1.4, 20); back.rotateX(Math.PI / 2); b.add(back, metal, at(ex, ey, -2.4));
+    const inside = new THREE.CircleGeometry(1.25, 28); b.add(inside, dark, at(ex, ey, -8.7, 0, Math.PI));
+    b.add(boxGeo(V(ex - 0.18, ey + 0.9, -7.2), V(ex + 0.18, wingY(8.6) - 0.1, -1.5)), white);
+  }
+  // fin
+  const fin = (y: number, le: number, te: number, t: number) => ({ y, le, te, t });
+  const f0 = fin(2.0, 12.5, 23.6, 0.42), f1 = fin(11.2, 21.0, 24.6, 0.14);
+  const fp = (q: ReturnType<typeof fin>, z: number, s: number) => V(s * q.t / 2, q.y, z);
+  for (const s of [-1, 1]) {
+    const [a, c, d, e] = [fp(f0, f0.le, s), fp(f1, f1.le, s), fp(f1, f1.te, s), fp(f0, f0.te, s)];
+    b.add(s > 0 ? quad(e, d, c, a) : quad(a, c, d, e), red);
+  }
+  b.add(quad(fp(f0, f0.le, -1), fp(f1, f1.le, -1), fp(f1, f1.le, 1), fp(f0, f0.le, 1)), red);
+  b.add(quad(fp(f1, f1.le, -1), fp(f1, f1.te, -1), fp(f1, f1.te, 1), fp(f1, f1.le, 1)), red);
+  // wing-to-body fairing + belly
+  b.add(boxGeo(V(-2.6, -2.3, -9.5), V(2.6, -1.0, 3.5)), grey);
+  b.build(root);
+  // fans (spin), gear (fold / retract)
+  const fans: THREE.Group[] = [];
+  for (const s of [-1, 1]) {
+    const g = new THREE.Group(); g.position.set(s * 8.6, -1.6, -8.75);
+    const fb = new Batch();
+    for (let k = 0; k < 14; k++) fb.add(boxGeo(V(-0.07, 0.25, -0.02), V(0.07, 1.22, 0.02)), metal, at(0, 0, 0, 0, 0, (k / 14) * Math.PI * 2 + 0.3));
+    const spin = new THREE.ConeGeometry(0.34, 0.7, 16); spin.rotateX(-Math.PI / 2);
+    fb.add(spin, lam("spinner", () => ({ color: "#e9eaee" })), at(0, 0, -0.25));
+    fb.build(g, false);
+    fans.push(g); root.add(g);
+  }
+  const wheel = (gb: Batch, x: number, y: number, z: number) => {
+    const w = cyl(0.56, 0.56, 0.38, 18); w.rotateZ(Math.PI / 2); gb.add(w, tyre, at(x, y, z));
+    const hub = cyl(0.28, 0.28, 0.4, 12); hub.rotateZ(Math.PI / 2); gb.add(hub, metal, at(x, y, z));
+  };
+  const noseGear = new THREE.Group(); noseGear.position.set(0, -2.15, -19.2);
+  { const gb = new Batch(); gb.add(cyl(0.12, 0.12, 1.45, 10), metal, at(0, -0.72, 0)); wheel(gb, -0.28, -1.34, 0); wheel(gb, 0.28, -1.34, 0); gb.build(noseGear); }
+  root.add(noseGear);
+  const mains: THREE.Group[] = [];
+  for (const s of [-1, 1]) {
+    const g = new THREE.Group(); g.position.set(s * 4.7, -1.5, 1.6);
+    const gb = new Batch();
+    gb.add(cyl(0.2, 0.2, 2.05, 10), metal, at(0, -1.0, 0));
+    for (const dz of [-0.75, 0.75]) for (const dx of [-0.32, 0.32]) wheel(gb, dx, -2.0, dz);
+    gb.add(boxGeo(V(-0.12, -2.08, -0.85), V(0.12, -1.95, 0.85)), metal);
+    gb.build(g);
+    mains.push(g); root.add(g);
+  }
+  root.traverse((o) => { const m = o as THREE.Mesh; if (m.isMesh) { m.castShadow = true; m.receiveShadow = true; } });
+  root.rotation.order = "YXZ";
+  return { root, noseGear, mains, fans };
+};
+const poseJet = (j: Jet, s: PlaneState) => {
+  j.root.visible = s.visible;
+  if (!s.visible) return;
+  j.root.position.set(...s.pos);
+  j.root.rotation.set(s.pitch, s.yaw, s.roll);
+  for (const f of j.fans) f.rotation.z = s.fan;
+  j.noseGear.rotation.x = -1.35 * s.nose; // folds back into the bay
+  j.noseGear.visible = s.gear > 0.02;
+  for (const m of j.mains) { m.visible = s.gear > 0.02; m.scale.y = Math.max(0.02, s.gear); }
+  j.root.updateMatrixWorld(true);
+};
+
+/** every lens of the ground shots (trees and props are left out where they would block one) */
 const sightLines = (): Ray[] => {
   const out: Ray[] = [];
-  for (const s of SHOTS) for (let f = s.a - 8; f < s.b + 8; f += 2) {
-    const c = camAt(s.id, Math.max(0, f)), o = V(...c.pos), look = V(...c.look);
-    const fw = look.clone().sub(o), len = fw.length();
-    fw.normalize();
-    const rt = fw.clone().cross(V(0, 1, 0)).normalize(), up = rt.clone().cross(fw);
-    const ty = Math.tan((c.fov * Math.PI) / 360), tx = ty * (9 / 16);
-    for (const [sx, sy] of [[0, 0], [-0.6, 0], [0.6, 0], [0, 0.6], [0, -0.4]])
-      out.push({ o, d: fw.clone().addScaledVector(rt, sx * tx).addScaledVector(up, sy * ty), len, core: sx === 0 && sy === 0 });
+  for (const s of SHOTS) {
+    if (s.place === "sky" || s.place === "cockpit") continue;
+    for (let f = s.a; f < s.b; f += 3) {
+      const c = camAt(s.id, f), o = V(...c.pos), look = V(...c.look);
+      const fw = look.clone().sub(o), len = Math.min(fw.length(), 60);
+      fw.normalize();
+      const rt = fw.clone().cross(V(0, 1, 0)).normalize(), up = rt.clone().cross(fw);
+      const ty = Math.tan((c.fov * Math.PI) / 360), tx = ty * (9 / 16);
+      for (const [sx, sy] of [[0, 0], [-0.6, 0], [0.6, 0], [0, 0.6], [0, -0.4]])
+        out.push({ o, d: fw.clone().addScaledVector(rt, sx * tx).addScaledVector(up, sy * ty), len, core: sx === 0 && sy === 0 });
+    }
   }
   return out;
 };
 
-type Mats = Record<string, THREE.Material>;
+// karts on race day: two lanes left of the guard rail, driving toward -z (past the low lens of shot 8b)
+const KARTS: { kit: string; x: number; t0: number; v: number; park: V3 }[] = [
+  { kit: "car:kart-oobi", x: -9.0, t0: 388 / FPS, v: 17, park: [-13.5, 0, -63] },
+  { kit: "car:kart-oodi", x: -14.0, t0: 396 / FPS, v: 16, park: [-17.2, 0, -66] },
+  { kit: "car:kart-ooli", x: -9.4, t0: 404 / FPS, v: 18, park: [-26.5, 0, -88] },
+  { kit: "car:kart-oopi", x: -13.6, t0: 352 / FPS, v: 15, park: [-24.8, 0, -91] },
+];
+
+const SUN_SHOT: Record<number, { az?: number; el?: number }> = {
+  6: { az: 150, el: 35 }, 7: { az: -40, el: 25 }, // cockpit: light through the side windows
+  9: { az: 160, el: 9 }, // glide in: low sun behind the lens lights the jet's belly and the family
+  14: { az: 120, el: 30 }, 16: { az: 120, el: 40 },
+};
 
 export class World {
   root = new THREE.Group();
   private pool = new Pool();
   private actors: Actor[] = [];
   private fxs: Fx[] = [];
-  private swing: Actor;
-  private hemi: THREE.HemisphereLight; private sun: THREE.DirectionalLight; private fill: THREE.DirectionalLight;
+  private hemi: THREE.HemisphereLight; private sun: THREE.DirectionalLight;
   private sky: THREE.Mesh; private skyMat: THREE.ShaderMaterial;
   private fog = new THREE.Fog("#bccbec", 25, 420);
-  private WU: Record<string, THREE.IUniform>;
   private sunDisc: THREE.Sprite; private sunHalo: THREE.Sprite;
   private sunCache = new Map<number, THREE.Vector3>();
   private cloudMaps: Record<"day" | "golden", THREE.Texture[]>;
-  private fgs: { o: THREE.Object3D; a: number; b: number }[] = [];
-  private deckTop: THREE.BufferGeometry; private deckSide: THREE.BufferGeometry;
-  private posts: THREE.InstancedMesh; private hangers: THREE.InstancedMesh; private ribs: THREE.InstancedMesh; private bunting: THREE.InstancedMesh;
-  private rails: Strand[] = []; private chains: Strand[] = []; private stays: Strand[] = [];
-  private boltA: THREE.Mesh; private boltB: THREE.Mesh; private eye: THREE.Mesh;
-  private flags: THREE.Mesh[] = [];
-  private smoke: { m: THREE.Mesh; mat: THREE.MeshLambertMaterial; top: V3; k: number }[] = [];
   private clouds: THREE.Mesh[] = [];
-  private sign = new THREE.Group();
+  private sea: { m: THREE.Mesh; mat: THREE.MeshBasicMaterial; k: number }[] = [];
+  private seaTex: Record<"day" | "golden", THREE.Texture[]>;
+  private fgs: { o: THREE.Object3D; a: number; b: number }[] = [];
+  private jet: Jet;
+  private race = new THREE.Group(); private podium = new THREE.Group(); private cockpit = new THREE.Group();
+  private karts: { o: THREE.Object3D; k: (typeof KARTS)[number] }[] = [];
+  private screens: THREE.MeshBasicMaterial[] = []; private screenOn: THREE.Texture[] = []; private screenOff: THREE.Texture[] = [];
   private frustum = new THREE.Frustum();
   private m4 = new THREE.Matrix4(); private v = new THREE.Vector3(); private sph = new THREE.Sphere();
 
   constructor(kit: Kit) {
-    const R = this.root, M: Mats = {};
-    // ---- sky + light ----
-    // sky: 5 colour stops by elevation (textures.md 5.2 #5 + depth.md 2/6.5), written as tone-map-inverted linear values
+    const R = this.root;
+    // ---- sky + light (as the bridge template) ----
     this.skyMat = new THREE.ShaderMaterial({
       uniforms: { c0: { value: new THREE.Color() }, c1: { value: new THREE.Color() }, c2: { value: new THREE.Color() },
         c3: { value: new THREE.Color() }, c4: { value: new THREE.Color() }, e: { value: new THREE.Vector4() } },
@@ -149,182 +266,139 @@ export class World {
     this.sun = new THREE.DirectionalLight("#fff0d6", 2.6);
     this.sun.castShadow = true;
     this.sun.shadow.mapSize.set(4096, 4096);
-    this.fill = new THREE.DirectionalLight("#9fb8ff", 0.35);
-    R.add(this.hemi, this.sun, this.sun.target, this.fill, this.fill.target);
+    R.add(this.hemi, this.sun, this.sun.target);
     this.cloudMaps = { day: [0, 1, 2, 3].map((k) => cloudHD(k, LOOK.day.cloud)), golden: [0, 1, 2, 3].map((k) => cloudHD(k, LOOK.golden.cloud)) };
-    for (let i = 0; i < 9; i++) {
-      const a = (i / 9) * Math.PI * 2 + 0.3, d = 620 + (i % 3) * 60;
+    for (let i = 0; i < 12; i++) {
       const m = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), new THREE.MeshBasicMaterial({ map: this.cloudMaps.day[i % 4], color: new THREE.Color(1.1, 1.1, 1.1), transparent: true, depthWrite: false, fog: false }));
-      const w = 130 + (i % 4) * 30;
-      m.position.set(Math.cos(a) * d, 120 + (i % 4) * 38, Math.sin(a) * d); m.scale.set(w, w / 2, 1);
-      m.layers.set(NOINK);
-      this.clouds.push(m); R.add(m);
+      m.layers.set(NOINK); this.clouds.push(m); R.add(m);
+    }
+    // sea of clouds under the cruising jet: two scrolling layers (the jet flies toward -z, so the clouds stream to +z)
+    this.seaTex = { day: [cloudSeaTex(LOOK.day.cloud, 1), cloudSeaTex(LOOK.day.cloud, 2)], golden: [cloudSeaTex(LOOK.golden.cloud, 1), cloudSeaTex(LOOK.golden.cloud, 2)] };
+    for (const [k, y] of [[0, 552], [1, 538]] as const) {
+      const mat = new THREE.MeshBasicMaterial({ map: this.seaTex.day[k], transparent: true, alphaTest: 0.5, depthWrite: true, fog: true, side: THREE.DoubleSide });
+      const m = new THREE.Mesh(new THREE.PlaneGeometry(5200, 5200), mat);
+      m.rotation.x = -Math.PI / 2; m.position.set(SKY[0], y, SKY[2]); m.layers.set(NOINK); m.frustumCulled = false;
+      this.sea.push({ m, mat, k }); R.add(m);
     }
 
-    // ---- ground, river, quays (static batch) ----
+    // ---- ground: grass, runway, apron, guard rail, hangars, tower, trees (static batch) ----
+    setSight(sightLines());
     const b = new Batch();
-    // HD painted textures (textures.md 5.1/5.2); every material is two-tone via lam() (shade.ts)
-    M.grass = lam("grassHD", () => ({ map: grassHD() }));
-    M.cobble = lam("cobbleHD", () => ({ map: cobbleHD() }));
-    M.wall = lam("wallHD", () => ({ map: stoneHD("wallHD", ["#c9bcaa", "#bfb19f", "#d1c5b4", "#b8aa97"], "#958776") }));
-    M.cope = lam("copeHD", () => ({ map: stoneHD("copeHD", ["#e6dccd", "#ddd3c3", "#ece4d6", "#d6cbba"], "#aea293") }));
-    M.tower = lam("towerHD", () => ({ map: stoneHD("towerHD") }));
-    // iron: a coloured dark (navy, L* 16-22 in shade, never black) with one soft metal highlight (lighting.md 9.3)
-    M.iron = twoTone(new THREE.MeshPhongMaterial({ color: "#3d414c", specular: "#8a8a8a", shininess: 60 }), 0.15);
-    M.steel = twoTone(new THREE.MeshPhongMaterial({ color: "#7d8088", specular: "#b0b0b0", shininess: 45 }), 0.15); // bolts + eyes
-    M.wood = lam("wood", () => ({ map: beam() }));
-    M.bed = lam("bed", () => ({ map: bed() }));
-    M.sand = lam("sand", () => ({ color: "#e2c992" }));
-    for (const s of [-1, 1]) {
-      const zn = s * 30, zf = s * 900;
-      b.add(s < 0 ? quadUp(-900, 900, zf, zn, 450, 217.5) : quadUp(-900, 900, zn, zf, 450, 217.5), M.grass);
-      b.add(s < 0 ? quadUp(-160, 160, -36.5, -30, 80, 1.625, 0.012) : quadUp(-160, 160, 30, 36.5, 80, 1.625, 0.012), M.cobble);
-      b.add(s < 0 ? quadUp(-6, 6, -170, -36.5, 3, 33.375, 0.012) : quadUp(-6, 6, 36.5, 170, 3, 33.375, 0.012), M.cobble);
-      // embankment wall facing the river, parapet with a gap for the bridge
-      b.add(s < 0 ? wallQuad(-900, 900, -30, 1) : wallQuad(900, -900, 30, -1), M.wall);
-      for (const [x0, x1] of [[-600, -4.6], [4.6, 600]]) b.add(boxGeo(V(x0, D0, s < 0 ? -30.5 : 30), V(x1, D0 + 0.75, s < 0 ? -30 : 30.5), 2), M.cope);
-      b.add(boxGeo(V(-600, D0 - 0.05, s < 0 ? -30.6 : 29.4), V(600, D0 + 0.02, s < 0 ? -29.4 : 30.6), 2), M.cope);
-    }
-    b.add(quadUp(-900, 900, -30, 30, 225, 7.5, -0.6 - D0), M.bed);
-    // towers: twin stone columns on plinths, lintel, cornice, pyramid caps, iron saddles; flag poles
-    for (const zc of [-27, 27]) {
-      for (const xc of [-3.35, 3.35]) {
-        b.add(boxGeo(V(xc - 0.7, -0.6, zc - 0.8), V(xc + 0.7, 15.6, zc + 0.8), 2), M.tower);
-        b.add(boxGeo(V(xc - 0.95, -0.6, zc - 1.05), V(xc + 0.95, 1.1, zc + 1.05), 2), M.tower);
-        // string course nearly flush (1 cm): an 8 cm ledge top aliased into a lit dashed line in the low golden sun (f1350)
-        b.add(boxGeo(V(xc - 0.71, D0 + 3.0, zc - 0.81), V(xc + 0.71, D0 + 3.45, zc + 0.81), 2), M.cope);
-        const cap = new THREE.ConeGeometry(0.98, 1.5, 4); cap.rotateY(Math.PI / 4);
-        b.add(cap, M.tower, new THREE.Matrix4().makeTranslation(xc, 17.9 + 0.75, zc));
+    const grass = lam("grassHD", () => ({ map: grassHD() }));
+    const rw = runwayTex(), runway = lam("runway", () => ({ map: rw }));
+    const conc = concreteTex(), apron = lam("apron", () => ({ map: conc }));
+    for (const [x0, x1] of [[-1400, -23], [23, 1400]]) b.add(flat(x0, x1, -1400, 1400, 0, (x1 - x0) / 4, 700), grass);
+    b.add(flat(-23, 23, -1400, -1100, 0, 12, 75), grass);
+    b.add(flat(-23, 23, -1100, 1100, 0.01, 1, 2200 / 60), runway);
+    b.add(flat(-215, -105, 80, 215, 0.02, 110 / 8, 135 / 8), apron);
+    b.add(flat(-105, -23, 110, 150, 0.015, 82 / 8, 40 / 8), apron); // taxiway
+    b.add(flat(-110, -40, -175, -100, 0.02, 70 / 8, 75 / 8), apron); // hangar apron
+    const rail = lam("guardRail", () => ({ color: "#c9cdd2" })), post = lam("railPost", () => ({ color: "#8d939c" }));
+    for (let z = -96; z < 640; z += 4) b.add(boxGeo(V(-0.06, 0, z - 0.06), V(0.06, 0.75, z + 0.06)), post);
+    b.add(boxGeo(V(-0.1, 0.48, -96), V(0.1, 0.72, 640)), rail);
+    // hangars: walls, a low-pitched roof, a big sliding door facing +x
+    const wall = lam("hangarWall", () => ({ color: "#d8d2c4" })), roofM = lam("hangarRoof", () => ({ color: "#8f5a46" }));
+    const door = lam("hangarDoor", () => ({ map: doorTex() }));
+    for (const [x0, z0, w, d, h] of [[-104, -158, 44, 52, 11], [-104, -96, 40, 44, 10], [-104, -224, 40, 50, 10]] as const) {
+      const x1 = x0 + w, z1 = z0 + d;
+      b.add(boxGeo(V(x0, 0, z0), V(x1, h, z1)), wall);
+      b.add(quad(V(x1 + 0.05, 0, z1 - 3), V(x1 + 0.05, 0, z0 + 3), V(x1 + 0.05, h - 1.2, z0 + 3), V(x1 + 0.05, h - 1.2, z1 - 3), 1, 1), door);
+      const ridge = h + 3.2;
+      for (const s of [-1, 1]) {
+        const zc = (z0 + z1) / 2, ze = s < 0 ? z0 - 0.6 : z1 + 0.6;
+        const [a, c, d2, e] = [V(x0 - 0.6, h, ze), V(x1 + 0.6, h, ze), V(x1 + 0.6, ridge, zc), V(x0 - 0.6, ridge, zc)];
+        b.add(s < 0 ? quad(a, c, d2, e) : quad(c, a, e, d2), roofM);
       }
-      b.add(boxGeo(V(-4.05, 15.6, zc - 0.8), V(4.05, 17.4, zc + 0.8), 2, true), M.tower);
-      b.add(boxGeo(V(-4.3, 17.4, zc - 1.0), V(4.3, 17.9, zc + 1.0), 2, true), M.cope);
-      for (const x of [-2.7, 2.7]) b.add(boxGeo(V(x - 0.22, 16.25, zc - 0.92), V(x + 0.22, 16.95, zc + 0.92), 0, true), M.iron);
-      b.add(boxGeo(V(-0.07, 17.9, zc - 0.07), V(0.07, 21.4, zc + 0.07)), M.wood);
-      // anchorages on the bank behind each tower
-      for (const x of [-2.7, 2.7]) {
-        const za = Math.sign(zc) * 37;
-        b.add(boxGeo(V(x - 1.0, D0 - 0.4, za - 1.3), V(x + 1.0, D0 + 0.5, za + 1.3), 2), M.cope);
-        b.add(boxGeo(V(x - 0.45, D0 + 0.5, za - 0.6), V(x + 0.45, D0 + 0.58, za + 0.6)), M.iron);
-        for (const s of [-1, 1]) b.add(boxGeo(V(x + s * 0.15 - 0.045, D0 + 0.58, za - 0.22), V(x + s * 0.15 + 0.045, D0 + 1.02, za + 0.22)), M.iron);
-        if (!(x < 0 && za < 0)) {
-          const bolt = new THREE.CylinderGeometry(0.075, 0.075, 0.62, 10); bolt.rotateZ(Math.PI / 2);
-          b.add(bolt, M.steel, new THREE.Matrix4().makeTranslation(x, D0 + 0.86, za));
-          const eye = new THREE.TorusGeometry(0.17, 0.05, 8, 18); eye.rotateY(Math.PI / 2);
-          b.add(eye, M.steel, new THREE.Matrix4().makeTranslation(x, D0 + 0.86, za));
-        }
-      }
+      for (const xe of [x0, x1]) b.add(new THREE.BufferGeometry().setFromPoints([V(xe, h, z0), V(xe, h, z1), V(xe, ridge, (z0 + z1) / 2)]).setIndex(xe === x1 ? [0, 2, 1] : [0, 1, 2]), wall);
     }
-    // park swing set (frame only; the swing itself is a sprite hanging from the bar at PARK, travelling in x):
-    // top bar along z, one A-frame at each end (legs spread in x, wide enough that the arc stays inside both A's
-    // on screen), the seat midway between them
-    // (A's at z +-2.2 with legs +-3.0: the near A is close enough to the lens that the parent and the arc stay inside it)
-    for (const zz of [-2.2, 2.2]) for (const s of [-1, 1])
-      b.add(beamBetween(V(PARK[0], D0 + 3.0, PARK[2] + zz), V(PARK[0] + s * 3.0, D0, PARK[2] + zz), 0.15), M.wood);
-    b.add(beamBetween(V(PARK[0], D0 + 3.0, PARK[2] - 2.35), V(PARK[0], D0 + 3.0, PARK[2] + 2.35), 0.17), M.wood);
-    const sandG = new THREE.CircleGeometry(3.4, 32); sandG.rotateX(-Math.PI / 2);
-    b.add(sandG, M.sand, new THREE.Matrix4().makeTranslation(PARK[0], D0 + 0.012, PARK[2]));
+    // control tower
+    const towerM = lam("tower", () => ({ color: "#e6e1d6" })), glass = lam("towerGlass", () => ({ color: "#2b3a4f" }));
+    b.add(boxGeo(V(-74, 0, -44), V(-69, 15, -39)), towerM);
+    b.add(boxGeo(V(-75.5, 15, -45.5), V(-67.5, 18.2, -37.5)), glass);
+    b.add(boxGeo(V(-76, 18.2, -46), V(-67, 18.8, -37)), towerM);
+    // trees around the field (left out wherever a lens looks through them)
+    const r = (i: number, k: number) => { const v = Math.sin(i * 127.1 + k * 311.7) * 43758.5453; return v - Math.floor(v); };
+    const TREES = ["tree_oak", "tree_default", "tree_fat", "tree_detailed", "tree_cone"];
+    for (let i = 0; i < 140; i++) {
+      const side = i % 2 ? 1 : -1, x = side * (58 + r(i, 1) * 70), z = -420 + i * 7.5 + r(i, 2) * 6;
+      if (side < 0 && x > -115 && z > -235 && z < -40) continue; // hangars
+      if (side < 0 && x > -220 && z > 70 && z < 225) continue; // apron
+      prop(b, kit, TREES[i % 5], x, 0, z, 7 + r(i, 3) * 6, r(i, 4) * 6);
+    }
+    for (let i = 0; i < 26; i++) prop(b, kit, "plant_bushLarge", 26 + r(i, 5) * 30, 0, -120 + i * 5.5, 1.6 + r(i, 6), r(i, 7) * 6);
+    // apron: fuel truck beside the left wing, an airline van
+    const truckBody = lam("fuelTruckCab", () => ({ color: "#e9e6dc" })), tank = twoTone(new THREE.MeshPhongMaterial({ color: "#d9dde2", specular: "#aaaaaa", shininess: 60 }), 0.3);
+    const tx = APRON[0] - 16.5, tz = APRON[2] - 6;
+    b.add(boxGeo(V(tx - 1.3, 0.55, tz - 6), V(tx + 1.3, 3.1, tz - 3.6)), truckBody);
+    const tk = cyl(1.25, 1.25, 7.2, 24); tk.rotateX(Math.PI / 2); b.add(tk, tank, at(tx, 2.05, tz + 0.4));
+    b.add(boxGeo(V(tx - 1.2, 0.5, tz - 3.6), V(tx + 1.2, 0.8, tz + 4.2)), lam("chassis", () => ({ color: "#3a3d45" })));
+    for (const wz of [tz - 4.8, tz + 1.2, tz + 2.8]) for (const s of [-1, 1]) { const w = cyl(0.55, 0.55, 0.4, 16); w.rotateZ(Math.PI / 2); b.add(w, lam("tyre", () => ({ color: "#23242a" })), at(tx + s * 1.25, 0.55, wz)); }
+    b.add(boxGeo(V(tx - 1.32, 1.9, tz - 5.4), V(tx + 1.32, 2.6, tz - 4.0)), lam("truckGlass", () => ({ color: "#2b3a4f" })));
+    // fuel hose from the truck to the wing's refuelling point
+    const hose = new THREE.TubeGeometry(new THREE.CatmullRomCurve3([V(tx + 1.2, 1.4, tz + 2), V(tx + 3.5, 0.15, tz + 4), V(APRON[0] - 9.5, 0.4, APRON[2] + 1.0), V(APRON[0] - 9.5, 2.1, APRON[2] + 1.5)]), 24, 0.09, 8);
+    b.add(hose, lam("hose", () => ({ color: "#222228" })));
+    prop(b, kit, "car:van", APRON[0] + 22, 0, APRON[2] - 26, 2.3, 0.8);
+    prop(b, kit, "car:delivery-flat", APRON[0] + 18, 0, APRON[2] + 22, 2.0, -0.6);
     b.build(R);
-    buildTown(R, kit, sightLines());
 
-    // water: its own mesh so the ripples can drift
-    // river: depression-angle gradient + sparse marks (textures.md 5.2 #4), sun visibility captured for the bridge shadow
-    const wNear = waterNear(), wFar = waterFar();
-    for (const t of [wNear, wFar]) { t.colorSpace = THREE.NoColorSpace; t.anisotropy = 16; t.needsUpdate = true; }
-    this.WU = {
-      wNearC: { value: new THREE.Color() }, wMidC: { value: new THREE.Color() }, wFarC: { value: new THREE.Color() },
-      wCrest: { value: new THREE.Color() }, wTrough: { value: new THREE.Color() }, wGlint: { value: new THREE.Color() },
-      wShade: { value: new THREE.Vector3(0.5, 0.56, 0.72) }, wNearTex: { value: wNear }, wFarTex: { value: wFar }, wTime: { value: 0 },
-    };
-    const waterM = new THREE.MeshLambertMaterial({ color: 0xffffff });
-    waterM.onBeforeCompile = (sh) => {
-      Object.assign(sh.uniforms, this.WU);
-      sh.vertexShader = sh.vertexShader
-        .replace("#include <common>", "#include <common>\nvarying vec3 vWP;")
-        .replace("#include <project_vertex>", "#include <project_vertex>\nvWP = (modelMatrix * vec4(transformed, 1.0)).xyz;");
-      sh.fragmentShader = sh.fragmentShader
-        .replace("#include <common>", WATER_DECL)
-        .replace("#include <map_fragment>", WATER_COL)
-        .replace("#include <lights_fragment_begin>", "float sunVis = 1.0;\n" + LFB)
-        .replace("#include <lights_fragment_end>", "#include <lights_fragment_end>\n  reflectedLight.directDiffuse = diffuseColor.rgb * mix(wShade, vec3(1.0), sunVis);\n  reflectedLight.indirectDiffuse = vec3(0.0);");
-    };
-    waterM.customProgramCacheKey = () => "river1";
-    const wm = new THREE.Mesh(quadUp(-900, 900, -30, 30, 1, 1, -D0), waterM);
-    wm.receiveShadow = true;
-    R.add(wm);
+    // ---- race day at Gimli (only in Gimli shots) ----
+    const rb = new Batch();
+    for (const [x, z, k, yaw] of [[-31, -98, "stall-red", 1.57], [-31, -84, "stall-green", 1.57], [-31, -70, "stall-red", 1.57], [-31, -56, "stall-green", 1.57],
+      [30, -66, "stall-green", -1.57], [30, -52, "stall-red", -1.57], [-31, -42, "stall-red", 1.57]] as const) prop(rb, kit, k, x, 0, z, 3.4, yaw);
+    for (const [x, z] of [[-27, -91], [-27, -63], [26.5, -60], [-27, -49]] as const) prop(rb, kit, "stall-bench", x, 0, z, 0.9, 1.57);
+    const cars = ["car:sedan", "car:suv", "car:van", "car:hatchback-sports", "car:sedan-sports"];
+    for (let i = 0; i < 18; i++) prop(rb, kit, cars[i % 5], -42 - (i % 2) * 6.5, 0, -118 + i * 6.2, 1.7, 1.57 + (i % 3 - 1) * 0.06);
+    for (let i = 0; i < 6; i++) prop(rb, kit, cars[(i + 2) % 5], 40 + (i % 2) * 6, 0, -96 + i * 7, 1.7, -1.57);
+    prop(rb, kit, "car:ambulance", -36, 0, -22, 2.4, 1.2);
+    // start lights pole at the line
+    const pole = lam("pole", () => ({ color: "#3a3d45" }));
+    rb.add(boxGeo(V(-1.0, 0, -100.2), V(-0.7, 3.4, -99.9)), pole);
+    rb.add(boxGeo(V(-1.3, 2.4, -100.3), V(-0.4, 3.6, -99.8)), pole);
+    const lampOn = new THREE.MeshBasicMaterial({ color: new THREE.Color(2.2, 1.6, 0.3) });
+    for (let k = 0; k < 3; k++) rb.add(new THREE.SphereGeometry(0.12, 10, 8), lampOn, at(-0.85, 2.65 + k * 0.33, -100.35));
+    // start line + chequered banner over the lanes
+    const chk = lam("chequer", () => ({ map: ctex("chequer", 256, 64, (g) => { for (let x = 0; x < 16; x++) for (let y = 0; y < 4; y++) { g.fillStyle = (x + y) % 2 ? "#1d1d22" : "#f4f4f2"; g.fillRect(x * 16, y * 16, 16, 16); } }) }));
+    rb.add(flat(-22, -0.5, -100.6, -99.4, 0.03, 1, 1), chk);
+    // barbecue grills (kettle on three legs, grate, sausages)
+    const kettle = lam("kettle", () => ({ color: "#2a2b31" })), steel = lam("grate", () => ({ color: "#9aa0a8" })), sausage = lam("sausage", () => ({ color: "#b5532f" }));
+    for (const [gx, gz] of [[GRILL[0], GRILL[2]], [-28.5, -77], [27.5, -58.5]] as const) {
+      const bowl = new THREE.SphereGeometry(0.42, 18, 10, 0, Math.PI * 2, Math.PI / 2, Math.PI / 2);
+      rb.add(bowl, kettle, at(gx, 0.85, gz));
+      for (let k = 0; k < 3; k++) { const a = (k / 3) * Math.PI * 2; rb.add(cyl(0.025, 0.025, 0.9, 6), steel, at(gx + 0.3 * Math.cos(a), 0.42, gz + 0.3 * Math.sin(a), 0.2 * Math.sin(a), 0, -0.2 * Math.cos(a))); }
+      const grate = new THREE.CircleGeometry(0.4, 18); grate.rotateX(-Math.PI / 2); rb.add(grate, steel, at(gx, 0.86, gz));
+      for (let k = 0; k < 4; k++) { const sg = new THREE.CapsuleGeometry(0.035, 0.3, 4, 8); sg.rotateZ(Math.PI / 2); rb.add(sg, sausage, at(gx - 0.05, 0.9, gz - 0.2 + k * 0.13, 0, 0.2 * (k % 2 ? 1 : -1))); }
+      rb.add(boxGeo(V(gx + 0.5, 0, gz - 0.35), V(gx + 1.15, 0.8, gz + 0.35)), lam("cooler", () => ({ color: "#d8473b" })));
+    }
+    // hay bales along the lanes
+    const hay = lam("hay", () => ({ color: "#d9b35a" }));
+    for (let z = -94; z < -30; z += 9) for (const x of [-21.6]) { const hb = cyl(0.6, 0.6, 1.1, 14); hb.rotateZ(Math.PI / 2); rb.add(hb, hay, at(x, 0.6, z)); }
+    rb.build(this.race);
+    for (const k of KARTS) { const o = kitClone(kit, k.kit, 0.95); if (o) { this.karts.push({ o, k }); this.race.add(o); } }
+    R.add(this.race);
 
-    // ---- bridge (dynamic) ----
-    this.deckTop = new THREE.BufferGeometry();
-    this.deckTop.setAttribute("position", new THREE.BufferAttribute(new Float32Array(NZ * 2 * 3), 3));
-    this.deckTop.setAttribute("normal", new THREE.BufferAttribute(new Float32Array(NZ * 2 * 3), 3));
-    this.deckTop.setAttribute("uv", new THREE.BufferAttribute(new Float32Array(ZS.flatMap((z) => [0, z / 2, 2.5, z / 2])), 2));
-    const ti: number[] = [];
-    for (let j = 0; j < NZ - 1; j++) { const a = j * 2, c = j * 2 + 1, d = (j + 1) * 2, e = (j + 1) * 2 + 1; ti.push(a, d, e, a, e, c); }
-    this.deckTop.setIndex(ti);
-    this.deckSide = new THREE.BufferGeometry();
-    this.deckSide.setAttribute("position", new THREE.BufferAttribute(new Float32Array(NZ * 6 * 3), 3));
-    const sn: number[] = [], su: number[] = [], si: number[] = [];
-    ZS.forEach((z) => { sn.push(-1, 0, 0, -1, 0, 0, 1, 0, 0, 1, 0, 0, 0, -1, 0, 0, -1, 0); su.push(z / 3, 0, z / 3, 0.3, z / 3, 0, z / 3, 0.3, z / 3, 0, z / 3, 1.2); });
-    for (let j = 0; j < NZ - 1; j++) {
-      const A = (k: number) => j * 6 + k, B = (k: number) => (j + 1) * 6 + k;
-      si.push(A(0), A(1), B(1), A(0), B(1), B(0), A(2), B(2), B(3), A(2), B(3), A(3), A(4), A(5), B(5), A(4), B(5), B(4));
+    // ---- podium (shot 17) ----
+    const pb = new Batch(), [px, , pz] = PODIUM;
+    pb.add(boxGeo(V(px - 1.3, 0, pz - 0.7), V(px + 1.3, 1.0, pz + 0.7)), lam("gold", () => ({ color: "#f2c14e" })));
+    pb.add(boxGeo(V(px - 1.2, 0, pz - 2.6), V(px + 1.2, 0.6, pz - 0.7)), lam("silver", () => ({ color: "#cfd5dc" })));
+    pb.add(boxGeo(V(px - 1.2, 0, pz + 0.7), V(px + 1.2, 0.4, pz + 2.6)), lam("bronze", () => ({ color: "#d08a4a" })));
+    const bunt = lam("bunting", () => ({ color: "#3f8fd0" }));
+    for (const s of [-1, 1]) pb.add(boxGeo(V(px - 2.6, 0, pz + s * 4.2 - 0.06), V(px - 2.48, 4.2, pz + s * 4.2 + 0.06)), pole);
+    pb.add(boxGeo(V(px - 2.6, 3.9, pz - 4.2), V(px - 2.5, 4.0, pz + 4.2)), bunt);
+    for (let i = 0; i < 12; i++) {
+      const zz = pz - 4 + i * 0.72, col = ["#e2453c", "#f2c14e", "#3f8fd0", "#5fae6a"][i % 4];
+      pb.add(new THREE.BufferGeometry().setFromPoints([V(px - 2.55, 3.92, zz), V(px - 2.55, 3.92, zz + 0.6), V(px - 2.55, 3.4, zz + 0.3)]), lam("pennant" + col, () => ({ color: col, side: THREE.DoubleSide })));
     }
-    this.deckSide.setAttribute("normal", new THREE.Float32BufferAttribute(sn, 3));
-    this.deckSide.setAttribute("uv", new THREE.Float32BufferAttribute(su, 2));
-    this.deckSide.setIndex(si);
-    const deckM = lam("planksHD", () => ({ map: planksHD() })), sideM = lam("deckSide", () => ({ map: beamHD() }));
-    for (const mm of [deckM, sideM]) if (mm.map) { mm.map.anisotropy = 16; mm.map.needsUpdate = true; }
-    for (const [g, m] of [[this.deckTop, deckM], [this.deckSide, sideM]] as const) {
-      const mesh = new THREE.Mesh(g, m); mesh.castShadow = true; mesh.receiveShadow = true; mesh.frustumCulled = false; R.add(mesh);
-    }
-    const inst = (g: THREE.BufferGeometry, m: THREE.Material, n: number) => {
-      const im = new THREE.InstancedMesh(g, m, n); im.castShadow = true; im.receiveShadow = true; im.frustumCulled = false; R.add(im); return im;
-    };
-    this.posts = inst(new THREE.BoxGeometry(0.11, 1.12, 0.11).translate(0, 0.56, 0), M.wood, POSTS.length * 2);
-    this.ribs = inst(new THREE.BoxGeometry(5.7, 0.26, 0.24), M.wood, POSTS.length);
-    const chainM = twoTone(lam("chainHD", () => ({ map: rep(chainHD(), 1, 1), side: THREE.DoubleSide })) as THREE.MeshLambertMaterial, 0.15);
-    chainM.color.set("#8c847c"); // dark iron: darker, warm-greyed multiplier on the painted links
-    this.hangers = inst(new THREE.CylinderGeometry(0.035, 0.035, 1, 5).translate(0, 0.5, 0), M.iron, HANG.length * 2);
-    const pen = new THREE.BufferGeometry();
-    pen.setAttribute("position", new THREE.Float32BufferAttribute([0, 0, -0.17, 0, 0, 0.17, 0, -0.42, 0], 3));
-    pen.computeVertexNormals();
-    this.bunting = inst(pen, lam("pennant", () => ({ side: THREE.DoubleSide })), FLAGS.length * 2);
-    const cols = ["#d23b3b", "#f3d35a", "#3f6fb5", "#f7f1e1", "#2f8a4f"].map((c) => new THREE.Color(c));
-    for (let i = 0; i < FLAGS.length * 2; i++) this.bunting.setColorAt(i, cols[i % 5]);
-    for (const [w, h] of [[0.1, 0.1], [0.07, 0.07], [0.1, 0.1], [0.07, 0.07]]) { const s = new Strand(NZ, w, h, M.wood, 3); this.rails.push(s); R.add(s.mesh); }
-    for (let i = 0; i < 2; i++) { const s = new Strand(CZ.length, 0.14, 0.3, chainM, 2); this.chains.push(s); R.add(s.mesh); }
-    for (let i = 0; i < 4; i++) { const s = new Strand(18, 0.14, 0.3, chainM, 2); this.stays.push(s); R.add(s.mesh); }
-    const half = new THREE.CylinderGeometry(0.075, 0.075, 0.31, 10); half.rotateZ(Math.PI / 2);
-    this.boltA = new THREE.Mesh(half, M.steel); this.boltB = new THREE.Mesh(half, M.steel);
-    const eyeG = new THREE.TorusGeometry(0.17, 0.05, 8, 18); eyeG.rotateY(Math.PI / 2);
-    this.eye = new THREE.Mesh(eyeG, M.steel);
-    for (const m of [this.boltA, this.boltB, this.eye]) { m.castShadow = true; R.add(m); }
-    const flagM = lam("flagM", () => ({ map: flagTex(), side: THREE.DoubleSide }));
-    for (const zc of [-27, 27]) {
-      const f = new THREE.Mesh(new THREE.PlaneGeometry(1.7, 1.0, 12, 1), flagM);
-      f.position.set(0, 20.75, zc); f.castShadow = true; f.frustumCulled = false;
-      this.flags.push(f); R.add(f);
-    }
-    // chimney smoke
-    const smokeT = smokeTex();
-    for (const [top, n] of [[[-22, D0 + 30.6, -77], 7], [[-80, D0 + 24.6, 93], 6]] as const)
-      for (let k = 0; k < n; k++) {
-        const mat = new THREE.MeshLambertMaterial({ map: smokeT, transparent: true, depthWrite: false });
-        const m = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), mat);
-        m.layers.set(NOINK);
-        this.smoke.push({ m, mat, top: top as unknown as V3, k: k / n }); R.add(m);
-      }
-    // the new rule's sign (shots 14-15)
-    // unlit painted face: lit by the side sun it went grey-blue and the pictogram could not be read
-    const board = new THREE.Mesh(new THREE.PlaneGeometry(1.4, 1.04), new THREE.MeshBasicMaterial({ map: ctex("sign", 700, 520, (g) => fxSign(new Pen(g))), alphaTest: 0.5, color: 0xe6e6e6 }));
-    board.layers.set(NOINK);
-    board.position.set(SIGN_AT[0], D0 + 1.62, SIGN_AT[2] - 0.04); board.rotation.y = Math.PI;
-    const back = new THREE.Mesh(new THREE.BoxGeometry(1.46, 1.1, 0.06), M.wood); back.position.set(SIGN_AT[0], D0 + 1.62, SIGN_AT[2] + 0.0);
-    this.sign.add(board, back);
-    for (const s of [-1, 1]) { const p = new THREE.Mesh(new THREE.BoxGeometry(0.12, 2.15, 0.12), M.wood); p.position.set(SIGN_AT[0] + s * 0.52, D0 + 1.07, SIGN_AT[2] + 0.07); this.sign.add(p); }
-    this.sign.traverse((o) => { o.castShadow = true; o.receiveShadow = true; });
-    R.add(this.sign);
-    this.swing = new Actor(R, swingGeo);
-    // the CAM agent's near framing objects: built once, never passed through the sight-line filter, toggled per frame
+    pb.build(this.podium);
+    R.add(this.podium);
+
+    // ---- cockpit set (high in the sky, so the windows show sky and the cloud sea) ----
+    this.buildCockpit();
+    R.add(this.cockpit);
+
+    // ---- the jet ----
+    this.jet = buildJet();
+    R.add(this.jet.root);
+
     for (const fg of FOREGROUND) {
       const o = kitClone(kit, fg.kit, fg.s ?? 1);
       if (!o) continue;
@@ -333,7 +407,50 @@ export class World {
     }
   }
 
-  /** camera-relative sun, frozen per shot: the shot's mean view direction turned by az toward screen right, lifted by el */
+  private buildCockpit() {
+    const g = this.cockpit, b = new Batch(), [cx, cy, cz] = COCKPIT;
+    const B = (x0: number, y0: number, z0: number, x1: number, y1: number, z1: number, m: THREE.Material) => b.add(boxGeo(V(cx + x0, cy + y0, cz + z0), V(cx + x1, cy + y1, cz + z1)), m);
+    const wall = lam("ckWall", () => ({ color: "#d4d6d8" })), panel = lam("ckPanel", () => ({ color: "#4f5664" })), dash = lam("ckDash", () => ({ color: "#5a6170" }));
+    const seat = lam("ckSeat", () => ({ color: "#5a4636" })), floor = lam("ckFloor", () => ({ color: "#4a4f5a" })), frame = lam("ckFrame", () => ({ color: "#b9bcc2" }));
+    B(-1.7, -0.1, -1.7, 1.7, 0, 1.5, floor);
+    B(-1.7, 2.1, -1.7, 1.7, 2.2, 1.5, wall);
+    B(-1.2, 1.88, -1.3, 1.2, 2.1, 0.2, panel); // overhead panel
+    B(-1.7, 0, 1.4, 1.7, 2.2, 1.5, wall); // back wall
+    B(-0.45, 0, 1.38, 0.45, 1.9, 1.42, lam("ckDoor", () => ({ color: "#bfc2c7" })));
+    for (const s of [-1, 1]) { // side walls with a window opening (z -1.45 .. -0.35, y 1.0 .. 1.6)
+      const x0 = s < 0 ? -1.7 : 1.6, x1 = s < 0 ? -1.6 : 1.7;
+      B(x0, 0, -1.7, x1, 1.0, 1.5, wall); B(x0, 1.6, -1.7, x1, 2.2, 1.5, wall);
+      B(x0, 1.0, -0.35, x1, 1.6, 1.5, wall); B(x0, 1.0, -1.7, x1, 1.6, -1.45, wall);
+    }
+    // windshield: frame posts around four panes (front at z -1.6)
+    B(-1.7, 0, -1.72, 1.7, 1.05, -1.6, dash); B(-1.7, 1.78, -1.72, 1.7, 2.2, -1.6, wall);
+    for (const x of [-1.7, -0.86, -0.06, 0.76, 1.6]) B(x, 1.05, -1.72, x + 0.1, 1.78, -1.6, frame); // window posts
+    // dashboard + glareshield + centre pedestal + yokes
+    B(-1.6, 0, -1.6, 1.6, 0.98, -1.05, dash);
+    B(-1.6, 0.98, -1.6, 1.6, 1.08, -0.95, panel);
+    B(-0.2, 0, -1.05, 0.2, 0.78, 0.3, panel);
+    for (const s of [-1, 1]) {
+      B(s * 0.62 - 0.03, 0.4, -0.78, s * 0.62 + 0.03, 0.82, -0.72, dash);
+      b.add(new THREE.TorusGeometry(0.16, 0.025, 6, 16, Math.PI), dash, at(cx + s * 0.62, cy + 0.84, cz - 0.75));
+      // seat: base, back, headrest
+      B(s * 0.62 - 0.3, 0.32, 0.12, s * 0.62 + 0.3, 0.48, 0.66, seat);
+      B(s * 0.62 - 0.3, 0.48, 0.62, s * 0.62 + 0.3, 1.32, 0.78, seat);
+      B(s * 0.62 - 0.17, 1.32, 0.64, s * 0.62 + 0.17, 1.55, 0.76, seat);
+      B(s * 0.62 - 0.08, 0, 0.3, s * 0.62 + 0.08, 0.32, 0.5, panel);
+    }
+    b.build(g, false);
+    g.traverse((o) => { const m = o as THREE.Mesh; if (m.isMesh) m.receiveShadow = false; });
+    // screens (unlit, swap to black when the power goes)
+    [-1.05, -0.45, 0.45, 1.05].forEach((x, i) => {
+      this.screenOn.push(screenTex(true, i)); this.screenOff.push(screenTex(false, i));
+      const mat = new THREE.MeshBasicMaterial({ map: this.screenOn[i], toneMapped: true });
+      const m = new THREE.Mesh(new THREE.PlaneGeometry(0.42, 0.36), mat);
+      m.position.set(cx + x, cy + 0.72, cz - 1.045); m.rotation.x = -0.12; m.layers.set(NOINK);
+      this.screens.push(mat); g.add(m);
+    });
+  }
+
+  /** camera-relative sun, frozen per shot */
   private shotSun(id: number, s: ShotDef, L: LightPreset) {
     let v = this.sunCache.get(id);
     if (v) return v;
@@ -343,47 +460,47 @@ export class World {
       fx += x / n; fz += z / n;
     }
     const n = Math.hypot(fx, fz) || 1; fx /= n; fz /= n;
-    const ss = s as ShotDef & { sunAz?: number; sunEl?: number };
-    const az = THREE.MathUtils.degToRad(ss.sunAz ?? SUN_SHOT[id]?.az ?? L.az), el = THREE.MathUtils.degToRad(ss.sunEl ?? SUN_SHOT[id]?.el ?? L.el);
-    const hx = fx * Math.cos(az) - fz * Math.sin(az), hz = fz * Math.cos(az) + fx * Math.sin(az); // screen right = (-fz, fx)
+    const az = THREE.MathUtils.degToRad(s.sunAz ?? SUN_SHOT[id]?.az ?? L.az), el = THREE.MathUtils.degToRad(s.sunEl ?? SUN_SHOT[id]?.el ?? L.el);
+    const hx = fx * Math.cos(az) - fz * Math.sin(az), hz = fz * Math.cos(az) + fx * Math.sin(az);
     v = new THREE.Vector3(hx * Math.cos(el), Math.sin(el), hz * Math.cos(el)).normalize();
     this.sunCache.set(id, v);
     return v;
   }
-
   private actor(i: number) { while (this.actors.length <= i) this.actors.push(new Actor(this.root)); return this.actors[i]; }
   private fx(i: number) { while (this.fxs.length <= i) this.fxs.push(new Fx(this.root)); return this.fxs[i]; }
 
   update(id: number, f: number, cam: THREE.PerspectiveCamera, scene: THREE.Scene) {
-    const t = f / FPS, s = SHOTS[id - 1], tau = s.tau(t), b = bridgeState(id, t), L = LIGHTS[s.light];
+    const t = f / FPS, s = SHOTS[id - 1], L = LIGHTS[s.light];
+    const high = s.place === "sky" || s.place === "cockpit";
     // ---- camera ----
     const c = camAt(id, f);
     cam.position.set(...c.pos); cam.up.set(0, 1, 0); cam.lookAt(...c.look); cam.rotateZ(c.roll);
-    cam.fov = c.fov; cam.near = 0.2; cam.far = 1500; cam.updateProjectionMatrix(); cam.updateMatrixWorld();
+    cam.fov = c.fov; cam.near = s.place === "cockpit" ? 0.05 : 0.2; cam.far = 3000; cam.updateProjectionMatrix(); cam.updateMatrixWorld();
     const focus = V(...c.look), dist = cam.position.distanceTo(focus);
-    cam.layers.enable(NOINK); // sky, clouds, smoke and sun sprites live on the no-ink layer but are still rendered
-    // ---- light rig (lighting.md 9.4): camera-relative sun frozen per shot, two-tone uniforms, shadow fit ----
+    cam.layers.enable(NOINK);
+    // ---- light rig ----
     const K = LOOK[s.light], sunDir = this.shotSun(id, s, L);
     this.hemi.color.set(L.sky); this.hemi.groundColor.set(L.ground); this.hemi.intensity = L.hemiI;
     this.sun.color.set(L.sunCol); this.sun.intensity = L.sunI;
     let Rr = THREE.MathUtils.clamp(dist * 1.15 + 7, 12, 95);
-    if (s.light === "golden") Rr = Math.max(Rr, 30); // el 7: 2 m cards throw ~16 m shadows, houses much longer
+    if (s.light === "golden") Rr = Math.max(Rr, 34);
+    if (s.place === "sky") Rr = Math.max(Rr, 34); // the whole jet
     this.sun.position.copy(focus).addScaledVector(sunDir, 220); this.sun.target.position.copy(focus);
     const sc = this.sun.shadow.camera;
     sc.left = -Rr; sc.right = Rr; sc.top = Rr; sc.bottom = -Rr; sc.near = 20; sc.far = 480; sc.updateProjectionMatrix();
     this.sun.shadow.bias = L.bias; this.sun.shadow.normalBias = L.normalBias * (Rr / 12);
-    this.fill.intensity = 0; // not used by the two-tone shading
     TONE.uLitCol.value.set(...L.lit); TONE.uShadeCol.value.set(...L.shade); TONE.uShadeLift.value.set(...L.lift);
-    TONE.uLambert.value = L.lambert; TONE.uSideK.value = L.sideK; TONE.uTerm.value = L.term; TONE.uBounce.value.set(...LOOK[s.light].bounce); TONE.uSat.value = LOOK[s.light].sat;
+    TONE.uLambert.value = L.lambert; TONE.uSideK.value = L.sideK; TONE.uTerm.value = L.term; TONE.uBounce.value.set(...K.bounce); TONE.uSat.value = K.sat;
     CHAR.uCharTint.value.set(...L.charTint); CHAR.uCharShade.value = L.charShade; CHAR.uGrad.value = L.charGrad;
     CHAR.uBodyGrad.value = L.bodyGrad; CHAR.uSideTint.value.set(...L.sideTint);
-    // ---- sky, fog (colour = horizon colour, linear fogNear -> fogFar), sun disc + halo, clouds ----
+    // ---- sky, fog, sun, clouds ----
     const su = this.skyMat.uniforms;
     K.sky.c.forEach((h, i) => untone(h, su["c" + i].value));
     const e = K.sky.e.map((deg) => THREE.MathUtils.degToRad(deg));
     su.e.value.set(e[1], e[2], e[3], e[4]);
     this.sky.position.copy(cam.position);
-    untone(L.fog, this.fog.color); this.fog.near = L.fogNear; this.fog.far = L.fogFar;
+    untone(L.fog, this.fog.color);
+    this.fog.near = high ? 300 : L.fogNear; this.fog.far = high ? 2600 : L.fogFar; // up high the air is clear to the cloud horizon
     scene.fog = this.fog; scene.background = null;
     const showSun = s.light === "golden";
     this.sunDisc.visible = this.sunHalo.visible = showSun;
@@ -393,194 +510,72 @@ export class World {
       this.sunHalo.position.copy(this.sunDisc.position); this.sunHalo.scale.setScalar(2 * 900 * Math.tan(THREE.MathUtils.degToRad(24)));
       (this.sunHalo.material as THREE.SpriteMaterial).color.set(L.sunDisc).multiplyScalar(1.3);
     }
-    for (let i = 0; i < this.clouds.length; i++) {
-      const m = this.clouds[i], mat = m.material as THREE.MeshBasicMaterial;
+    this.clouds.forEach((m, i) => {
+      const a = (i / this.clouds.length) * Math.PI * 2 + 0.3, d = 820 + (i % 3) * 80, w = 170 + (i % 4) * 40;
+      const y = high ? cam.position.y + (i % 3 === 0 ? -30 : 25 + (i % 4) * 30) : 120 + (i % 4) * 38;
+      m.position.set(cam.position.x + Math.cos(a) * d, y, cam.position.z + Math.sin(a) * d); m.scale.set(w, w / 2, 1);
       m.lookAt(cam.position.x, m.position.y, cam.position.z);
-      mat.map = this.cloudMaps[s.light][i % 4];
+      (m.material as THREE.MeshBasicMaterial).map = this.cloudMaps[s.light][i % 4];
+    });
+    for (const c2 of this.sea) {
+      c2.m.visible = high;
+      c2.mat.map = this.seaTex[s.light][c2.k];
+      c2.mat.map.repeat.set(9, 9);
+      c2.mat.map.offset.set(0.002 * c2.k, -((t * (c2.k ? 0.0105 : 0.0072)) % 1)); // stream toward +z
     }
-    // ---- river colours (on-screen targets, tone-map-inverted) ----
-    const W = this.WU, wc = K.water;
-    untone(wc.near, W.wNearC.value); untone(wc.mid, W.wMidC.value); untone(wc.far, W.wFarC.value);
-    untone(wc.crest, W.wCrest.value); untone(wc.trough, W.wTrough.value); untone(wc.glint, W.wGlint.value);
-    W.wShade.value.set(...wc.shade); W.wTime.value = t;
-    // ---- foreground framing objects: inside their frames AND their own shot (so a crossfade layer never shows them) ----
+    // ---- set dressing per place ----
+    const gimli = s.place === "gimli";
+    this.race.visible = gimli; this.podium.visible = id === 17;
+    this.cockpit.visible = s.place === "cockpit";
     for (const g of this.fgs) g.o.visible = f >= g.a && f < g.b && g.a < s.b && g.b > s.a;
-    // ---- bridge ----
-    this.poseBridge(b, t, tau, id);
-    this.sign.visible = id >= 14;
-    for (const sm of this.smoke) {
-      const u = (t * 0.11 + sm.k) % 1, sz = 3 + u * 9;
-      sm.m.position.set(sm.top[0] - u * 18, sm.top[1] + u * 13 + u * u * 4, sm.top[2] + u * 3);
-      sm.m.scale.set(sz, sz, 1); sm.m.quaternion.copy(cam.quaternion);
-      sm.mat.opacity = 0.85 * (1 - u) ** 1.2;
+    for (const { o, k } of this.karts) {
+      if (id === 8) { o.position.set(k.x, 0, -78 + k.v * (k.t0 - t)); o.rotation.y = 0; }
+      else { o.position.set(...k.park); o.rotation.y = 0.5 + k.x * 0.1; }
     }
+    const dead = f >= 233 || id > 6;
+    this.screens.forEach((m, i) => { m.map = dead ? this.screenOff[i] : this.screenOn[i]; });
+    // ---- the jet ----
+    const ps = planeAt(id, t);
+    poseJet(this.jet, ps);
     // ---- cast + effects ----
     const right = V(0, 0, 0).setFromMatrixColumn(cam.matrixWorld, 0);
-    const st = stage(id, t, b, { pos: cam.position, right });
-    if (id === 8) {
-      snapFx(tau, BOLT, st); splashFx(tau, st);
-      if (tau > 33.1 && tau < SNAP) creakFx(t, [[BOLT[0] + 0.3, BOLT[1] + 0.14, BOLT[2] - 0.12], [BOLT[0] - 0.32, BOLT[1] + 0.08, BOLT[2] - 0.12]], st, 0.3);
-    }
-    if (id === 7 && t > 28.9) {
-      const F = front(tau);
-      creakFx(t, [3, 5.5, 8].map((dz) => [-2.7, chainY(F + dz, b) + 0.35, F + dz] as V3), st);
-    }
+    const st = stage(id, t, ps, { pos: cam.position, right, sun: sunDir });
     this.frustum.setFromProjectionMatrix(this.m4.multiplyMatrices(cam.projectionMatrix, cam.matrixWorldInverse));
-    const tint = s.light === "golden" ? "#ffcf9e" : "#ffffff";
     let ai = 0;
     const used: Actor[] = [];
     for (const p of st.places) {
       const sc2 = p.scale ?? 1;
-      if (p.geo !== "swing" && !this.frustum.intersectsSphere(this.sph.set(this.v.set(p.x, p.y + 1.1 * sc2, p.z), 3.5))) continue;
-      const a = p.geo === "swing" ? this.swing : this.actor(ai++);
+      if (!this.frustum.intersectsSphere(this.sph.set(this.v.set(p.x, p.y + 1.1 * sc2, p.z), 3.5))) continue;
+      const a = this.actor(ai++);
       const [w, h, k] = p.size ?? [300, 500, 0.5];
       a.r = this.pool.req(p.key, w, h, k, p.draw);
       a.mesh.visible = true;
       a.mesh.position.set(p.x, p.y, p.z);
       a.mesh.rotation.set(0, p.yaw ?? Math.atan2(cam.position.x - p.x, cam.position.z - p.z), p.roll ?? 0);
       a.mesh.scale.set(p.mirror ? -sc2 : sc2, sc2, sc2);
-      if (a.mat.emissiveMap) a.mat.emissive.set(tint); // legacy emissive card until the CHAR agent's cardShade lands
-      a.mesh.castShadow = p.geo === "swing" ? true : L.actorShadow; // day: soft contact blobs instead (CHAR agent)
+      a.mesh.castShadow = L.actorShadow && s.place !== "cockpit";
       used.push(a);
     }
     for (let i = ai; i < this.actors.length; i++) this.actors[i].mesh.visible = false;
-    if (!used.includes(this.swing)) this.swing.mesh.visible = false;
     let fi = 0;
     const fused: Fx[] = [];
     for (const p of st.fx) {
       if (!this.frustum.intersectsSphere(this.sph.set(this.v.set(p.x, p.y, p.z), Math.max(p.w, p.h)))) continue;
-      const e = this.fx(fi++);
-      e.r = this.pool.req(p.key, p.cw, p.ch, 1, p.draw);
-      e.use(!!p.soft);
-      e.mesh.visible = true;
-      e.mesh.position.set(p.x, p.y, p.z);
-      if (p.flat) e.mesh.rotation.set(-Math.PI / 2, 0, p.rot ?? 0);
-      else { e.mesh.quaternion.copy(cam.quaternion); e.mesh.rotateZ(p.rot ?? 0); }
-      e.mesh.scale.set(p.w, p.h, 1);
-      fused.push(e);
+      const e2 = this.fx(fi++);
+      e2.r = this.pool.req(p.key, p.cw, p.ch, 1, p.draw);
+      e2.use(!!p.soft);
+      e2.mesh.visible = true;
+      e2.mesh.position.set(p.x, p.y, p.z);
+      if (p.flat) e2.mesh.rotation.set(-Math.PI / 2, 0, p.rot ?? 0);
+      else { e2.mesh.quaternion.copy(cam.quaternion); e2.mesh.rotateZ(p.rot ?? 0); }
+      e2.mesh.scale.set(p.w, p.h, 1);
+      fused.push(e2);
     }
     for (let i = fi; i < this.fxs.length; i++) this.fxs[i].mesh.visible = false;
     this.pool.flush();
     for (const a of used) a.bind();
-    for (const e of fused) e.bind();
+    for (const e3 of fused) e3.bind();
     return focus;
   }
-
-  private poseBridge(b: BridgeState, t: number, tau: number, id: number) {
-    const dy = ZS.map((z) => deckY(z, b));
-    const top = this.deckTop.attributes.position.array as Float32Array, tn = this.deckTop.attributes.normal.array as Float32Array;
-    const side = this.deckSide.attributes.position.array as Float32Array;
-    for (let j = 0; j < NZ; j++) {
-      const z = ZS[j], y = dy[j], slope = (dy[Math.min(NZ - 1, j + 1)] - dy[Math.max(0, j - 1)]) / ((Math.min(NZ - 1, j + 1) - Math.max(0, j - 1)) * 0.5);
-      const nl = Math.hypot(1, slope);
-      top.set([-2.5, y, z, 2.5, y, z], j * 6);
-      tn.set([0, 1 / nl, -slope / nl, 0, 1 / nl, -slope / nl], j * 6);
-      side.set([-2.5, y, z, -2.5, y - 0.45, z, 2.5, y, z, 2.5, y - 0.45, z, -2.5, y - 0.45, z, 2.5, y - 0.45, z], j * 18);
-    }
-    this.deckTop.attributes.position.needsUpdate = true; this.deckTop.attributes.normal.needsUpdate = true;
-    this.deckSide.attributes.position.needsUpdate = true;
-    const q = new THREE.Quaternion(), one = V(1, 1, 1), pos = V(0, 0, 0), scl = V(1, 1, 1);
-    POSTS.forEach((z, k) => {
-      const y = deckY(z, b);
-      for (const [i, x] of [[0, -2.42], [1, 2.42]] as const) this.posts.setMatrixAt(k * 2 + i, this.m4.compose(pos.set(x, y, z), q, one));
-      this.ribs.setMatrixAt(k, this.m4.compose(pos.set(0, y - 0.58, z), q, one));
-    });
-    this.posts.instanceMatrix.needsUpdate = true; this.ribs.instanceMatrix.needsUpdate = true;
-    [[-2.42, 1.08], [-2.42, 0.6], [2.42, 1.08], [2.42, 0.6]].forEach(([x, h], i) => this.rails[i].set(ZS.map((z, j) => V(x, dy[j] + h, z))));
-    [-2.7, 2.7].forEach((x, i) => this.chains[i].set(CZ.map((z) => V(x, chainY(z, b), z))));
-    HANG.forEach((z, k) => {
-      const base = deckY(z, b), up = Math.max(0.01, chainY(z, b) - base);
-      for (const [i, x] of [[0, -2.62], [1, 2.62]] as const) this.hangers.setMatrixAt(k * 2 + i, this.m4.compose(pos.set(x, base, z), q, scl.set(1, up, 1)));
-    });
-    this.hangers.instanceMatrix.needsUpdate = true;
-    // no pennants where the intact chain hangs below 3.3 m over the planks (mid-span): from the side cameras they
-    // cover the shakos. Decided on the intact catenary so none pop in or out while the chain falls.
-    FLAGS.forEach((z, k) => {
-      const s = catY(z) - D0 > 3.3 ? 1 : 0;
-      for (const [i, x] of [[0, -2.78], [1, 2.78]] as const) this.bunting.setMatrixAt(k * 2 + i, this.m4.compose(pos.set(x, chainY(z, b) - 0.1, z), q, scl.set(s, s, s)));
-    });
-    this.bunting.instanceMatrix.needsUpdate = true;
-    // backstays: far pair intact; near pair drapes over the wall when the end drops; near-left one snaps first
-    const sag = (a: THREE.Vector3, e: THREE.Vector3, n: number, dip: number) =>
-      Array.from({ length: n }, (_, i) => { const u = i / (n - 1); return a.clone().lerp(e, u).add(V(0, -dip * 4 * u * (1 - u), 0)); });
-    const drape = (a: THREE.Vector3, x: number, e: THREE.Vector3, n: number) => {
-      const w = V(x, D0 + 0.12, -30.1), h = Math.floor(n / 2);
-      return Array.from({ length: n }, (_, i) => {
-        if (i < h) { const u = i / h; return V(a.x + (w.x - a.x) * u, a.y + (w.y - a.y) * u * u, a.z + (w.z - a.z) * u); }
-        const u = (i - h) / (n - 1 - h);
-        return V(w.x + (e.x - w.x) * u, D0 + 0.12 + (e.y - D0 - 0.12) * u ** 3, w.z + (e.z - w.z) * u);
-      });
-    };
-    const blend = (a: THREE.Vector3[], c: THREE.Vector3[], k: number) => a.map((p, i) => p.clone().lerp(c[i], k));
-    const n = 18, kd = smooth(b.drop);
-    this.stays[2].set(sag(V(-2.7, TOP, 27), V(-2.7, D0 + 0.86, 37), n, 0.5));
-    this.stays[3].set(sag(V(2.7, TOP, 27), V(2.7, D0 + 0.86, 37), n, 0.5));
-    const endR = V(2.7, D0 + 0.86, -37);
-    this.stays[1].set(blend(sag(V(2.7, TOP, -27), endR, n, 0.5), drape(V(2.7, chainY(-27, b), -27), 2.7, endR, n), kd));
-    const jerk = id === 8 && b.snap === 0 ? 0.06 * b.bounce : 0; // the bolt jerks with every footfall before it goes
-    const e = V(...snapEnd(b.snap)).add(V(0, 0.24 + 0.4 * jerk, jerk));
-    const whip = sag(V(-2.7, TOP, -27), e, n, b.snap > 0 ? 0.25 + 0.6 * Math.sin(Math.min(1, b.snap) * Math.PI) : 0.5);
-    const fallenEnd = e.clone().lerp(V(-3.3, D0 + 0.12, -33.2), kd);
-    this.stays[0].set(blend(whip, drape(V(-2.7, chainY(-27, b), -27), -2.9, fallenEnd, n), kd));
-    this.eye.position.copy(b.drop > 0 ? fallenEnd : e);
-    // the bolt: whole until it snaps, then two halves fly off and land on the bank
-    const ts = id === 15 || b.snap === 0 ? -1 : Math.max(0, (id >= 9 ? 9 : tau - SNAP));
-    if (ts < 0) {
-      this.boltA.position.set(BOLT[0] - 0.155, BOLT[1] + 0.4 * jerk, BOLT[2] + jerk); this.boltB.position.set(BOLT[0] + 0.155, BOLT[1] + 0.4 * jerk, BOLT[2] + jerk);
-      this.boltA.rotation.set(0, 0, 0); this.boltB.rotation.set(0, 0, 0);
-      this.eye.position.copy(e);
-    } else {
-      for (const [m, vx, vy, vz, sp] of [[this.boltA, -2.4, 4.4, 1.1, 17], [this.boltB, 2.1, 3.7, -0.9, -14]] as const) {
-        const tl = Math.min(ts, (vy + Math.sqrt(vy * vy + 2 * 9.8 * (BOLT[1] - D0 - 0.08))) / 9.8);
-        m.position.set(BOLT[0] + vx * tl + (vx > 0 ? 0.155 : -0.155), BOLT[1] + vy * tl - 4.9 * tl * tl, BOLT[2] + vz * tl);
-        m.rotation.set(sp * tl * 0.4, sp * tl, 0);
-      }
-    }
-    // tower flags waving
-    for (const fl of this.flags) {
-      const p = fl.geometry.attributes.position as THREE.BufferAttribute;
-      for (let i = 0; i < p.count; i++) {
-        const u = (i % 13) / 12, y = i < 13 ? 0.5 : -0.5;
-        p.setXYZ(i, -u * 1.7, y + 0.05 * u * Math.sin(t * 4 - u * 3), 0.24 * u * Math.sin(t * 5.5 - u * 5 + fl.position.z));
-      }
-      p.needsUpdate = true;
-    }
-  }
 }
-
-const WATER_DECL = `#include <common>
-varying vec3 vWP;
-uniform vec3 wNearC, wMidC, wFarC, wCrest, wTrough, wGlint, wShade;
-uniform sampler2D wNearTex, wFarTex;
-uniform float wTime;`;
-const WATER_COL = `
-  vec3 wV = vWP - cameraPosition;
-  float wd = length(wV);
-  float wDep = asin(clamp(-wV.y / wd, 0.0, 1.0));       // depression angle of the view ray
-  float wf = 1.0 - smoothstep(0.0, 0.42, wDep);         // 1 at the horizon .. 0 at 24 deg down
-  vec3 wc = mix(mix(wNearC, wMidC, smoothstep(0.0, 0.55, wf)), wFarC, smoothstep(0.55, 1.0, wf));
-  vec2 wp = vWP.xz + vec2(0.35 * wTime, 0.0);           // slow river along +x
-  vec4 mk = mix(texture2D(wNearTex, wp / 8.0), texture2D(wFarTex, wp / 40.0 + 0.37), smoothstep(25.0, 90.0, wd));
-  wc = mix(wc, wTrough, mk.g * 0.6);
-  wc = mix(wc, wCrest, mk.r * 0.7);
-  wc = mix(wc, wGlint, mk.b * (0.3 + 0.5 * wf));
-  diffuseColor.rgb = wc;`;
-
-const swingGeo = (() => { const g = new THREE.PlaneGeometry(700 * SU_SWING, 2300 * SU_SWING); g.translate(0, -(1150 - 20) * SU_SWING, 0); return g; })();
-/** horizontal quad facing up at height D0 + dy covering x0..x1, z0..z1 (z0 < z1) */
-function quadUp(x0: number, x1: number, z0: number, z1: number, u: number, v: number, dy = 0) {
-  const y = D0 + dy, g = new THREE.BufferGeometry();
-  g.setAttribute("position", new THREE.Float32BufferAttribute([x0, y, z1, x1, y, z1, x1, y, z0, x0, y, z1, x1, y, z0, x0, y, z0], 3));
-  g.setAttribute("normal", new THREE.Float32BufferAttribute([0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0], 3));
-  g.setAttribute("uv", new THREE.Float32BufferAttribute([0, 0, u, 0, u, v, 0, 0, u, v, 0, v], 2));
-  return g;
-}
-/** embankment wall from the river bed to the bank top at z, facing +z (dir 1) or -z (dir -1) */
-function wallQuad(x0: number, x1: number, z: number, dir: number) {
-  const g = new THREE.BufferGeometry(), y0 = -0.6, y1 = D0;
-  g.setAttribute("position", new THREE.Float32BufferAttribute([x0, y0, z, x1, y0, z, x1, y1, z, x0, y0, z, x1, y1, z, x0, y1, z], 3));
-  g.setAttribute("normal", new THREE.Float32BufferAttribute(Array(6).fill([0, 0, dir]).flat(), 3));
-  const u = Math.abs(x1 - x0) / 4, v = (y1 - y0) / 4;
-  g.setAttribute("uv", new THREE.Float32BufferAttribute([0, 0, u, 0, u, v, 0, 0, u, v, 0, v], 2));
-  return g;
-}
+export { smooth };
