@@ -154,7 +154,7 @@ const P = (id: number, f: number) => planeAt(id, F(f));
 // sky: the jet flies toward -z, so the lens on the -z side sees its front
 const S1a = (f: number) => dolly([-52, 609, -60], [2, 600.5, 1], pushK(f, 0, 0.0028), { fov: 42, roll: -0.03 });
 const S2a = (f: number) => dolly([-17, 597.2, -19], [-8.6, 598.2, -6], pushK(f, 58, 0.0025), { fov: 38, roll: 0.03 }); // left engine
-const S2b = (f: number) => ({ pos: [-150, 528, -190] as V3, look: [0, 598, 0] as V3, fov: 34, roll: 0.02 }); // pull far back: tiny jet over the cloud sea
+const S2b = (f: number) => ({ pos: [-120, 650, -170] as V3, look: [0, 596, 0] as V3, fov: 36, roll: 0.02 }); // pull far back and up: tiny jet over the cloud sea
 const S4a = (f: number) => dolly([34, 590, -78], [0, 601, -2], pushK(f, 168, 0.0025), { fov: 42, roll: 0.04 });
 const S5a = (f: number) => dolly([15.5, 597.6, -18.5], [8.6, 598.4, -6.2], pushK(f, 203, 0.003, 0.006, 22), { fov: 36, roll: -0.04 });
 const S15a = (f: number) => dolly([-14.5, 606.2, 8.5], [-9.5, 599.5, -1.2], pushK(f, 697, 0.0028), { fov: 42, roll: 0.03 });
