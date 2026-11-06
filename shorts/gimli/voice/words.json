@@ -1,0 +1,537 @@
+[
+ {
+  "word": "In",
+  "start": 0.04,
+  "end": 0.2
+ },
+ {
+  "word": "1983",
+  "start": 0.2,
+  "end": 1.111
+ },
+ {
+  "word": "a",
+  "start": 1.223,
+  "end": 1.279
+ },
+ {
+  "word": "passenger",
+  "start": 1.279,
+  "end": 1.743
+ },
+ {
+  "word": "jet",
+  "start": 1.743,
+  "end": 1.959
+ },
+ {
+  "word": "ran",
+  "start": 1.959,
+  "end": 2.215
+ },
+ {
+  "word": "out",
+  "start": 2.215,
+  "end": 2.319
+ },
+ {
+  "word": "of",
+  "start": 2.319,
+  "end": 2.391
+ },
+ {
+  "word": "fuel",
+  "start": 2.391,
+  "end": 2.766
+ },
+ {
+  "word": "at",
+  "start": 2.766,
+  "end": 2.83
+ },
+ {
+  "word": "forty-one",
+  "start": 2.83,
+  "end": 3.374
+ },
+ {
+  "word": "thousand",
+  "start": 3.374,
+  "end": 3.83
+ },
+ {
+  "word": "feet",
+  "start": 3.83,
+  "end": 4.182
+ },
+ {
+  "word": "and",
+  "start": 4.294,
+  "end": 4.438
+ },
+ {
+  "word": "everyone",
+  "start": 4.549,
+  "end": 4.949
+ },
+ {
+  "word": "survived",
+  "start": 4.949,
+  "end": 5.493
+ },
+ {
+  "word": "Halfway",
+  "start": 5.605,
+  "end": 5.901
+ },
+ {
+  "word": "across",
+  "start": 5.901,
+  "end": 6.197
+ },
+ {
+  "word": "Canada",
+  "start": 6.197,
+  "end": 6.66
+ },
+ {
+  "word": "both",
+  "start": 6.772,
+  "end": 7.06
+ },
+ {
+  "word": "engines",
+  "start": 7.06,
+  "end": 7.38
+ },
+ {
+  "word": "go",
+  "start": 7.38,
+  "end": 7.516
+ },
+ {
+  "word": "quiet",
+  "start": 7.516,
+  "end": 7.98
+ },
+ {
+  "word": "Luckily",
+  "start": 8.091,
+  "end": 8.483
+ },
+ {
+  "word": "the",
+  "start": 8.483,
+  "end": 8.699
+ },
+ {
+  "word": "captain",
+  "start": 8.699,
+  "end": 9.051
+ },
+ {
+  "word": "flies",
+  "start": 9.051,
+  "end": 9.379
+ },
+ {
+  "word": "gliders",
+  "start": 9.379,
+  "end": 9.874
+ },
+ {
+  "word": "as",
+  "start": 9.874,
+  "end": 9.97
+ },
+ {
+  "word": "a",
+  "start": 9.97,
+  "end": 10.01
+ },
+ {
+  "word": "hobby",
+  "start": 10.01,
+  "end": 10.378
+ },
+ {
+  "word": "Unluckily",
+  "start": 10.49,
+  "end": 11.026
+ },
+ {
+  "word": "the",
+  "start": 11.026,
+  "end": 11.226
+ },
+ {
+  "word": "nearest",
+  "start": 11.226,
+  "end": 11.554
+ },
+ {
+  "word": "runway",
+  "start": 11.554,
+  "end": 11.921
+ },
+ {
+  "word": "is",
+  "start": 11.921,
+  "end": 12.065
+ },
+ {
+  "word": "hosting",
+  "start": 12.065,
+  "end": 12.369
+ },
+ {
+  "word": "a",
+  "start": 12.369,
+  "end": 12.401
+ },
+ {
+  "word": "family",
+  "start": 12.401,
+  "end": 12.785
+ },
+ {
+  "word": "car",
+  "start": 12.785,
+  "end": 13.097
+ },
+ {
+  "word": "race",
+  "start": 13.097,
+  "end": 13.416
+ },
+ {
+  "word": "He",
+  "start": 13.528,
+  "end": 13.6
+ },
+ {
+  "word": "glides",
+  "start": 13.6,
+  "end": 13.968
+ },
+ {
+  "word": "in",
+  "start": 13.968,
+  "end": 14.24
+ },
+ {
+  "word": "the",
+  "start": 14.352,
+  "end": 14.416
+ },
+ {
+  "word": "nose",
+  "start": 14.416,
+  "end": 14.696
+ },
+ {
+  "word": "wheel",
+  "start": 14.696,
+  "end": 14.872
+ },
+ {
+  "word": "collapses",
+  "start": 14.872,
+  "end": 15.543
+ },
+ {
+  "word": "and",
+  "start": 15.647,
+  "end": 15.743
+ },
+ {
+  "word": "it",
+  "start": 15.743,
+  "end": 15.815
+ },
+ {
+  "word": "scrapes",
+  "start": 15.815,
+  "end": 16.223
+ },
+ {
+  "word": "to",
+  "start": 16.223,
+  "end": 16.343
+ },
+ {
+  "word": "a",
+  "start": 16.343,
+  "end": 16.375
+ },
+ {
+  "word": "stop",
+  "start": 16.375,
+  "end": 16.743
+ },
+ {
+  "word": "in",
+  "start": 16.743,
+  "end": 16.823
+ },
+ {
+  "word": "front",
+  "start": 16.823,
+  "end": 17.046
+ },
+ {
+  "word": "of",
+  "start": 17.046,
+  "end": 17.11
+ },
+ {
+  "word": "the",
+  "start": 17.11,
+  "end": 17.166
+ },
+ {
+  "word": "barbecues",
+  "start": 17.166,
+  "end": 17.774
+ },
+ {
+  "word": "You",
+  "start": 17.886,
+  "end": 17.966
+ },
+ {
+  "word": "see",
+  "start": 17.966,
+  "end": 18.214
+ },
+ {
+  "word": "the",
+  "start": 18.214,
+  "end": 18.398
+ },
+ {
+  "word": "plane",
+  "start": 18.398,
+  "end": 18.686
+ },
+ {
+  "word": "measured",
+  "start": 18.686,
+  "end": 18.957
+ },
+ {
+  "word": "fuel",
+  "start": 18.957,
+  "end": 19.325
+ },
+ {
+  "word": "in",
+  "start": 19.325,
+  "end": 19.429
+ },
+ {
+  "word": "kilograms",
+  "start": 19.429,
+  "end": 20.173
+ },
+ {
+  "word": "but",
+  "start": 20.173,
+  "end": 20.413
+ },
+ {
+  "word": "the",
+  "start": 20.413,
+  "end": 20.469
+ },
+ {
+  "word": "crew",
+  "start": 20.469,
+  "end": 20.836
+ },
+ {
+  "word": "did",
+  "start": 20.836,
+  "end": 20.956
+ },
+ {
+  "word": "the",
+  "start": 20.956,
+  "end": 21.012
+ },
+ {
+  "word": "sums",
+  "start": 21.012,
+  "end": 21.364
+ },
+ {
+  "word": "in",
+  "start": 21.364,
+  "end": 21.484
+ },
+ {
+  "word": "pounds",
+  "start": 21.484,
+  "end": 22.004
+ },
+ {
+  "word": "So",
+  "start": 22.116,
+  "end": 22.284
+ },
+ {
+  "word": "it",
+  "start": 22.284,
+  "end": 22.347
+ },
+ {
+  "word": "took",
+  "start": 22.347,
+  "end": 22.539
+ },
+ {
+  "word": "off",
+  "start": 22.539,
+  "end": 22.787
+ },
+ {
+  "word": "with",
+  "start": 22.787,
+  "end": 22.899
+ },
+ {
+  "word": "less",
+  "start": 22.899,
+  "end": 23.131
+ },
+ {
+  "word": "than",
+  "start": 23.131,
+  "end": 23.243
+ },
+ {
+  "word": "half",
+  "start": 23.243,
+  "end": 23.579
+ },
+ {
+  "word": "the",
+  "start": 23.579,
+  "end": 23.667
+ },
+ {
+  "word": "fuel",
+  "start": 23.667,
+  "end": 23.955
+ },
+ {
+  "word": "it",
+  "start": 23.955,
+  "end": 24.019
+ },
+ {
+  "word": "needed",
+  "start": 24.019,
+  "end": 24.386
+ },
+ {
+  "word": "The",
+  "start": 24.498,
+  "end": 24.626
+ },
+ {
+  "word": "airline",
+  "start": 24.626,
+  "end": 24.994
+ },
+ {
+  "word": "punished",
+  "start": 24.994,
+  "end": 25.402
+ },
+ {
+  "word": "both",
+  "start": 25.402,
+  "end": 25.69
+ },
+ {
+  "word": "pilots",
+  "start": 25.69,
+  "end": 26.177
+ },
+ {
+  "word": "Then",
+  "start": 26.289,
+  "end": 26.633
+ },
+ {
+  "word": "they",
+  "start": 26.633,
+  "end": 26.833
+ },
+ {
+  "word": "won",
+  "start": 26.833,
+  "end": 27.017
+ },
+ {
+  "word": "an",
+  "start": 27.017,
+  "end": 27.089
+ },
+ {
+  "word": "award",
+  "start": 27.089,
+  "end": 27.473
+ },
+ {
+  "word": "for",
+  "start": 27.473,
+  "end": 27.569
+ },
+ {
+  "word": "some",
+  "start": 27.569,
+  "end": 27.736
+ },
+ {
+  "word": "of",
+  "start": 27.736,
+  "end": 27.784
+ },
+ {
+  "word": "the",
+  "start": 27.784,
+  "end": 27.856
+ },
+ {
+  "word": "best",
+  "start": 27.856,
+  "end": 28.192
+ },
+ {
+  "word": "flying",
+  "start": 28.192,
+  "end": 28.544
+ },
+ {
+  "word": "anyone",
+  "start": 28.544,
+  "end": 28.936
+ },
+ {
+  "word": "had",
+  "start": 28.936,
+  "end": 29.16
+ },
+ {
+  "word": "ever",
+  "start": 29.16,
+  "end": 29.368
+ },
+ {
+  "word": "seen",
+  "start": 29.368,
+  "end": 29.727
+ }
+]

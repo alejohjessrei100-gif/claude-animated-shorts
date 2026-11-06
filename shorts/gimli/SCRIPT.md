@@ -27,10 +27,12 @@ So it took off with less than half the fuel it needed.
 The airline punished both pilots.
 Then they won an award for some of the best flying anyone had ever seen.
 
-## Voice
-The user records the narration themselves (the ElevenLabs draft was dropped). Read `voice/voice.txt` in one steady tone,
-fast (~3.7 words/s, about 28 s), with almost no pauses between sentences. Deliver `voice/voice.wav` (48 kHz preferred),
-then make `voice/words.json` (word start/end times) with speech-to-text and hand-fix it. Everything is timed to it.
+## Voice (locked 2026-11-06)
+- Source: `voice/voice_recording_elevenlabs_roger.mp3`, made by the user in ElevenLabs (Roger, Laid-Back Casual), 40.5 s.
+- Fitted with `video/scripts/voice_fit.py --target 29.9`: offline PocketSphinx forced alignment of `voice.txt`,
+  12 pauses cut to 0.14 s, then atempo x1.251 (pitch kept), loudness -16 LUFS → `voice/voice.wav` 29.9 s, 3.58 words/s.
+- `voice/words.json` = word times in the fitted file (checked: every word span has speech, every pause is silent).
+- Copy used by the composition: `video/public/gimli/voice.wav`. Picture timing is locked to words.json from here.
 
 ## Light plan
 day (cruise, engines out) → golden (glide, landing, explanation) → day (punishment / award ending).
