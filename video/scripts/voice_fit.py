@@ -9,7 +9,7 @@ import numpy as np
 from pocketsphinx import Decoder
 
 GAP_AFTER, GAP_BEFORE, LEAD, TAIL = 0.08, 0.06, 0.05, 0.30
-SPOKEN = {"1983": "nineteen eighty three", "1995": "nineteen ninety five", "forty-one": "forty one",
+SPOKEN = {"1983": "nineteen eighty three", "1995": "nineteen ninety five", "1943": "nineteen forty three", "forty-one": "forty one",
           "schoolkids": "school kids", "metres": "meters"}  # digits must be spelled out; extend per script
 
 rec, txt, out = sys.argv[1:4]
@@ -28,7 +28,10 @@ for i, w in enumerate(orig):
     for p in SPOKEN.get(w.lower(), w.lower().strip("'").replace("-", " ")).split():
         norm.append(p); owner.append(i)
 d = Decoder(bestpath=False)
+PRON = {"ig": "IH G", "pecks": "P EH K S"}  # words missing from the dictionary, as CMU phones; extend per script
 for wd in sorted(set(norm)):
+    if d.lookup_word(wd) is None and wd in PRON:
+        d.add_word(wd, PRON[wd], True); continue
     if d.lookup_word(wd) is None:  # e.g. "unluckily" = "un" + known stem
         stem = wd[2:] if wd.startswith("un") else ""
         if stem and d.lookup_word(stem): d.add_word(wd, "AH N " + d.lookup_word(stem), True)
@@ -49,10 +52,30 @@ for (_, s, e), i in zip(segs, owner):
 with wave.open(w48) as f:
     sr = f.getframerate(); x = np.frombuffer(f.readframes(f.getnframes()), np.int16).astype(np.float32)
 dur = len(x) / sr
+def sound_end(t0, t_max):
+    """the aligner can end a word early (a trailing "s", a question lift): keep going in 10 ms steps until the
+    level falls below -42 dBFS, so a cut never clips a word's tail"""
+    t = t0
+    while t < t_max:
+        seg = x[int(t * sr):int((t + 0.01) * sr)] / 32768.0
+        if seg.size == 0 or 20 * np.log10(np.sqrt(np.mean(seg ** 2)) + 1e-12) < -42: break
+        t += 0.01
+    return t
+def sound_start(t1, t_min):
+    """and a word can start before its aligned onset: walk back until the level falls below -42 dBFS"""
+    t = t1
+    while t > t_min:
+        seg = x[int((t - 0.01) * sr):int(t * sr)] / 32768.0
+        if seg.size == 0 or 20 * np.log10(np.sqrt(np.mean(seg ** 2)) + 1e-12) < -42: break
+        t -= 0.01
+    return t
 keep, a = [], max(0.0, words[0][1] - GAP_BEFORE)
 for cur, nxt in zip(words, words[1:]):
-    if nxt[1] - cur[2] > GAP_AFTER + GAP_BEFORE:
-        keep.append((a, cur[2] + GAP_AFTER)); a = nxt[1] - GAP_BEFORE
+    e = sound_end(cur[2], nxt[1])
+    s0 = sound_start(nxt[1], e)
+    if s0 - e > GAP_AFTER + GAP_BEFORE:
+        keep.append((a, e + GAP_AFTER)); a = s0 - GAP_BEFORE
+        nxt[1] = s0  # the next word's timing starts where its sound does
 keep.append((a, min(words[-1][2] + TAIL, dur)))
 fade = int(0.005 * sr); parts = [np.zeros(int(LEAD * sr), np.float32)]; offs = []; t = LEAD
 for a, b in keep:
