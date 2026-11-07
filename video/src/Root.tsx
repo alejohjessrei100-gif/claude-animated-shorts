@@ -3,6 +3,7 @@ import { Scene, myCompSchema } from "./Scene";
 import { getMediaMetadata } from "./helpers/get-media-metadata";
 import { GimliShort, GIMLI_FRAMES } from "./videos/gimli/Bridge";
 import { ToastShort, TOAST_FRAMES } from "./videos/toast/Bridge";
+import { PigeonShort, PIGEON_FRAMES } from "./videos/pigeon/Bridge";
 
 // Welcome to the Remotion Three Starter Kit!
 // Two compositions have been created, showing how to use
@@ -22,6 +23,8 @@ import { ToastShort, TOAST_FRAMES } from "./videos/toast/Bridge";
 export const RemotionRoot: React.FC = () => {
   return (
     <>
+      {/* The Pigeons Who Flew a Bomb */}
+      <Composition id="PigeonShort" component={PigeonShort} durationInFrames={PIGEON_FRAMES} fps={30} width={1080} height={1920} />
       {/* Why Toast Lands Butter-Side Down (reference-style build) */}
       <Composition id="ToastShort" component={ToastShort} durationInFrames={TOAST_FRAMES} fps={30} width={1080} height={1920} />
       {/* The Gimli Glider: cartoon 3D story short (starts as a copy of the bridge template) */}
