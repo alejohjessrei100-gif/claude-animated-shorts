@@ -16,7 +16,8 @@ The style reference is a channel studied privately (`references/`: STYLE_BIBLE.m
 - Never say the channel's name in a voice-over or description.
 
 User rules that apply:
-- Length: 20-30 s (about 75-110 words at ~3.7 words/s). The bridge short (67 s) predates this rule.
+- Length: 30-45 s (about 110-165 words at ~3.7 words/s; user rule from 2026-11-07, was 20-30 s).
+- Style source: the 20 reference videos (references/frames, sheets, reports, STYLE_BIBLE.md), NOT the bridge short's look.
 - Captions ON (user request 2026-11-07): one word at a time, hard swap on each word onset (words.json), heavy white
   sans (Montserrat ExtraBold 800, local woff2 in public/fonts) with a thick black outline, centred ~65 % down the frame
   (`Captions.tsx` in the Gimli project). No other labels or text in the picture.
