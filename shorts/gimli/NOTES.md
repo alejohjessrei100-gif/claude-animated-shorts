@@ -8,3 +8,8 @@
   `video/scripts/voice_fit.py` (pauses cut, x1.25, offline PocketSphinx word timings).
 - QA (short_qa.py): no black / white / frozen frames; frame-diff spikes only at planned cuts / impacts (370, 447-450, 512, 584).
 - Known nit: the f72 engine-sputter puffs stream behind the nacelle (heard, not seen).
+
+## v2 (2026-11-07, user review)
+- `gimli_glider_v2_1080p.mp4`: one-word captions (Montserrat ExtraBold, black outline, ~65 % down), lens blur locked on the
+  subject and halved (cInf <= 5 px), 3D cumulus under the jet, rolling hills + trees around the field, terminal behind the
+  apron, hangar shot looking down the hangar row. Same sound mix. QA: 897 frames, -14.1 LUFS, no black/white/frozen frames.
