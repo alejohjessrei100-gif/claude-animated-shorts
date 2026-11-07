@@ -294,6 +294,10 @@ def main():
         L = integrated(y)
         if abs(L + 14.0) < 0.05: break
         G += -14.0 - L
+    tp = true_peak(y)
+    if tp > -1.05:  # inter-sample peaks the sample limiter cannot see: trim the master so true peak <= -1 dBTP
+        G += -1.1 - tp
+        y = y * dbg(-1.1 - tp)
     y = fades(y, 0.0, 0.03)
     os.makedirs(os.path.join(HERE, "stems"), exist_ok=True)
     write_wav(os.path.join(HERE, "mix.wav"), y)
