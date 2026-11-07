@@ -4,9 +4,9 @@
 // the sun, painted crescent in the drawing); standing ones get a soft multiply contact blob. Effects are unlit cards.
 // Cards, effects and blobs live on the NOINK layer so the world ink pass never outlines their quads.
 import * as THREE from "three";
-import { Pen, bodyFront, bodySide, fxShadow, fxContact, Outfit, Expr, FrontOpts, SideOpts, MATTHEWS, COLLEAGUE_A, COLLEAGUE_B, pupil } from "./toon";
+import { Pen, bodyFront, bodySide, fxShadow, fxContact, Outfit, Expr, FrontOpts, SideOpts, MATTHEWS, COLLEAGUE_A, COLLEAGUE_B, pupil, shoulderOf, armColour } from "./toon";
 import {
-  FPS, SHOTS, V3, clamp01, smooth, BEAT, DROPS, dropAt, landT, DAD, MATT_LAB, COLL_A, COLL_B, KID_B, MATT_KITCHEN, GIANT_AT, GIANT_SCALE,
+  FPS, SHOTS, V3, clamp01, smooth, BEAT, DROPS, dropAt, landT, Drop, DAD, DAD_BEHIND, MATT_LAB, COLL_A, COLL_B, KID_B, MATT_KITCHEN, GIANT_AT, GIANT_SCALE,
   CLASS, KITCHEN, DESK_ROWS, LINES, TABLE_EDGE_Z, TABLE_H,
 } from "./story";
 import { fxSplat, fxPow, fxSpeed, fxSparkle, fxSpin, fxPath, fxMark, fxDrop, fxDust, fxCoin, fxRing } from "./gfx";
@@ -218,7 +218,9 @@ const blob = (out: Stage, x: number, y: number, z: number, sc = 1, k = 1) => {
 };
 
 // ---------------- the toast cast by shot ----------------
-export type Stage = { places: Place[]; fx: FxPlace[] };
+/** a real 3D arm from a shoulder to a hand point (pushing toast across a table); tool = something held at the hand */
+export type ArmPlace = { a: V3; b: V3; col: string; tool?: "marker" };
+export type Stage = { places: Place[]; fx: FxPlace[]; arms: ArmPlace[] };
 const FRONT = { side: false, mirror: false };
 const L2 = LEAD;
 type Body = { i: number; o: Outfit; key: string; x: number; y?: number; z: number; expr: Expr; scale?: number; fo?: Partial<FrontOpts>; noBlob?: boolean };
@@ -235,16 +237,7 @@ const talkOf = (t: number, who: "collA" | "matt") => {
   const f = Math.round(t * FPS + 1); // the mouth leads the voice by ~1 f (reference)
   return q((ENV as number[])[Math.min(ENV.length - 1, Math.max(0, f))] ?? 0, 12);
 };
-/** a reach that goes out and comes back around each action time (hand target in canvas units) */
-const reachCycle = (t: number, times: number[], rest: [number, number], out: [number, number], lead = 0.2, hold = 0.18): [number, number] => {
-  let k = 0;
-  for (const tt of times) {
-    const u = t - (tt - lead);
-    if (u >= 0 && u < lead + hold + 0.2) k = Math.max(k, u < lead ? smooth(u / lead) : u < lead + hold ? 1 : 1 - smooth((u - lead - hold) / 0.2));
-  }
-  return [rest[0] + (out[0] - rest[0]) * k, rest[1] + (out[1] - rest[1]) * k];
-};
-const qq = (p: [number, number]): [number, number] => [Math.round(p[0] / 4) * 4, Math.round(p[1] / 4) * 4];
+const qq = (p: [number, number]): [number, number] => [Math.round(p[0] / 2) * 2, Math.round(p[1] / 2) * 2];
 /** the splat / impact effects of every slice in this shot */
 const sliceFx = (id: number, t: number, out: Stage) => {
   for (const d of DROPS[id] ?? []) {
@@ -254,12 +247,57 @@ const sliceFx = (id: number, t: number, out: Stage) => {
     const up = d.flat || d.fullTurn;
     if (!up && d.butter !== "B") {
       const u = q(Math.min(1, age / 0.12), 12);
-      out.fx.push({ key: `splat${u}`, cw: 400, ch: 400, draw: (p) => fxSplat(p, u), x, y: 0.006, z, w: 0.46, h: 0.46, flat: true, rot: 0.4 });
+      out.fx.push({ key: `splat${u}`, cw: 400, ch: 400, draw: (p) => fxSplat(p, u), x, y: 0.016, z, w: 0.46, h: 0.46, flat: true, rot: 0.4 }); // above the lab rug (0.006): no z-fighting
     }
     if (age < 7 / FPS) { const u = q(age / (7 / FPS), 14); out.fx.push({ key: `pow${u}`, cw: 500, ch: 500, draw: (p) => fxPow(p, u), x, y: 0.12, z, w: 0.7, h: 0.7 }); }
     if (age < 0.9) { const u = q(age / 0.9, 20); out.fx.push({ key: `dust${u}`, cw: 300, ch: 300, draw: (p) => fxDust(p, u), x: x + 0.06, y: 0.1, z, w: 0.5, h: 0.5, soft: true }); }
     if (up && age < 1.6) { const u = q(t, 15); out.fx.push({ key: `spark${u}`, cw: 300, ch: 300, draw: (p) => fxSparkle(p, u), x, y: 0.22, z, w: 0.62, h: 0.62 }); }
   }
+};
+/** where world point P appears on a character card at `at` (camera-facing, scale sc), in the card's canvas units:
+ *  the view ray to P is cut with the card plane, so a hand drawn there covers P on screen (it reads as touching it) */
+const cardPoint = (cam: CamInfo, at: V3, sc: number, P: V3): [number, number] => {
+  const yaw = Math.atan2(cam.pos.x - at[0], cam.pos.z - at[2]), nx = Math.sin(yaw), nz = Math.cos(yaw);
+  const ox = cam.pos.x, oy = cam.pos.y, oz = cam.pos.z, dx = P[0] - ox, dy = P[1] - oy, dz = P[2] - oz;
+  const den = dx * nx + dz * nz, k = Math.abs(den) < 1e-6 ? 1 : ((at[0] - ox) * nx + (at[2] - oz) * nz) / den;
+  const qx = ox + dx * k, qy = oy + dy * k, qz = oz + dz * k;
+  const lx = (qx - at[0]) * Math.cos(yaw) - (qz - at[2]) * Math.sin(yaw), ly = qy - at[1];
+  return [300 + lx / (SU * sc), 975 - ly / (SU * sc)];
+};
+/** world point of a shoulder of a card standing at `at` facing the camera */
+const shoulderW = (cam: CamInfo, at: V3, o: Outfit, side: number, sc = 1): V3 => {
+  const yaw = Math.atan2(cam.pos.x - at[0], cam.pos.z - at[2]), [sx, sy] = shoulderOf(o, side);
+  const lx = (sx - 300) * SU * sc, ly = (975 - sy) * SU * sc;
+  return [at[0] + lx * Math.cos(yaw), at[1] + ly, at[2] - lx * Math.sin(yaw)];
+};
+/** the hand on a slice being pushed (world point), with the 0..1 blend from rest; null when not pushing now */
+const pushPoint = (d: Drop, t: number): { P: V3; k: number } | null => {
+  const sl = d.slow ?? 1, dir = d.dir ?? 1;
+  const back = (z: number): V3 => [d.from[0], d.from[1] + 0.04, z - dir * 0.07]; // fingertips on the back of the slice
+  if (d.flat) {
+    if (t < d.t0 - 0.25 || t > d.t0 + 0.45) return null;
+    if (t < d.t0) return { P: back(d.from[2]), k: smooth((t - (d.t0 - 0.25)) / 0.25) };
+    const u = Math.min(1, (t - d.t0) / 0.12);
+    return { P: back(d.from[2] + dir * 0.35 * u), k: 1 - smooth((t - d.t0 - 0.2) / 0.25) };
+  }
+  const tE = d.t0 + (Math.abs(d.edgeZ - d.from[2]) + 0.03) / (d.push ?? 0.35) / sl;
+  if (t < d.t0 - 0.35 || t > tE + 0.45) return null;
+  if (t < d.t0) return { P: back(d.from[2]), k: smooth((t - (d.t0 - 0.35)) / 0.35) };
+  if (t <= tE) return { P: back(dropAt(d, t).pos[2]), k: 1 };
+  return { P: back(d.edgeZ), k: 1 - smooth((t - tE - 0.12) / 0.33) };
+};
+/** a character pushing one of `drops`: the near arm leaves the card and becomes a 3D arm that reaches the slice */
+const pushing = (cam: CamInfo, out: Stage, at: V3, o: Outfit, drops: Drop[], t: number, sc = 1): Partial<FrontOpts> => {
+  for (const d of drops) {
+    const h = pushPoint(d, t);
+    if (!h || h.k <= 0.02) continue;
+    const side = cardPoint(cam, at, sc, h.P)[0] < 300 ? -1 : 1, S = shoulderW(cam, at, o, side, sc);
+    const rest: V3 = [S[0], S[1] - 0.42 * sc, S[2] + 0.05]; // a hanging hand
+    const B: V3 = [rest[0] + (h.P[0] - rest[0]) * h.k, rest[1] + (h.P[1] - rest[1]) * h.k, rest[2] + (h.P[2] - rest[2]) * h.k];
+    out.arms.push({ a: S, b: B, col: armColour(o) });
+    return { hideArm: side as -1 | 1 };
+  }
+  return {};
 };
 const head = (pos: V3, sc = 1, kid = false): V3 => [pos[0], pos[1] + (kid ? 1.02 : 1.48) * sc, pos[2]];
 const mark = (out: Stage, kind: "?" | "!", p: V3, key = "", s = 0.3) => out.fx.push({ key: `mark${kind}${key}`, cw: 200, ch: 260, draw: (pp) => fxMark(pp, kind), x: p[0] + 0.22 * s / 0.3, y: p[1] + 0.32 * s / 0.3, z: p[2], w: s, h: s * 1.3 });
@@ -267,23 +305,27 @@ const PUPILS = Array.from({ length: 14 }, (_, v) => pupil(v));
 const DADO: Outfit = { jacket: "#4f6fa6", pants: "#3b3f52", boots: "#3a2a22", hat: "hair", hair: "#5a3b2a", moustache: "#5a3b2a", collar: "#f4f4f2", skin: "#f6e7d8" };
 
 export const stage = (id: number, t: number, cam: CamInfo): Stage => {
-  const out: Stage = { places: [], fx: [] };
+  const out: Stage = { places: [], fx: [], arms: [] };
   const s = SHOTS[id - 1];
   LNAME = s.light;
   findSun(cam, SUN);
   sliceFx(id, t, out);
   switch (id) {
+    case 1: { // the dad, behind the table, slides the slice toward the edge with his fingertips
+      const gone = t > landT(DROPS[1][0]) - 0.6;
+      put(cam, t, out, id, { i: 1, o: DADO, key: "dad", x: DAD_BEHIND[0], z: DAD_BEHIND[2], expr: gone ? "shock" : "smile",
+        fo: pushing(cam, out, DAD_BEHIND, DADO, DROPS[1], t) });
+      break;
+    }
     case 2: { // the dad looks down at his breakfast on the floor ("how tall you are")
       const tall = at(t, BEAT.tall);
-      put(cam, t, out, id, { i: 1, o: DADO, key: "dad", x: DAD[0], z: DAD[2], expr: tall ? "pained" : "shock", fo: { held: "plate", reach: [372, 640], headTilt: 4 } });
-      if (tall) out.fx.push({ key: "drop", cw: 120, ch: 160, draw: fxDrop, x: DAD[0] + 0.24, y: 1.62, z: DAD[2], w: 0.09, h: 0.12 });
+      put(cam, t, out, id, { i: 1, o: DADO, key: "dad", x: DAD_BEHIND[0], z: DAD_BEHIND[2], expr: tall ? "pained" : "shock", fo: { reach: [356, 600], headTilt: 4 } });
+      if (tall) out.fx.push({ key: "drop", cw: 120, ch: 160, draw: fxDrop, x: DAD_BEHIND[0] + 0.24, y: 1.62, z: DAD_BEHIND[2], w: 0.09, h: 0.12 });
       break;
     }
     case 3: case 4: { // Matthews shoving slice after slice off the lab table
-      const pushes = [BEAT.pushing, BEAT.off, 246 / FPS, 165 / FPS, 140 / FPS];
-      const r = qq(reachCycle(t, pushes, [356, 600], [452, 676], 0.18, 0.12));
       const ex: Expr = at(t, BEAT.robert) ? (Math.floor(t * 2) % 2 ? "grin" : "smile_closed") : "smile";
-      put(cam, t, out, id, { i: 2, o: MATTHEWS, key: "matt", x: MATT_LAB[0], z: MATT_LAB[2], expr: ex, fo: { reach: r } });
+      put(cam, t, out, id, { i: 2, o: MATTHEWS, key: "matt", x: MATT_LAB[0], z: MATT_LAB[2], expr: ex, fo: pushing(cam, out, MATT_LAB, MATTHEWS, DROPS[4], t) });
       break;
     }
     case 6: { // colleagues in the doorway: laughing, "he's lost it" (finger at the temple), then the line
@@ -312,18 +354,23 @@ export const stage = (id: number, t: number, cam: CamInfo): Stage => {
     case 9: { // 2001: a classroom of kids pushing toast off their desks
       DROPS[9].forEach((d, k) => {
         const row = Math.floor(k / 7), x = d.from[0], z = DESK_ROWS[row] - 0.58 + CLASS[2];
-        const tl = landT(d), push = tl - 0.35, cheer = t > tl + 0.1 && k % 3 === 0;
-        const r = qq(reachCycle(t, [push], [348, 600], [420, 640], 0.15, 0.15));
+        const tl = landT(d), cheer = t > tl + 0.35 && k % 3 === 0, at3: V3 = [x, 0, z];
         put(cam, t, out, id, { i: 20 + k, o: PUPILS[k % 14], key: `p${k % 14}`, x, z, expr: t > tl ? (k % 2 ? "laugh" : "grin") : "smile_closed", scale: 1,
-          fo: cheer ? { up: true } : { reach: r } });
+          fo: cheer ? { up: true } : pushing(cam, out, at3, PUPILS[k % 14], [d], t) });
       });
       break;
     }
     case 10: case 11: { // the girl draws a B, drops it ... B-side down
       const shock = id === 11 && at(t, BEAT.lsDown);
-      const scrib: [number, number] = [334 + 8 * Math.sin(t * 25), 690 + 6 * Math.cos(t * 19)];
-      put(cam, t, out, id, { i: 40, o: PUPILS[3], key: "girl", x: KID_B[0], z: KID_B[2], expr: shock ? "shock" : id === 10 ? "smile_closed" : "smile",
-        fo: id === 10 ? { held: "marker", reach: qq(scrib), headTilt: 7 } : shock ? { up: true } : { reach: [420, 640] } });
+      // shot 10: a real 3D arm holding a marker on the slice, drawing the B's strokes
+      let girlFo: Partial<FrontOpts>;
+      if (id === 10) {
+        const s0 = DROPS[10][0].from, S = shoulderW(cam, KID_B, PUPILS[3], 1);
+        const tip: V3 = [s0[0] - 0.015 + 0.03 * Math.sin(t * 9), s0[1] + 0.02, s0[2] + 0.02 * Math.sin(t * 13)];
+        out.arms.push({ a: S, b: [tip[0] + 0.01, tip[1] + 0.09, tip[2] - 0.02], col: armColour(PUPILS[3]), tool: "marker" });
+        girlFo = { hideArm: 1, headTilt: 7 };
+      } else girlFo = shock ? { up: true } : pushing(cam, out, KID_B, PUPILS[3], DROPS[11], t);
+      put(cam, t, out, id, { i: 40, o: PUPILS[3], key: "girl", x: KID_B[0], z: KID_B[2], expr: shock ? "shock" : id === 10 ? "smile_closed" : "smile", fo: girlFo });
       for (const [k, dx] of [[41, -0.8], [42, 0.8]] as const)
         put(cam, t, out, id, { i: k, o: PUPILS[(k * 3) % 14], key: `p${(k * 3) % 14}`, x: KID_B[0] + dx, z: KID_B[2] - 0.05, expr: shock ? "shock" : "grin", fo: { facing: dx < 0 ? 1 : -1 } });
       if (shock) mark(out, "!", head(KID_B, 1, true), "girl", 0.26);
@@ -366,8 +413,9 @@ export const stage = (id: number, t: number, cam: CamInfo): Stage => {
     }
     case 17: { // "two ways": a raised hand; then the swat, fast
       const knock = at(t, BEAT.knock), swing = t > 1272 / FPS - 0.1;
-      const r: [number, number] = !knock ? (at(t, BEAT.two) ? [384, 400] : [356, 600]) : swing ? [520, 640] : [300, 560];
-      put(cam, t, out, id, { i: 2, o: MATTHEWS, key: "matt", x: MATT_KITCHEN[0], z: MATT_KITCHEN[2], expr: swing ? "laugh" : knock ? "stern" : "grin", fo: { reach: r } });
+      const rest: [number, number] = at(t, BEAT.two) && !knock ? [384, 400] : [356, 600];
+      put(cam, t, out, id, { i: 2, o: MATTHEWS, key: "matt", x: MATT_KITCHEN[0], z: MATT_KITCHEN[2], expr: swing ? "laugh" : knock ? "stern" : "grin",
+        fo: { reach: rest, ...pushing(cam, out, MATT_KITCHEN, MATTHEWS, DROPS[17], t) } });
       const d = DROPS[17][0], sl = dropAt(d, t);
       if (t > d.t0 && t < landT(d) + 0.1) out.fx.push({ key: `speed${Math.floor(t * 10)}`, cw: 500, ch: 200, draw: (p) => fxSpeed(p, Math.floor(t * 10)), x: sl.pos[0], y: sl.pos[1] + 0.05, z: sl.pos[2] - 0.3, w: 0.7, h: 0.22, rot: 0 });
       break;

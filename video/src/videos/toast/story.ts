@@ -135,7 +135,9 @@ DROPS[10] = DROPS[11];
 DROPS[12] = [{ t0: F(735), from: [KITCHEN[0], TABLE_H + 0.012, TABLE_EDGE_Z - 0.06], edgeZ: TABLE_EDGE_Z, h: TABLE_H, slow: 0.15, push: 0.35 }];
 
 /** pile of fallen slices (lab floor), growing through shots 4-6: count at time t */
-export const pileCount = (t: number) => Math.min(60, Math.floor(8 + Math.max(0, t - F(165)) * 9));
+/** fallen slices already on the floor, fixed per shot (nothing pops in while we watch; new ones arrive by falling) */
+export const LAB_PILE: Record<number, number> = { 3: 14, 4: 14, 5: 26, 6: 34, 7: 34, 8: 34 };
+export const CLASS_PILE: Record<number, number> = { 9: 40, 10: 80, 11: 80 };
 
 // ---------------- camera ----------------
 export type Cam = { pos: V3; look: V3; fov: number; roll: number };
@@ -172,6 +174,7 @@ const sliceAt = (id: number, k: number, f: number) => dropAt(DROPS[id][k], F(f))
 
 // cast spots the camera frames (cast.ts reads them too)
 export const DAD: V3 = K(0.55, 0, 1.2);            // stands just in front of the table, right of the splat
+export const DAD_BEHIND: V3 = K(0.45, 0, -0.42);     // shots 1-2: behind the table on the hook lens's axis, pushing the slice toward it
 export const MATT_LAB: V3 = L(0.0, 0, -0.55);       // behind the lab table, facing the lens
 export const COLL_A: V3 = L(2.55, 0, -1.6), COLL_B: V3 = L(3.15, 0, -1.25); // in the doorway (right wall)
 export const KID_B: V3 = Cl(0.1, 0, -0.5);          // the girl with the marker, behind her desk
@@ -184,7 +187,7 @@ const S1a = (f: number) => { const p = sliceAt(1, 0, Math.min(f, 40)); return do
 const S1b = (f: number) => { const p = sliceAt(1, 0, f); return { pos: K(-0.15, Math.max(0.16, p[1] * 0.7 + 0.08), 1.75) as V3, look: [p[0], Math.max(0.03, p[1] - 0.05), p[2]] as V3, fov: 40, roll: 0.04 }; };
 // 2 crane up from the splat to the dad's face ("how tall you are")
 const S2a = (f: number) => dolly(K(0.1, 0.25, 2.0), K(0.3, 0.05, 1.05), pushK(f, 80, 0.002), { fov: 44 });
-const S2b = (f: number) => dolly(K(0.35, 1.5, 2.75), add(DAD, [0, 1.42, 0]), pushK(f, 90, 0.0025, 0.006, 25), { fov: 40, roll: -0.04 });
+const S2b = (f: number) => dolly(K(0.3, 1.55, 2.6), add(DAD_BEHIND, [0, 1.38, 0]), pushK(f, 90, 0.0025, 0.006, 25), { fov: 42, roll: -0.04 }); // up over the table edge to his face
 // 3 lab wide (night)
 const S3a = (f: number) => dolly(L(-2.6, 2.0, 4.6), L(0.2, 1.0, -0.6), pushK(f, 126, 0.0035), { fov: 46 });
 // 4 Matthews pushing toast off (MS, 3/4 from the front-left)
@@ -202,11 +205,11 @@ const S8a = (f: number) => dolly(L(0.5, 1.3, 1.75), L(0.05, 1.18, -0.1), pushK(f
 const S8b = (f: number) => dolly(L(0.3, 1.25, 1.35), L(0.0, 1.15, -0.1), pushK(f, 490, 0.002, 0.007, 22), { fov: 40, roll: 0.03 });
 // 9 classroom wide, then the crane back on "ten thousand"
 const S9a = (f: number) => dolly(Cl(-0.4, 1.7, 4.6), Cl(-0.4, 1.2, -0.6), pushK(f, 513, 0.0025), { fov: 46 });
-const S9b = (f: number) => ({ pos: Cl(0.6, 4.2, 7.4) as V3, look: Cl(-0.3, 0.6, -0.8) as V3, fov: 50, roll: -0.02 });
+const S9b = (f: number) => ({ pos: Cl(0.6, 3.1, 7.2) as V3, look: Cl(-0.3, 0.6, -0.8) as V3, fov: 52, roll: -0.02 }); // stays below the wall tops
 // 10 the girl draws a B (high angle onto the desk + her face)
 const S10a = (f: number) => dolly(Cl(0.55, 1.75, 1.35), add(KID_B, [0, 0.95, 0.45]), pushK(f, 622, 0.003, 0.007, 25), { fov: 42, roll: 0.04 });
 // 11 the drop: low by the desk edge, then her shocked face
-const S11a = (f: number) => { const p = sliceAt(11, 0, f); return dolly(Cl(0.75, 0.35, 1.45), [p[0], Math.max(0.05, p[1] * 0.5), 0.55], pushK(f, 693, 0.0045), { fov: 44, roll: -0.04 + 0.0008 * (f - 693) }); }; // slow push + roll creep: never a dead hold
+const S11a = (f: number) => { const p = sliceAt(11, 0, f); return dolly(Cl(0.85, 1.05, 1.55), [p[0], Math.max(0.1, p[1] * 0.7), 0.45], pushK(f, 693, 0.0045), { fov: 44, roll: -0.04 + 0.0008 * (f - 693) }); }; // slow push + roll creep: never a dead hold
 const S11b = (f: number) => dolly(Cl(0.05, 0.95, 1.35), add(KID_B, [0, 0.95, 0]), pushK(f, 751, 0.004, 0.01, 12), { fov: 40, roll: 0.05 });
 // 12-13 the explanation, side-on (lens on +x looking -x at the table edge)
 const S12a = (f: number) => dolly(K(1.75, TABLE_H + 0.12, 0.85), K(0, TABLE_H + 0.02, 0.8), pushK(f, 764, 0.0025, 0.006, 25), { fov: 36 });
@@ -221,7 +224,7 @@ const S15b = (f: number) => { const p = sliceAt(15, 0, f); return { pos: K(1.4, 
 const S16a = (f: number) => dolly(K(1.9, 1.1, 3.6), add(DAD, [-0.35, 0.95, -0.3]), pushK(f, 1127, 0.0025, 0.005, 25), { fov: 44, roll: -0.02 });
 // 17 Matthews in the kitchen ("two ways"), then the swat
 const S17a = (f: number) => dolly(K(0.4, 1.45, 2.6), add(MATT_KITCHEN, [0, 1.5, 0]), pushK(f, 1185, 0.0028, 0.006, 25), { fov: 40 });
-const S17b = (f: number) => dolly(K(-1.7, 0.95, 2.4), K(0.2, 0.6, 1.5), pushK(f, 1246, 0.002), { fov: 46, roll: 0.05 });
+const S17b = (f: number) => dolly(K(1.95, 1.3, 3.0), K(0.1, 0.72, 1.25), pushK(f, 1246, 0.002), { fov: 52, roll: 0.05 }); // Matthews, the slice and where it lands
 // 18 the giant over the rooftops: crane up and back
 const S18a = (f: number) => dolly(St(4.0, 1.6, 12.5), add(GIANT_AT, [0, 12.5, 0]), pushK(f, 1293, 0.0015), { fov: 56, roll: 0.02 });
 const S18b = (f: number) => ({ pos: St(6.0, 3.0, 19) as V3, look: add(GIANT_AT, [0, 13.5, 0]), fov: 58, roll: -0.02 });
@@ -276,7 +279,7 @@ export type Dof = { f: number; dur?: number; cInf: number; focus?: (f: number) =
 export const DOF: Dof[] = [
   { f: 0, cInf: 5, focus: (f) => sliceAt(1, 0, f) }, // the falling slice
   { f: 80, cInf: 3, focus: () => K(0.2, 0.02, 1.0) },
-  { f: 88, dur: 30, cInf: 5, focus: () => add(DAD, [0, 1.42, 0]) },
+  { f: 88, dur: 30, cInf: 4, focus: () => add(DAD_BEHIND, [0, 1.38, 0]) },
   { f: 126, cInf: 0 }, // lab wide
   { f: 165, cInf: 4, focus: () => add(MATT_LAB, [0, 1.3, 0.3]) },
   { f: 253, cInf: 0 }, // top-down

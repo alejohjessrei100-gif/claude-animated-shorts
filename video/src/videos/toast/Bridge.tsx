@@ -116,8 +116,9 @@ export const ToastShort: React.FC = () => {
       {flash > 0 && <AbsoluteFill style={{ background: "#ffffff", opacity: flash }} />}
       {IRIS.filter((r) => f >= r.a && f < r.b).map((r, i) => {
         // spotlight iris (reference close-ups): dark outside a soft circle; opens over 6 f, closes over the last 5 f
-        const k = Math.min(1, (f - r.a + 1) / 6, (r.b - f) / 5), rad = r.r * (1.6 - 0.6 * k) * 100;
-        return <AbsoluteFill key={i} style={{ background: `radial-gradient(circle at ${r.cx * 100}% ${r.cy * 100}%, rgba(8,8,20,0) ${rad * 0.9}vw, rgba(8,8,20,0.82) ${rad}vw, rgba(8,8,20,0.9) ${rad * 1.6}vw)` }} />;
+        // closes in over 6 f at the start; fades out (no size change) over the last 5 f, so nothing jumps
+        const kin = Math.min(1, (f - r.a + 1) / 6), fade = Math.min(1, (r.b - f) / 5), rad = r.r * (1.6 - 0.6 * kin) * 100;
+        return <AbsoluteFill key={i} style={{ opacity: fade, background: `radial-gradient(circle at ${r.cx * 100}% ${r.cy * 100}%, rgba(8,8,20,0) ${rad * 0.9}vw, rgba(8,8,20,0.82) ${rad}vw, rgba(8,8,20,0.9) ${rad * 1.6}vw)` }} />;
       })}
       {(getInputProps() as { captions?: boolean }).captions === false ? null : <Captions />}
     </AbsoluteFill>

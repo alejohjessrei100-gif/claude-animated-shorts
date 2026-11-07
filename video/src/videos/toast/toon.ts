@@ -59,6 +59,14 @@ export const OFFICER: Outfit = { ...RIFLEMAN, hat: "shako_tall", buttons: "#e8c4
 export const KID: Outfit = { jacket: "#f08a2c", pants: "#3b5b9a", boots: "#f4f1ea", hat: "cap", cap: "#e2453c", build: "kid" };
 export const PARENT: Outfit = { jacket: "#7b5ac9", pants: "#3b3f52", boots: "#5a3b2a", hat: "hair", hair: "#5a3b2a" };
 export const SKINS = [SKIN, "#f5c9a0", "#ecd0b6", "#c99067"];
+/** canvas point of a shoulder (side -1 left / +1 right) of a standing front-view figure of this build (for the 3D arms) */
+export const shoulderOf = (o: Outfit, side: number): [number, number] => {
+  const Bd = BUILD[o.build ?? "adult"], HH = 2 * headBlob(1, Bd.a, 0).b, W = 2 * headBlob(1, Bd.a, 0).a;
+  const torsoBot = 975 - Bd.legs * HH, chin = torsoBot - Bd.torso * HH, Ta = ((Bd.tw / 2) * W) / 1.06;
+  return [300 + side * 0.85 * Ta, chin + 0.12 * HH];
+};
+/** the colour an arm is drawn in */
+export const armColour = (o: Outfit) => mix(o.jacket, INK, 0.5);
 // ---- toast short cast (1995 / 2001) ----
 export const MATTHEWS: Outfit = { jacket: "#7a8f5a", pants: "#3e4452", boots: "#3a2a22", hat: "hair", hair: "#6b4a32", glasses: true, collar: "#eef0f2", tie: "#8a3a3a", skin: "#f6e7d8" };
 export const COLLEAGUE_A: Outfit = { jacket: "#f2f2ee", pants: "#3b4152", boots: "#2a2a30", hat: "hair", hair: "#2a201a", collar: "#c9d6e6", tie: "#2f5f9a", skin: "#f3e3d3", moustache: "#2a201a" };
@@ -478,6 +486,8 @@ export type FrontOpts = {
   /** toast short: talking mouth opening 0..1 (driven by the voice), hand targets in canvas units (right / left arm),
    *  the thing held in the right hand, both arms thrown up */
   talk?: number; reach?: [number, number]; reachL?: [number, number]; held?: Held; up?: boolean;
+  /** leave this arm off the card: it is drawn as a real 3D arm reaching onto a table (world.ts) */
+  hideArm?: -1 | 1;
 };
 export type Held = null | "toast" | "toastB" | "marker" | "coin" | "magnifier" | "plate";
 /** a slice of toast seen face-on (crust ring, crumb, butter or a drawn letter), centred on (x, y), width w */
@@ -581,7 +591,7 @@ export const bodyFront = (p: Pen, o: Outfit, opts: FrontOpts) => {
     const arm = (side: number, tgt: [number, number] | undefined, fwdFallback: number) => {
       const S = sh(side);
       if (!tgt) return { pts: hang(side, fwdFallback), front: false };
-      const dx = tgt[0] - S[0], dy = tgt[1] - S[1], L = Math.hypot(dx, dy) || 1, reachMax = 0.95 * HH;
+      const dx = tgt[0] - S[0], dy = tgt[1] - S[1], L = Math.hypot(dx, dy) || 1, reachMax = 1.45 * HH; // noodle arms stretch to reach
       const k = Math.min(1, reachMax / L), H2: P2 = [S[0] + dx * k, S[1] + dy * k];
       const E: P2 = [(S[0] + H2[0]) / 2 + side * 6 * u, (S[1] + H2[1]) / 2 + 9 * u];
       return { pts: [S, E, H2] as [P2, P2, P2], front: true };
@@ -612,7 +622,8 @@ export const bodyFront = (p: Pen, o: Outfit, opts: FrontOpts) => {
       arms.push({ pts: [S, E, Hd], front: true });
     } else arms.push({ pts: hang(1, sw), front: false });
   }
-  const drawArm = (a: Arm) => { p.stroke(curve(a.pts[0], a.pts[1], a.pts[2]), 5.2 * u, armCol); p.dot(a.pts[2][0], a.pts[2][1], 5.5 * u); };
+  const hidden = opts.hideArm === -1 ? arms[0] : opts.hideArm === 1 ? arms[1] : null;
+  const drawArm = (a: Arm) => { if (a === hidden) return; p.stroke(curve(a.pts[0], a.pts[1], a.pts[2]), 5.2 * u, armCol); p.dot(a.pts[2][0], a.pts[2][1], 5.5 * u); };
   // behind the body: rifle, sword, arms
   if (rifle) {
     p.band([R0, R1], "#7a4b2a", 5 * u, 1.5 * u, "round");
@@ -667,7 +678,7 @@ export const bodyFront = (p: Pen, o: Outfit, opts: FrontOpts) => {
     p.inkRing(tp, ow, thick);
   }
   // in front of the body: hands holding props
-  for (const a of arms) if (a.front) {
+  for (const a of arms) if (a.front && a !== hidden) {
     drawArm(a);
     const [hx, hy] = a.pts[2];
     if (opts.held && a === arms[arms.length - 1]) {
