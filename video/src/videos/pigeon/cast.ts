@@ -7,7 +7,7 @@ import * as THREE from "three";
 import { Pen, bodyFront, bodySide, fxShadow, fxContact, Outfit, Expr, FrontOpts, SideOpts, shoulderOf, armColour, SKINNER_O, general, BOY_O, DAUGHTER_O } from "./toon";
 import {
   FPS, SHOTS, V3, clamp01, smooth, BEAT, LINES, CONE, STATION_X, STATION_FLOOR, BIRD_Z, peckAt, TRAIN_BOX, TRAIN_SCREEN_X, CONE_ON_BENCH,
-  SKINNER, GENERALS, BOY, DOG, DAUGHTER, BIRD_STAGE, WAR, TABLE_H,
+  SKINNER, SKINNER_BOX, GENERALS, BOY, DOG, DAUGHTER, BIRD_STAGE, WAR, TABLE_H,
 } from "./story";
 import { fxSpeed, fxMark, fxDrop, fxDust, fxStamp, fxSeed, fxBiscuit, fxConfetti } from "./gfx";
 import { pigeonSide, pigeonFront, pigeonBack, dogSide, pigeonTip, PSU, BirdOpts, BirdExpr } from "./birds";
@@ -255,7 +255,7 @@ const birdView = (cam: CamInfo, p: V3, dir: [number, number]): View => {
 };
 /** a pigeon card. view: forced card (pilots share one so the row matches); lean: tip the card back toward a high camera
  *  (feet stay put) so a steep view does not squash the bird flat */
-const bird = (cam: CamInfo, out: Stage, t: number, i: number, p: V3, dir: [number, number], o: BirdOpts, sc = 1, forceFront = false, view?: View, lean = false) => {
+const bird = (cam: CamInfo, out: Stage, t: number, i: number, p: V3, dir: [number, number], o: BirdOpts, sc = 1, forceFront = false, view?: View, lean = false, roll = 0) => {
   const v: View = forceFront ? "F" : view ?? birdView(cam, p, dir);
   const mirror = v === "S" && dir[0] * cam.right.x + dir[1] * cam.right.z < 0;
   const d = cam.pos.distanceTo(tmp.set(p[0], p[1] + 0.17 * sc, p[2])) / sc;
@@ -264,12 +264,12 @@ const bird = (cam: CamInfo, out: Stage, t: number, i: number, p: V3, dir: [numbe
   const oo: BirdOpts = { ...o, blink, peck: q(o.peck ?? 0, 24), flap: q(o.flap ?? 0, 12) };
   const el = Math.atan2(cam.pos.y - (p[1] + 0.17 * sc), Math.hypot(cam.pos.x - p[0], cam.pos.z - p[2]));
   out.places.push({ key: `bird|${v}|${JSON.stringify(oo)}`, draw: (pp) => (v === "F" ? pigeonFront(pp, oo) : v === "B" ? pigeonBack(pp, oo) : pigeonSide(pp, oo)),
-    x: p[0], y: p[1], z: p[2], geo: "bird", mirror, scale: sc, size: [w, h, k], pitch: lean ? -Math.min(0.5, Math.max(0, 0.55 * el)) : 0 });
+    x: p[0], y: p[1], z: p[2], geo: "bird", mirror, scale: sc, size: [w, h, k], pitch: lean ? -Math.min(0.5, Math.max(0, 0.55 * el)) : 0, roll });
 };
 /** the three pilots at their stations in the nose cone (one card view for the row, taken from the middle bird) */
-const pilots = (cam: CamInfo, out: Stage, id: number, t: number, ex: (k: number) => BirdExpr, gear: (k: number) => BirdOpts["gear"] = () => "cap") => {
+const pilots = (cam: CamInfo, out: Stage, id: number, t: number, ex: (k: number) => BirdExpr, gear: (k: number) => BirdOpts["gear"] = () => "cap", roll: (k: number) => number = () => 0) => {
   const v = birdView(cam, [CONE[0], STATION_FLOOR, CONE[2] + BIRD_Z], [0, -1]);
-  STATION_X.forEach((sx, k) => bird(cam, out, t, k, [CONE[0] + sx, STATION_FLOOR, CONE[2] + BIRD_Z], [0, -1], { peck: peckAt(id, k, t), expr: ex(k), gear: gear(k), harness: true }, 1, false, v, true));
+  STATION_X.forEach((sx, k) => bird(cam, out, t, k, [CONE[0] + sx, STATION_FLOOR, CONE[2] + BIRD_Z], [0, -1], { peck: peckAt(id, k, t), expr: ex(k), gear: gear(k), harness: true }, 1, false, v, true, roll(k)));
 };
 const head = (p: V3, h = 1.48): V3 => [p[0], p[1] + h, p[2]];
 
@@ -287,7 +287,7 @@ export const stage = (id: number, t: number, cam: CamInfo): Stage => {
     case 3: case 4: { // Skinner at the bench, a pigeon pecking the ship in the training box
       const pk = Math.max(0, ...[BEAT.peck1, BEAT.peck1 + 0.5, BEAT.ship].map((tp) => (t >= tp - 0.08 && t < tp + 0.12 ? Math.sin(Math.PI * (t - tp + 0.08) / 0.2) : 0)));
       trainBird("curious", pk);
-      put(cam, t, out, id, { i: 1, o: SKINNER_O, key: "skinner", x: SKINNER[0], z: SKINNER[2], expr: at(t, BEAT.skinner) ? "smile_closed" : "smile", fo: { reach: [372, 610] } });
+      put(cam, t, out, id, { i: 1, o: SKINNER_O, key: "skinner", x: SKINNER_BOX[0], z: SKINNER_BOX[2], expr: at(t, BEAT.skinner) ? "smile_closed" : "smile", fo: { reach: [372, 610] } });
       break;
     }
     case 5: { // peck -> a seed drops from the hopper into the tray -> a happy flap
@@ -318,7 +318,12 @@ export const stage = (id: number, t: number, cam: CamInfo): Stage => {
       break;
     }
     case 10: pilots(cam, out, id, t, () => "stern"); break; // furious pecking, locked on
-    case 11: pilots(cam, out, id, t, (k) => (k === 1 ? "curious" : "neutral")); mark(out, "?", [CONE[0] + 0.06, STATION_FLOOR + 0.42, CONE[2] + BIRD_Z], "m", 0.1); break;
+    case 11: { // the curious pause: the middle pilot cocks its head one way, then the other; a "?" pops over it
+      const cock = 0.14 * smooth((t - 652 / FPS) / 0.3) - 0.26 * smooth((t - 676 / FPS) / 0.35);
+      pilots(cam, out, id, t, (k) => (k === 1 ? "curious" : "neutral"), undefined, (k) => (k === 1 ? cock : 0));
+      if (t > 656 / FPS) mark(out, "?", [CONE[0] - 0.02, STATION_FLOOR + 0.31, CONE[2] + BIRD_Z - 0.06], "m", 0.05);
+      break;
+    }
     case 12: { // the explanation: the lens's light to the screens, the peck, the tilt
       pilots(cam, out, id, t, (k) => (k === 1 ? "stern" : "neutral"));
       break;
@@ -349,7 +354,7 @@ export const stage = (id: number, t: number, cam: CamInfo): Stage => {
     case 16: { // "cancelled": the stamp comes down on the pigeon file (a real 3D arm with the stamp in its hand)
       const gp: V3 = [WAR[0], 0, WAR[2] - 0.95], slam = BEAT.cancelled;
       const S = shoulderW(cam, gp, general(1), 1);
-      const up = t < slam - 0.35 ? smooth((t - (slam - 1.0)) / 0.5) : t < slam ? 1 - smooth((t - (slam - 0.12)) / 0.12) : 0;
+      const up = t < slam - 0.35 ? smooth((t - (slam - 1.0)) / 0.5) : t < slam ? 1 - smooth((t - (slam - 0.12)) / 0.12) : 0.55 * smooth((t - slam - 0.3) / 0.35); // lifts to show the mark
       const tgt: V3 = [WAR[0] + 0.02, 0.835 + 0.11, WAR[2] + 0.04];
       const H: V3 = [tgt[0], tgt[1] + 0.45 * up, tgt[2] - 0.1 * up];
       out.arms.push({ a: S, b: H, col: armColour(general(1)), tool: "stamp" });

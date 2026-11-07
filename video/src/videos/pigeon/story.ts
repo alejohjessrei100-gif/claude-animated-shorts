@@ -143,6 +143,7 @@ const B = (f: number) => bombAt(F(f)).pos;
 
 // cast spots
 export const SKINNER: V3 = Lb(0.0, 0, -0.6);
+export const SKINNER_BOX: V3 = Lb(-0.3, 0, -0.6);        // shots 3-4: right behind the training box (then he walks to the bench nose)
 export const TRAIN_BOX: V3 = Lb(-0.35, TABLE_H, 0.12);      // training box on the bench (open toward +z / the lens)
 /** the training screen hangs on the box's left inner wall, facing +x: the bird faces -x and pecks it in profile */
 export const TRAIN_SCREEN_X = TRAIN_BOX[0] - 0.21 + 0.022;
@@ -154,20 +155,23 @@ export const PODIUM: V3 = Sg(-0.55, 0.6, -0.15);
 export const BIRD_STAGE: V3 = Sg(-0.55, 0.6 + 1.12, -0.12); // a pigeon perched on the podium top
 
 // 1 the bomb over the sea: a chase lens beside it, gliding back to reveal the raft far ahead
-const S1a = (f: number) => { const b = B(f); return { pos: [b[0] + 5.2, b[1] + 1.4, b[2] + 4.2] as V3, look: [b[0], b[1] - 0.1, b[2] - 0.5] as V3, fov: 40, roll: -0.05 }; };
+const S1a = (f: number) => { // a slow orbit + push round the whole bomb (behind-right quarter, swinging toward its side)
+  const b = B(f), th = 0.55 + 0.006 * f, R = 9.5 - 0.03 * f;
+  return { pos: [b[0] + R * Math.sin(th), b[1] + 2.0 - 0.006 * f, b[2] + R * Math.cos(th)] as V3, look: [b[0], b[1] - 0.1, b[2] - 0.3] as V3, fov: 40, roll: -0.05 };
+};
 const S1b = (f: number) => { const b = B(f); return { pos: [b[0] + 4.2, b[1] + 0.8, b[2] - 6.5] as V3, look: [b[0], b[1], b[2] + 0.3] as V3, fov: 42, roll: 0.04 }; };
 // 2 inside the nose: 3/4 from the front, above the screens: three heads over three screens
 const S2a = (f: number) => dolly(Co(1.12, 0.74, -1.02), Co(0.07, 0.27, BIRD_Z - CONE[2]), pushK(f, 90, 0.002, 0.005, 28), { fov: 52, roll: 0.04 }); // front quarter: three faces over their screens, in a row
 // 3 lab wide (night), 4 Skinner at the training box, 5 insert peck + seed, 6 strapping into the cone
 const S3a = (f: number) => dolly(Lb(-2.4, 2.0, 4.2), Lb(0.0, 1.0, -0.4), pushK(f, 140, 0.0035), { fov: 46 });
 const S4a = (f: number) => dolly(Lb(-1.25, 1.45, 2.1), Lb(-0.15, 1.1, -0.1), pushK(f, 208, 0.0025), { fov: 42, roll: 0.03 });
-const S4b = (f: number) => dolly(Lb(-0.85, 1.12, 1.2), add(TRAIN_BOX, [0, 0.18, 0]), pushK(f, 250, 0.003), { fov: 40, roll: -0.03 });
+const S4b = (f: number) => dolly(add(TRAIN_BOX, [0.45, 0.55, 1.35]), add(TRAIN_BOX, [-0.05, 0.38, -0.15]), pushK(f, 250, 0.0018), { fov: 44, roll: -0.03 }); // the ship screen face-on, Skinner above
 const S5a = (f: number) => dolly(add(TRAIN_BOX, [0.3, 0.3, 0.95]), add(TRAIN_BOX, [-0.08, 0.13, 0.0]), pushK(f, 316, 0.002, 0.006, 24), { fov: 40, roll: 0.04 }); // bird, screen and seed tray all in
 const S6a = (f: number) => dolly(Lb(1.65, 1.55, 0.95), Lb(0.3, 1.02, -0.02), pushK(f, 367, 0.0018), { fov: 46, roll: -0.03 }); // from the open side: into the nose section, Skinner behind it
 // 7 the three screens light up (low, along the row of stations)
 const S7a = (f: number) => dolly(Co(0.85, 0.62, 0.6), Co(0, 0.24, -0.16), pushK(f, 433, 0.004), { fov: 44, roll: -0.04 }); // behind and above: birds + lit screens
 // 8 war room: generals laughing round the map table; then the doubter
-const S8a = (f: number) => dolly(Wr(0.2, 1.9, 2.6), Wr(0.2, 1.0, -0.3), pushK(f, 476, 0.003), { fov: 46 });
+const S8a = (f: number) => dolly(Wr(0.27, 2.0, 5.2), Wr(0.27, 1.1, -0.6), pushK(f, 476, 0.0015), { fov: 50 }); // all four generals
 const S8b = (f: number) => dolly(Wr(0.5, 1.6, 0.9), add(GENERALS[1], [0, 1.5, 0]), pushK(f, 512, 0.0025, 0.007, 25), { fov: 40, roll: 0.04 });
 // 9 the test: the bomb dives on the raft
 const S9a = (f: number) => { // behind and above the bomb, down its line: the bomb low in frame, the raft ahead of it
@@ -212,7 +216,7 @@ const CAMS: Record<number, Key[]> = {
   9: [{ f: 553, s: S9a }],
   10: [{ f: 615, s: S10a }],
   11: [{ f: 647, s: S11a }],
-  12: [{ f: 711, s: S12a }, { f: 772, dur: 26, s: S12b }],
+  12: [{ f: 711, s: S12a }, { f: 786, cut: true, s: S12b }],
   19: [{ f: 848, s: S19a }],
   13: [{ f: 890, s: S13a }, { f: 934, dur: 18, s: S13b }],
   14: [{ f: 972, s: S14a }],
@@ -243,7 +247,7 @@ export const DOF: Dof[] = [
   { f: 0, cInf: 0 },
   { f: 90, cInf: 4, focus: () => Co(0, 0.3, BIRD_Z - CONE[2]) },
   { f: 144, cInf: 0 },
-  { f: 208, cInf: 4, focus: () => add(SKINNER, [0, 1.4, 0.2]) },
+  { f: 208, cInf: 4, focus: () => add(SKINNER_BOX, [0, 1.4, 0.2]) },
   { f: 250, dur: 30, cInf: 4, focus: () => add(TRAIN_BOX, [0, 0.18, 0]) },
   { f: 316, cInf: 5, focus: () => add(TRAIN_BOX, [0, 0.14, 0]) },
   { f: 367, cInf: 3, focus: () => add(CONE_ON_BENCH, [0, 0.15, 0]) },
