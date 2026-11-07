@@ -206,7 +206,7 @@ const S9b = (f: number) => ({ pos: Cl(0.6, 4.2, 7.4) as V3, look: Cl(-0.3, 0.6, 
 // 10 the girl draws a B (high angle onto the desk + her face)
 const S10a = (f: number) => dolly(Cl(0.55, 1.75, 1.35), add(KID_B, [0, 0.95, 0.45]), pushK(f, 622, 0.003, 0.007, 25), { fov: 42, roll: 0.04 });
 // 11 the drop: low by the desk edge, then her shocked face
-const S11a = (f: number) => { const p = sliceAt(11, 0, f); return dolly(Cl(0.75, 0.35, 1.45), [p[0], Math.max(0.05, p[1] * 0.5), 0.55], 1, { fov: 44, roll: -0.04 }); };
+const S11a = (f: number) => { const p = sliceAt(11, 0, f); return dolly(Cl(0.75, 0.35, 1.45), [p[0], Math.max(0.05, p[1] * 0.5), 0.55], pushK(f, 693, 0.0045), { fov: 44, roll: -0.04 + 0.0008 * (f - 693) }); }; // slow push + roll creep: never a dead hold
 const S11b = (f: number) => dolly(Cl(0.05, 0.95, 1.35), add(KID_B, [0, 0.95, 0]), pushK(f, 751, 0.004, 0.01, 12), { fov: 40, roll: 0.05 });
 // 12-13 the explanation, side-on (lens on +x looking -x at the table edge)
 const S12a = (f: number) => dolly(K(1.75, TABLE_H + 0.12, 0.85), K(0, TABLE_H + 0.02, 0.8), pushK(f, 764, 0.0025, 0.006, 25), { fov: 36 });
