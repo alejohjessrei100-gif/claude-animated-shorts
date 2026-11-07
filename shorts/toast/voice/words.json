@@ -1,0 +1,777 @@
+[
+ {
+  "word": "A",
+  "start": 0.092,
+  "end": 0.134
+ },
+ {
+  "word": "physicist",
+  "start": 0.134,
+  "end": 0.672
+ },
+ {
+  "word": "proved",
+  "start": 0.672,
+  "end": 0.982
+ },
+ {
+  "word": "your",
+  "start": 0.982,
+  "end": 1.108
+ },
+ {
+  "word": "toast",
+  "start": 1.108,
+  "end": 1.469
+ },
+ {
+  "word": "lands",
+  "start": 1.469,
+  "end": 1.771
+ },
+ {
+  "word": "butter-side",
+  "start": 1.771,
+  "end": 2.367
+ },
+ {
+  "word": "down",
+  "start": 2.367,
+  "end": 2.762
+ },
+ {
+  "word": "because",
+  "start": 2.762,
+  "end": 3.031
+ },
+ {
+  "word": "of",
+  "start": 3.031,
+  "end": 3.106
+ },
+ {
+  "word": "how",
+  "start": 3.106,
+  "end": 3.274
+ },
+ {
+  "word": "tall",
+  "start": 3.274,
+  "end": 3.618
+ },
+ {
+  "word": "you",
+  "start": 3.618,
+  "end": 3.82
+ },
+ {
+  "word": "are",
+  "start": 3.82,
+  "end": 4.08
+ },
+ {
+  "word": "It's",
+  "start": 4.198,
+  "end": 4.349
+ },
+ {
+  "word": "1995",
+  "start": 4.349,
+  "end": 5.398
+ },
+ {
+  "word": "and",
+  "start": 5.516,
+  "end": 5.65
+ },
+ {
+  "word": "Robert",
+  "start": 5.65,
+  "end": 5.969
+ },
+ {
+  "word": "Matthews",
+  "start": 5.969,
+  "end": 6.414
+ },
+ {
+  "word": "is",
+  "start": 6.414,
+  "end": 6.531
+ },
+ {
+  "word": "pushing",
+  "start": 6.531,
+  "end": 6.985
+ },
+ {
+  "word": "buttered",
+  "start": 6.985,
+  "end": 7.278
+ },
+ {
+  "word": "toast",
+  "start": 7.278,
+  "end": 7.606
+ },
+ {
+  "word": "off",
+  "start": 7.606,
+  "end": 7.875
+ },
+ {
+  "word": "tables",
+  "start": 7.875,
+  "end": 8.395
+ },
+ {
+  "word": "over",
+  "start": 8.513,
+  "end": 8.966
+ },
+ {
+  "word": "and",
+  "start": 8.966,
+  "end": 9.209
+ },
+ {
+  "word": "over",
+  "start": 9.209,
+  "end": 9.621
+ },
+ {
+  "word": "His",
+  "start": 9.738,
+  "end": 9.847
+ },
+ {
+  "word": "colleagues",
+  "start": 9.847,
+  "end": 10.334
+ },
+ {
+  "word": "think",
+  "start": 10.334,
+  "end": 10.469
+ },
+ {
+  "word": "he's",
+  "start": 10.469,
+  "end": 10.611
+ },
+ {
+  "word": "lost",
+  "start": 10.611,
+  "end": 10.981
+ },
+ {
+  "word": "it",
+  "start": 10.981,
+  "end": 11.149
+ },
+ {
+  "word": "Robert",
+  "start": 11.266,
+  "end": 11.778
+ },
+ {
+  "word": "it's",
+  "start": 11.778,
+  "end": 11.954
+ },
+ {
+  "word": "just",
+  "start": 11.954,
+  "end": 12.148
+ },
+ {
+  "word": "bad",
+  "start": 12.148,
+  "end": 12.441
+ },
+ {
+  "word": "luck",
+  "start": 12.441,
+  "end": 12.828
+ },
+ {
+  "word": "Then",
+  "start": 12.945,
+  "end": 13.046
+ },
+ {
+  "word": "why",
+  "start": 13.046,
+  "end": 13.298
+ },
+ {
+  "word": "does",
+  "start": 13.298,
+  "end": 13.449
+ },
+ {
+  "word": "it",
+  "start": 13.449,
+  "end": 13.533
+ },
+ {
+  "word": "keep",
+  "start": 13.533,
+  "end": 13.743
+ },
+ {
+  "word": "happening",
+  "start": 13.743,
+  "end": 14.255
+ },
+ {
+  "word": "Wait",
+  "start": 14.372,
+  "end": 14.632
+ },
+ {
+  "word": "is",
+  "start": 14.75,
+  "end": 14.893
+ },
+ {
+  "word": "the",
+  "start": 14.893,
+  "end": 14.96
+ },
+ {
+  "word": "butter",
+  "start": 14.96,
+  "end": 15.338
+ },
+ {
+  "word": "making",
+  "start": 15.338,
+  "end": 15.64
+ },
+ {
+  "word": "that",
+  "start": 15.64,
+  "end": 15.774
+ },
+ {
+  "word": "side",
+  "start": 15.774,
+  "end": 16.018
+ },
+ {
+  "word": "heavier",
+  "start": 16.018,
+  "end": 16.471
+ },
+ {
+  "word": "Nope",
+  "start": 16.588,
+  "end": 16.966
+ },
+ {
+  "word": "Years",
+  "start": 17.084,
+  "end": 17.336
+ },
+ {
+  "word": "later",
+  "start": 17.336,
+  "end": 17.705
+ },
+ {
+  "word": "British",
+  "start": 17.806,
+  "end": 18.083
+ },
+ {
+  "word": "schoolkids",
+  "start": 18.083,
+  "end": 18.645
+ },
+ {
+  "word": "dropped",
+  "start": 18.645,
+  "end": 18.922
+ },
+ {
+  "word": "almost",
+  "start": 18.922,
+  "end": 19.258
+ },
+ {
+  "word": "ten",
+  "start": 19.258,
+  "end": 19.585
+ },
+ {
+  "word": "thousand",
+  "start": 19.585,
+  "end": 20.064
+ },
+ {
+  "word": "slices",
+  "start": 20.064,
+  "end": 20.626
+ },
+ {
+  "word": "Some",
+  "start": 20.744,
+  "end": 21.063
+ },
+ {
+  "word": "just",
+  "start": 21.063,
+  "end": 21.264
+ },
+ {
+  "word": "had",
+  "start": 21.264,
+  "end": 21.39
+ },
+ {
+  "word": "a",
+  "start": 21.39,
+  "end": 21.416
+ },
+ {
+  "word": "letter",
+  "start": 21.416,
+  "end": 21.735
+ },
+ {
+  "word": "drawn",
+  "start": 21.735,
+  "end": 22.037
+ },
+ {
+  "word": "on",
+  "start": 22.037,
+  "end": 22.205
+ },
+ {
+  "word": "instead",
+  "start": 22.205,
+  "end": 22.507
+ },
+ {
+  "word": "of",
+  "start": 22.507,
+  "end": 22.599
+ },
+ {
+  "word": "butter",
+  "start": 22.599,
+  "end": 22.977
+ },
+ {
+  "word": "and",
+  "start": 23.095,
+  "end": 23.221
+ },
+ {
+  "word": "most",
+  "start": 23.221,
+  "end": 23.674
+ },
+ {
+  "word": "still",
+  "start": 23.724,
+  "end": 24.102
+ },
+ {
+  "word": "landed",
+  "start": 24.102,
+  "end": 24.463
+ },
+ {
+  "word": "letter-side",
+  "start": 24.463,
+  "end": 24.983
+ },
+ {
+  "word": "down",
+  "start": 24.983,
+  "end": 25.344
+ },
+ {
+  "word": "You",
+  "start": 25.462,
+  "end": 25.529
+ },
+ {
+  "word": "see",
+  "start": 25.529,
+  "end": 25.781
+ },
+ {
+  "word": "toast",
+  "start": 25.899,
+  "end": 26.201
+ },
+ {
+  "word": "tips",
+  "start": 26.201,
+  "end": 26.52
+ },
+ {
+  "word": "off",
+  "start": 26.52,
+  "end": 26.671
+ },
+ {
+  "word": "the",
+  "start": 26.671,
+  "end": 26.839
+ },
+ {
+  "word": "edge",
+  "start": 26.839,
+  "end": 27.116
+ },
+ {
+  "word": "and",
+  "start": 27.116,
+  "end": 27.217
+ },
+ {
+  "word": "starts",
+  "start": 27.217,
+  "end": 27.544
+ },
+ {
+  "word": "to",
+  "start": 27.544,
+  "end": 27.636
+ },
+ {
+  "word": "spin",
+  "start": 27.636,
+  "end": 28.081
+ },
+ {
+  "word": "From",
+  "start": 28.199,
+  "end": 28.341
+ },
+ {
+  "word": "a",
+  "start": 28.341,
+  "end": 28.367
+ },
+ {
+  "word": "normal",
+  "start": 28.367,
+  "end": 28.702
+ },
+ {
+  "word": "table",
+  "start": 28.702,
+  "end": 29.114
+ },
+ {
+  "word": "it",
+  "start": 29.156,
+  "end": 29.257
+ },
+ {
+  "word": "only",
+  "start": 29.257,
+  "end": 29.458
+ },
+ {
+  "word": "has",
+  "start": 29.458,
+  "end": 29.659
+ },
+ {
+  "word": "time",
+  "start": 29.659,
+  "end": 29.911
+ },
+ {
+  "word": "for",
+  "start": 29.911,
+  "end": 30.037
+ },
+ {
+  "word": "half",
+  "start": 30.037,
+  "end": 30.356
+ },
+ {
+  "word": "a",
+  "start": 30.356,
+  "end": 30.398
+ },
+ {
+  "word": "turn",
+  "start": 30.398,
+  "end": 30.734
+ },
+ {
+  "word": "before",
+  "start": 30.734,
+  "end": 31.011
+ },
+ {
+  "word": "it",
+  "start": 31.011,
+  "end": 31.078
+ },
+ {
+  "word": "hits",
+  "start": 31.078,
+  "end": 31.28
+ },
+ {
+  "word": "the",
+  "start": 31.28,
+  "end": 31.338
+ },
+ {
+  "word": "floor",
+  "start": 31.338,
+  "end": 31.733
+ },
+ {
+  "word": "Ever",
+  "start": 31.851,
+  "end": 32.002
+ },
+ {
+  "word": "caught",
+  "start": 32.002,
+  "end": 32.195
+ },
+ {
+  "word": "a",
+  "start": 32.195,
+  "end": 32.22
+ },
+ {
+  "word": "flipped",
+  "start": 32.22,
+  "end": 32.564
+ },
+ {
+  "word": "coin",
+  "start": 32.564,
+  "end": 32.866
+ },
+ {
+  "word": "too",
+  "start": 32.866,
+  "end": 33.059
+ },
+ {
+  "word": "early",
+  "start": 33.059,
+  "end": 33.345
+ },
+ {
+  "word": "Same",
+  "start": 33.462,
+  "end": 33.681
+ },
+ {
+  "word": "problem",
+  "start": 33.681,
+  "end": 34.058
+ },
+ {
+  "word": "To",
+  "start": 34.176,
+  "end": 34.252
+ },
+ {
+  "word": "land",
+  "start": 34.252,
+  "end": 34.554
+ },
+ {
+  "word": "butter-up",
+  "start": 34.554,
+  "end": 35.141
+ },
+ {
+  "word": "tables",
+  "start": 35.259,
+  "end": 35.612
+ },
+ {
+  "word": "would",
+  "start": 35.612,
+  "end": 35.737
+ },
+ {
+  "word": "need",
+  "start": 35.737,
+  "end": 35.897
+ },
+ {
+  "word": "to",
+  "start": 35.897,
+  "end": 35.973
+ },
+ {
+  "word": "be",
+  "start": 35.973,
+  "end": 36.098
+ },
+ {
+  "word": "about",
+  "start": 36.098,
+  "end": 36.325
+ },
+ {
+  "word": "three",
+  "start": 36.325,
+  "end": 36.695
+ },
+ {
+  "word": "metres",
+  "start": 36.695,
+  "end": 37.081
+ },
+ {
+  "word": "tall",
+  "start": 37.081,
+  "end": 37.433
+ },
+ {
+  "word": "And",
+  "start": 37.551,
+  "end": 37.66
+ },
+ {
+  "word": "tables",
+  "start": 37.66,
+  "end": 38.088
+ },
+ {
+  "word": "are",
+  "start": 38.088,
+  "end": 38.231
+ },
+ {
+  "word": "only",
+  "start": 38.231,
+  "end": 38.483
+ },
+ {
+  "word": "as",
+  "start": 38.483,
+  "end": 38.609
+ },
+ {
+  "word": "tall",
+  "start": 38.609,
+  "end": 38.86
+ },
+ {
+  "word": "as",
+  "start": 38.86,
+  "end": 38.953
+ },
+ {
+  "word": "we",
+  "start": 38.953,
+  "end": 39.121
+ },
+ {
+  "word": "are",
+  "start": 39.121,
+  "end": 39.373
+ },
+ {
+  "word": "So",
+  "start": 39.49,
+  "end": 39.75
+ },
+ {
+  "word": "there",
+  "start": 39.75,
+  "end": 39.927
+ },
+ {
+  "word": "are",
+  "start": 39.927,
+  "end": 40.044
+ },
+ {
+  "word": "two",
+  "start": 40.044,
+  "end": 40.346
+ },
+ {
+  "word": "ways",
+  "start": 40.346,
+  "end": 40.64
+ },
+ {
+  "word": "to",
+  "start": 40.64,
+  "end": 40.724
+ },
+ {
+  "word": "save",
+  "start": 40.724,
+  "end": 40.951
+ },
+ {
+  "word": "your",
+  "start": 40.951,
+  "end": 41.035
+ },
+ {
+  "word": "breakfast",
+  "start": 41.035,
+  "end": 41.555
+ },
+ {
+  "word": "knock",
+  "start": 41.673,
+  "end": 41.958
+ },
+ {
+  "word": "it",
+  "start": 41.958,
+  "end": 42.034
+ },
+ {
+  "word": "off",
+  "start": 42.034,
+  "end": 42.21
+ },
+ {
+  "word": "really",
+  "start": 42.21,
+  "end": 42.521
+ },
+ {
+  "word": "fast",
+  "start": 42.521,
+  "end": 42.982
+ },
+ {
+  "word": "or",
+  "start": 43.1,
+  "end": 43.411
+ },
+ {
+  "word": "become",
+  "start": 43.52,
+  "end": 43.83
+ },
+ {
+  "word": "a",
+  "start": 43.83,
+  "end": 43.872
+ },
+ {
+  "word": "giant",
+  "start": 43.872,
+  "end": 44.368
+ }
+]

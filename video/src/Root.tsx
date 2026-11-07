@@ -2,6 +2,7 @@ import { Composition, staticFile } from "remotion";
 import { Scene, myCompSchema } from "./Scene";
 import { getMediaMetadata } from "./helpers/get-media-metadata";
 import { GimliShort, GIMLI_FRAMES } from "./videos/gimli/Bridge";
+import { ToastShort, TOAST_FRAMES } from "./videos/toast/Bridge";
 
 // Welcome to the Remotion Three Starter Kit!
 // Two compositions have been created, showing how to use
@@ -21,6 +22,8 @@ import { GimliShort, GIMLI_FRAMES } from "./videos/gimli/Bridge";
 export const RemotionRoot: React.FC = () => {
   return (
     <>
+      {/* Why Toast Lands Butter-Side Down (reference-style build) */}
+      <Composition id="ToastShort" component={ToastShort} durationInFrames={TOAST_FRAMES} fps={30} width={1080} height={1920} />
       {/* The Gimli Glider: cartoon 3D story short (starts as a copy of the bridge template) */}
       <Composition id="GimliShort" component={GimliShort} durationInFrames={GIMLI_FRAMES} fps={30} width={1080} height={1920} />
       <Composition

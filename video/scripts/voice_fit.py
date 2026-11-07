@@ -9,7 +9,8 @@ import numpy as np
 from pocketsphinx import Decoder
 
 GAP_AFTER, GAP_BEFORE, LEAD, TAIL = 0.08, 0.06, 0.05, 0.30
-SPOKEN = {"1983": "nineteen eighty three", "forty-one": "forty one"}  # digits must be spelled out; extend per script
+SPOKEN = {"1983": "nineteen eighty three", "1995": "nineteen ninety five", "forty-one": "forty one",
+          "schoolkids": "school kids", "metres": "meters"}  # digits must be spelled out; extend per script
 
 rec, txt, out = sys.argv[1:4]
 target = float(sys.argv[sys.argv.index("--target") + 1]) if "--target" in sys.argv else 29.0
@@ -23,7 +24,8 @@ ff("-i", rec, "-ar", "48000", "-ac", "1", w48)
 orig = re.findall(r"[A-Za-z0-9'\-]+", open(txt).read())
 norm, owner = [], []
 for i, w in enumerate(orig):
-    for p in SPOKEN.get(w.lower(), w.lower().strip("'")).split():
+    # spelled-out forms first, then hyphenated words split into their parts (butter-side -> butter side)
+    for p in SPOKEN.get(w.lower(), w.lower().strip("'").replace("-", " ")).split():
         norm.append(p); owner.append(i)
 d = Decoder(bestpath=False)
 for wd in sorted(set(norm)):
