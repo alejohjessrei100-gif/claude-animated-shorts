@@ -15,11 +15,11 @@ import { Pool, Actor, Fx, stage, ArmPlace } from "./cast";
 import { INK } from "./toon";
 import { PSU } from "./birds";
 import {
-  boardsTex, plasterTex, booksTex, shipScreenTex, crossTex, pigeonChalkTex, mapTex, curtainTex, cagesTex, oliveTex, seaTex, bullseyeTex, nightWindowTex,
+  boardsTex, plasterTex, booksTex, shipScreenTex, crossTex, pigeonChalkTex, mapTex, curtainTex, cagesTex, oliveTex, seaTex, bullseyeTex, nightWindowTex, heTex,
 } from "./gfx";
 import {
   FPS, SHOTS, camAt, ShotDef, RANGE, CONE, LAB, WAR, YARD, STAGE, TABLE_H, LAB_TABLE, TARGET, bombAt, STATION_X, STATION_FLOOR, SCREEN_Z, BIRD_Z, PECK_Y,
-  LENS, TRAIN_BOX, TRAIN_SCREEN_X, CONE_ON_BENCH, PODIUM, DAUGHTER, driftAt, tiltAt,
+  LENS, TRAIN_BOX, TRAIN_SCREEN_X, CONE_ON_BENCH, PODIUM, DAUGHTER, driftAt, tiltAt, BEAT, smooth,
 } from "./story";
 
 // ---------------- assets ----------------
@@ -76,6 +76,7 @@ const buildBomb = (): Bomb => {
   const g = new THREE.Group(), b = new Batch();
   const skin = lam("bombSkin", () => ({ map: oliveTex("bomb") })), dark = lam("bombDark", () => ({ color: "#3d4528" }));
   const prof: THREE.Vector2[] = [];
+  prof.push(new THREE.Vector2(0.001, -1.6)); // closed tail
   for (let i = 0; i <= 30; i++) { const y = -1.6 + (3.2 * i) / 30; let r = 0.45; if (y > 0.8) r = 0.45 * Math.sqrt(Math.max(0.04, 1 - ((y - 0.8) / 0.85) ** 2)); if (y < -1.1) r = 0.45 - 0.2 * ((-1.1 - y) / 0.5); prof.push(new THREE.Vector2(r, y)); }
   const body = new THREE.LatheGeometry(prof, 28); body.rotateX(-Math.PI / 2); b.add(body, skin);
   b.add(boxB(V(-1.7, -0.05, -0.2), V(1.7, 0.05, 0.45)), dark); // wings
@@ -135,6 +136,7 @@ export class World {
   private sets: Record<string, THREE.Group> = { range: new THREE.Group(), cone: new THREE.Group(), lab: new THREE.Group(), war: new THREE.Group(), yard: new THREE.Group(), stage: new THREE.Group() };
   private bomb!: Bomb;
   private screens: { g: THREE.Group; img: THREE.Texture }[] = [];
+  private beam!: THREE.Mesh;
   private coneFins: THREE.Group[] = [];
   private seaTexture!: THREE.Texture;
   private frustum = new THREE.Frustum();
@@ -211,11 +213,30 @@ export class World {
     // tail section + four fins (the explanation pulls back to them)
     for (let k = 0; k < 4; k++) {
       const f = new THREE.Group(), fb = new Batch();
-      fb.add(boxB(V(-0.025, 0, -0.08), V(0.025, 0.42, 0.26)), lam("fin", () => ({ color: "#3d4528" }))); fb.build(f);
+      fb.add(boxB(V(-0.025, 0, -0.08), V(0.025, 0.42, 0.26)), lam("fin", () => ({ color: "#8a9a52" }))); fb.build(f);
       f.position.set(X, AX, Z + 1.5); f.rotation.z = Math.PI / 2 + (k * Math.PI) / 2; this.coneFins.push(f); g.add(f); // past the hull's end, in view
     }
     b.add(cyl(0.012, 0.012, 1.5, 8), lam("rod", () => ({ color: "#9aa0a8" })), at(X, PECK_Y - 0.12, Z + 0.75, Math.PI / 2)); // the linkage to the tail
-    b.add(new THREE.ConeGeometry(0.3, 0.35, 20, 1, true), lam("tailCone", () => ({ color: "#4f5a32", side: THREE.DoubleSide })), at(X, AX, Z + 1.5, -Math.PI / 2)); // tail cone the fins sit on
+    b.add(new THREE.ConeGeometry(0.3, 0.35, 20, 1, true), lam("tailCone", () => ({ color: "#6d7a48", side: THREE.DoubleSide })), at(X, AX, Z + 1.5, -Math.PI / 2)); // tail cone the fins sit on
+    // the lens's light: a real 3D frustum from the lens to the three screens (additive, no ink), so it reads from any angle
+    {
+      const L0 = 0.07, y0 = LENS[1], z0 = LENS[2] + 0.02, z1 = Z + SCREEN_Z - 0.01, xs = 0.5, ya = PECK_Y - 0.09, yb = PECK_Y + 0.09;
+      const P = [X - L0, y0 - L0, z0, X + L0, y0 - L0, z0, X + L0, y0 + L0, z0, X - L0, y0 + L0, z0,
+        X - xs, ya, z1, X + xs, ya, z1, X + xs, yb, z1, X - xs, yb, z1];
+      const C = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0.35, 0.35, 0.35, 0.35, 0.35, 0.35, 0.35, 0.35, 0.35, 0.35, 0.35, 0.35];
+      const bg = new THREE.BufferGeometry(); bg.setAttribute("position", new THREE.Float32BufferAttribute(P, 3)); bg.setAttribute("color", new THREE.Float32BufferAttribute(C, 3));
+      bg.setIndex([0, 1, 5, 0, 5, 4, 1, 2, 6, 1, 6, 5, 2, 3, 7, 2, 7, 6, 3, 0, 4, 3, 4, 7]);
+      this.beam = new THREE.Mesh(bg, new THREE.MeshBasicMaterial({ color: new THREE.Color(0.55, 0.75, 1.0), vertexColors: true, transparent: true, opacity: 0, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide }));
+      this.beam.layers.set(NOINK); this.beam.visible = false; g.add(this.beam);
+    }
+    // the warhead behind the pilots: olive drab with the yellow bands of a US high-explosive bomb, round end toward the birds
+    const olive = lam("warhead", () => ({ color: "#5f6b3a" })), yel = lam("hebands", () => ({ color: "#e0b23a" }));
+    b.add(cyl(0.27, 0.27, 0.78, 28), olive, at(X, 0.43, Z + 0.86, Math.PI / 2));
+    b.add(new THREE.SphereGeometry(0.27, 28, 14, 0, Math.PI * 2, 0, Math.PI / 2), olive, at(X, 0.43, Z + 0.47, -Math.PI / 2));
+    for (const dz of [0.6, 0.72]) b.add(cyl(0.276, 0.276, 0.05, 28), yel, at(X, 0.43, Z + dz, Math.PI / 2));
+    b.add(boxB(V(X - 0.2, STATION_FLOOR, Z + 0.55), V(X + 0.2, 0.2, Z + 1.15)), lam("rod", () => ({ color: "#9aa0a8" }))); // its cradle
+    const he = new THREE.Mesh(new THREE.PlaneGeometry(0.12, 0.24), new THREE.MeshLambertMaterial({ map: heTex(), transparent: true, depthWrite: false }));
+    he.position.set(X, 0.43 + 0.27 + 0.003, Z + 0.95); he.rotation.set(-Math.PI / 2, 0, Math.PI); g.add(he);
     glow(g, X - 0.3, 0.85, Z + 0.1, 1.3); // a small cabin lamp
     b.build(g);
   }
@@ -394,7 +415,7 @@ export class World {
     // ---- dynamic pieces ----
     if (s.place === "range") {
       const bs = bombAt(t);
-      this.bomb.g.position.set(...bs.pos); this.bomb.g.rotation.set(bs.pitch, 0, bs.roll);
+      this.bomb.g.position.set(...bs.pos); this.bomb.g.rotation.set(bs.pitch, bs.yaw ?? 0, bs.roll);
       this.bomb.fins.forEach((fn, k) => { fn.rotation.x = k % 2 ? bs.fin : -bs.fin; });
       this.seaTexture.offset.set(0, (t * 0.002) % 1);
     }
@@ -405,6 +426,8 @@ export class World {
         sc2.g.rotation.x = -tl; sc2.g.rotation.y = k === 1 ? tl * 0.6 : 0;
       });
       this.coneFins.forEach((fn, k) => { fn.rotation.x = (k % 2 ? 1 : -1) * tl * 1.6; });
+      const bk = id === 12 ? smooth((t - BEAT.lens) / 0.4) : 0;
+      this.beam.visible = bk > 0.01; (this.beam.material as THREE.MeshBasicMaterial).opacity = 0.42 * bk;
     }
     // ---- cast + effects ----
     const right = V(0, 0, 0).setFromMatrixColumn(cam.matrixWorld, 0);
@@ -420,7 +443,7 @@ export class World {
       a.r = this.pool.req(p.key, w, h, k, p.draw);
       a.mesh.visible = true;
       a.mesh.position.set(p.x, p.y, p.z);
-      a.mesh.rotation.set(0, p.yaw ?? Math.atan2(cam.position.x - p.x, cam.position.z - p.z), p.roll ?? 0);
+      a.mesh.rotation.order = "YXZ"; a.mesh.rotation.set(p.pitch ?? 0, p.yaw ?? Math.atan2(cam.position.x - p.x, cam.position.z - p.z), p.roll ?? 0);
       a.mesh.scale.set(p.mirror ? -sc2 : sc2, sc2, sc2);
       a.mesh.castShadow = Lp.actorShadow;
       used.push(a);

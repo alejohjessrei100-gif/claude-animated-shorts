@@ -6,11 +6,11 @@
 import * as THREE from "three";
 import { Pen, bodyFront, bodySide, fxShadow, fxContact, Outfit, Expr, FrontOpts, SideOpts, shoulderOf, armColour, SKINNER_O, general, BOY_O, DAUGHTER_O } from "./toon";
 import {
-  FPS, SHOTS, V3, clamp01, smooth, BEAT, LINES, CONE, STATION_X, STATION_FLOOR, BIRD_Z, LENS, SCREEN_Z, PECK_Y, peckAt, TRAIN_BOX, TRAIN_SCREEN_X, CONE_ON_BENCH,
+  FPS, SHOTS, V3, clamp01, smooth, BEAT, LINES, CONE, STATION_X, STATION_FLOOR, BIRD_Z, peckAt, TRAIN_BOX, TRAIN_SCREEN_X, CONE_ON_BENCH,
   SKINNER, GENERALS, BOY, DOG, DAUGHTER, BIRD_STAGE, WAR, TABLE_H,
 } from "./story";
-import { fxSpeed, fxMark, fxDrop, fxDust, fxStamp, fxBeam, fxSeed, fxBiscuit, fxConfetti } from "./gfx";
-import { pigeonSide, pigeonFront, dogSide, pigeonTip, PSU, BirdOpts, BirdExpr } from "./birds";
+import { fxSpeed, fxMark, fxDrop, fxDust, fxStamp, fxSeed, fxBiscuit, fxConfetti } from "./gfx";
+import { pigeonSide, pigeonFront, pigeonBack, dogSide, pigeonTip, PSU, BirdOpts, BirdExpr } from "./birds";
 import ENV from "./voiceEnv.json";
 import { NOINK } from "./ink";
 import { cardShade, blobMaterial, CARD_K } from "./cardshade";
@@ -111,7 +111,7 @@ export class Fx {
 // ---------------- placements ----------------
 export type Place = {
   key: string; draw: (p: Pen) => void; x: number; y: number; z: number;
-  scale?: number; mirror?: boolean; yaw?: number; geo?: "body" | "swing" | "bird" | "dog"; roll?: number; size?: [number, number, number];
+  scale?: number; mirror?: boolean; yaw?: number; geo?: "body" | "swing" | "bird" | "dog"; roll?: number; pitch?: number; size?: [number, number, number];
 };
 export type FxPlace = { key: string; cw: number; ch: number; draw: (p: Pen) => void; x: number; y: number; z: number; w: number; h: number; flat?: boolean; rot?: number; soft?: boolean };
 /** sun = world direction TOWARD the sun (optional: when absent the scene's shadow-casting light is used) */
@@ -247,20 +247,30 @@ const mark = (out: Stage, kind: "?" | "!", p: V3, key = "", s = 0.3) => out.fx.p
 
 /** a pigeon card at `p` (feet), facing world direction `dir` (x/z): side view (mirrored to face its way on screen) unless the
  *  lens is in front of the bird, then the front view. Canvas resolution follows the distance (sharp in close-ups). */
-const bird = (cam: CamInfo, out: Stage, t: number, i: number, p: V3, dir: [number, number], o: BirdOpts, sc = 1, forceFront = false) => {
-  const tx = cam.pos.x - p[0], tz = cam.pos.z - p[2], tl = Math.hypot(tx, tz) || 1;
-  const front = forceFront || (tx * dir[0] + tz * dir[1]) / tl > 0.62;
-  const mirror = !front && dir[0] * cam.right.x + dir[1] * cam.right.z < 0;
+type View = "F" | "S" | "B";
+/** which card a bird at p facing dir shows to this camera: front (faces the lens), back (faces away) or side */
+const birdView = (cam: CamInfo, p: V3, dir: [number, number]): View => {
+  const tx = cam.pos.x - p[0], tz = cam.pos.z - p[2], d = (tx * dir[0] + tz * dir[1]) / (Math.hypot(tx, tz) || 1);
+  return d > 0.62 ? "F" : d < -0.7 ? "B" : "S";
+};
+/** a pigeon card. view: forced card (pilots share one so the row matches); lean: tip the card back toward a high camera
+ *  (feet stay put) so a steep view does not squash the bird flat */
+const bird = (cam: CamInfo, out: Stage, t: number, i: number, p: V3, dir: [number, number], o: BirdOpts, sc = 1, forceFront = false, view?: View, lean = false) => {
+  const v: View = forceFront ? "F" : view ?? birdView(cam, p, dir);
+  const mirror = v === "S" && dir[0] * cam.right.x + dir[1] * cam.right.z < 0;
   const d = cam.pos.distanceTo(tmp.set(p[0], p[1] + 0.17 * sc, p[2])) / sc;
   const [w, h, k] = d < 0.9 ? [1200, 1200, 3] : d < 2.2 ? [800, 800, 2] : [400, 400, 1];
   const blink = lidAt(t, 300 + i);
   const oo: BirdOpts = { ...o, blink, peck: q(o.peck ?? 0, 24), flap: q(o.flap ?? 0, 12) };
-  out.places.push({ key: `bird|${front ? "F" : "S"}|${JSON.stringify(oo)}`, draw: (pp) => (front ? pigeonFront(pp, oo) : pigeonSide(pp, oo)),
-    x: p[0], y: p[1], z: p[2], geo: "bird", mirror, scale: sc, size: [w, h, k] });
+  const el = Math.atan2(cam.pos.y - (p[1] + 0.17 * sc), Math.hypot(cam.pos.x - p[0], cam.pos.z - p[2]));
+  out.places.push({ key: `bird|${v}|${JSON.stringify(oo)}`, draw: (pp) => (v === "F" ? pigeonFront(pp, oo) : v === "B" ? pigeonBack(pp, oo) : pigeonSide(pp, oo)),
+    x: p[0], y: p[1], z: p[2], geo: "bird", mirror, scale: sc, size: [w, h, k], pitch: lean ? -Math.min(0.5, Math.max(0, 0.55 * el)) : 0 });
 };
-/** the three pilots at their stations in the nose cone */
-const pilots = (cam: CamInfo, out: Stage, id: number, t: number, ex: (k: number) => BirdExpr, gear: (k: number) => BirdOpts["gear"] = () => "cap") =>
-  STATION_X.forEach((sx, k) => bird(cam, out, t, k, [CONE[0] + sx, STATION_FLOOR, CONE[2] + BIRD_Z], [0, -1], { peck: peckAt(id, k, t), expr: ex(k), gear: gear(k), harness: true }));
+/** the three pilots at their stations in the nose cone (one card view for the row, taken from the middle bird) */
+const pilots = (cam: CamInfo, out: Stage, id: number, t: number, ex: (k: number) => BirdExpr, gear: (k: number) => BirdOpts["gear"] = () => "cap") => {
+  const v = birdView(cam, [CONE[0], STATION_FLOOR, CONE[2] + BIRD_Z], [0, -1]);
+  STATION_X.forEach((sx, k) => bird(cam, out, t, k, [CONE[0] + sx, STATION_FLOOR, CONE[2] + BIRD_Z], [0, -1], { peck: peckAt(id, k, t), expr: ex(k), gear: gear(k), harness: true }, 1, false, v, true));
+};
 const head = (p: V3, h = 1.48): V3 => [p[0], p[1] + h, p[2]];
 
 export const stage = (id: number, t: number, cam: CamInfo): Stage => {
@@ -285,17 +295,17 @@ export const stage = (id: number, t: number, cam: CamInfo): Stage => {
       const fed = at(t, BEAT.seed);
       trainBird(fed ? "happy" : "curious", pk, fed ? 0.5 + 0.5 * Math.sin(t * 22) : 0);
       const u = clamp01((t - (BEAT.seed - 0.25)) / 0.25), [bx, by, bz] = TRAIN_BOX;
-      if (t > BEAT.seed - 0.25) out.fx.push({ key: "seed", cw: 120, ch: 80, draw: fxSeed, x: bx - 0.16, y: by + 0.28 - 0.22 * u * u, z: bz + 0.1, w: 0.03, h: 0.02 });
+      if (t > BEAT.seed - 0.25) out.fx.push({ key: "seed", cw: 120, ch: 80, draw: fxSeed, x: bx - 0.16, y: by + 0.28 - 0.22 * u * u, z: bz + 0.1, w: 0.045, h: 0.03 });
       break;
     }
     case 6: { // Skinner lowers a pigeon into the cut-open nose: a real 3D arm, the bird in his hand
       const [cx, cy, cz] = CONE_ON_BENCH, u = smooth((t - BEAT.straps) / 1.1);
       const S = shoulderW(cam, SKINNER, SKINNER_O, 1);
-      const from: V3 = [S[0] + 0.1, S[1] + 0.05, S[2] + 0.35], to: V3 = [cx - 0.04, cy + 0.12, cz + 0.17];
+      const from: V3 = [S[0] + 0.1, S[1] + 0.05, S[2] + 0.35], to: V3 = [cx - 0.04, cy + 0.12, cz];
       const H: V3 = [from[0] + (to[0] - from[0]) * u, from[1] + (to[1] - from[1]) * u, from[2] + (to[2] - from[2]) * u];
       out.arms.push({ a: S, b: H, col: armColour(SKINNER_O) });
       bird(cam, out, t, 20, [H[0], H[1] - 0.1, H[2] + 0.02], [0, 1], { expr: u < 1 ? "nervous" : "neutral", flap: u < 0.9 ? 0.4 + 0.4 * Math.sin(t * 20) : 0, harness: true }, 0.75, true);
-      for (const [k, dz] of [[21, -0.17], [22, 0]] as const) bird(cam, out, t, k, [cx - 0.04, cy + 0.04, cz + dz], [1, 0], { expr: "neutral", harness: true }, 0.75);
+      for (const [k, dz] of [[21, -0.17], [22, 0.17]] as const) bird(cam, out, t, k, [cx - 0.04, cy + 0.04, cz + dz], [1, 0], { expr: "neutral", harness: true }, 0.75);
       put(cam, t, out, id, { i: 1, o: SKINNER_O, key: "skinner", x: SKINNER[0], z: SKINNER[2], expr: "smile_closed", fo: { hideArm: 1, reachL: [228, 600] } });
       break;
     }
@@ -311,14 +321,12 @@ export const stage = (id: number, t: number, cam: CamInfo): Stage => {
     case 11: pilots(cam, out, id, t, (k) => (k === 1 ? "curious" : "neutral")); mark(out, "?", [CONE[0] + 0.06, STATION_FLOOR + 0.42, CONE[2] + BIRD_Z], "m", 0.1); break;
     case 12: { // the explanation: the lens's light to the screens, the peck, the tilt
       pilots(cam, out, id, t, (k) => (k === 1 ? "stern" : "neutral"));
-      const k = smooth((t - BEAT.lens) / 0.4), mid: V3 = [(LENS[0] + CONE[0]) / 2, (LENS[1] + PECK_Y) / 2, (LENS[2] + CONE[2] + SCREEN_Z) / 2];
-      if (k > 0.02) out.fx.push({ key: `beam${q(k, 10)}`, cw: 400, ch: 200, draw: (pp) => fxBeam(pp, q(k, 10)), x: mid[0], y: mid[1], z: mid[2], w: Math.abs(LENS[2] - SCREEN_Z) * 1.0, h: 0.32, soft: true, rot: 0 });
       break;
     }
     case 13: { // the outvote: the middle bird pecks wrong, the other two glare, then peck it right
       const wrong = at(t, BEAT.wrong), vote = at(t, BEAT.outvote);
       pilots(cam, out, id, t, (k) => (k === 1 ? (vote ? "sad" : wrong ? "nervous" : "neutral") : wrong ? "stern" : "neutral"));
-      if (wrong && !vote) mark(out, "!", [CONE[0] - 0.36, STATION_FLOOR + 0.42, CONE[2] + BIRD_Z], "l", 0.09);
+      if (wrong && !vote) mark(out, "!", [CONE[0] + 0.05, STATION_FLOOR + 0.29, CONE[2] + BIRD_Z + 0.05], "l", 0.05); // uh-oh, over the wrong one
       break;
     }
     case 14: { // the boy tosses a biscuit, the dog catches it
@@ -360,7 +368,7 @@ export const stage = (id: number, t: number, cam: CamInfo): Stage => {
     case 18: { // 2024: the daughter raises the trophy; a pigeon struts on the podium; confetti
       const prize = at(t, BEAT.prize), peace = at(t, BEAT.peace);
       put(cam, t, out, id, { i: 50, o: DAUGHTER_O, key: "daughter", x: DAUGHTER[0], y: DAUGHTER[1], z: DAUGHTER[2], expr: prize ? "laugh" : "smile",
-        fo: { held: "trophy", reach: prize ? [372, 330] : [380, 560] } });
+        fo: { held: "trophy", reach: prize ? [470, 250] : [380, 560] } });
       bird(cam, out, t, 41, BIRD_STAGE, [1, 0], { expr: "proud", flap: peace ? 0.5 + 0.5 * Math.sin(t * 18) : 0 }, 1.1, true);
       if (peace) for (let k = 0; k < 6; k++) {
         const u = t - BEAT.peace, sd = k * 13 + 1, y = DAUGHTER[1] + 3.0 - ((u * 0.8 + k * 0.33) % 2.6);

@@ -92,6 +92,38 @@ export const pigeonFront = (p: Pen, o: BirdOpts) => {
   gearSide(p, 200, 144 + hy, gear);
 };
 
+/** back view (facing away from the lens, toward its screen): tail fan, folded wings with their two dark bars, the back of
+ *  the head. A peck dips the head forward and down onto the screen in front of it (the head shrinks a little as it goes). */
+export const pigeonBack = (p: Pen, o: BirdOpts) => {
+  const { expr = "neutral", gear = null, harness = false, flap = 0, peck = 0 } = o;
+  const k = Math.max(0, Math.min(1, peck)), hy = 58 * k + (expr === "sad" ? 10 : 0), hs = 1 - 0.18 * k;
+  for (const s of [-1, 1]) p.stroke([[200 + s * 24, 336], [200 + s * 22, 378]], 6, FOOT);
+  p.poly([[176, 300], [224, 300], [246, 374], [154, 374]], DARK, 6); // tail fan
+  p.stroke([[160, 358], [240, 358]], 8, "#3a3f4c"); // dark tail band
+  p.poly(ring(200, 262, 80, 74, 48), GREY, 7);
+  // neck: stretches toward the screen on a peck
+  p.poly([[166, 214], [200 - 30 * hs, 168 + hy], [200 + 30 * hs, 168 + hy], [234, 214]], "#5f8a7a", 5);
+  p.poly([[176, 214], [200 - 18 * hs, 176 + hy], [200 + 18 * hs, 176 + hy], [224, 214]], "#8a6aa8", 0);
+  // head (no face: we see the back of it)
+  p.poly(ring(200, 150 + hy, 46 * hs, 44 * hs, 40), HEAD, 6);
+  if (gear === "cap") {
+    p.poly(ring(200, 146 + hy, 48 * hs, 44 * hs, 24, Math.PI, Math.PI * 2), "#7a4a2a", 5);
+    p.stroke([[200 - 47 * hs, 150 + hy], [200 + 47 * hs, 150 + hy]], 7, "#3a2a20"); // goggle strap round the back
+    for (const s of [-1, 1]) p.poly([[200 + s * 38 * hs, 150 + hy], [200 + s * 46 * hs, 178 + hy], [200 + s * 30 * hs, 176 + hy]], "#7a4a2a", 4); // ear flaps
+  } else if (gear === "helmet") {
+    p.poly(ring(200, 146 + hy, 50 * hs, 46 * hs, 24, Math.PI, Math.PI * 2), "#4f6a3a", 5);
+    p.stroke([[200 - 56 * hs, 146 + hy], [200 + 56 * hs, 146 + hy]], 6, "#3d5530");
+  }
+  // folded wings meet along the spine; they lift and spread on a flap
+  for (const s of [-1, 1]) {
+    const c: P2 = [200 + s * (36 + 30 * flap), 262 - 18 * flap], a = s * (0.12 + 0.7 * flap);
+    p.poly(ring(c[0], c[1], 40, 70, 32).map((q) => rot(q, a, [200 + s * 20, 210])), LIGHT, 6);
+    for (const dy of [12, 34]) p.stroke([rot([c[0] - 26, c[1] + dy], a, [200 + s * 20, 210]), rot([c[0] + 26, c[1] + dy + 8 * s], a, [200 + s * 20, 210])], 7, "#3a3f4c");
+  }
+  if (harness) { for (const s of [-1, 1]) p.band([[200 + s * 34, 212], [200 + s * 40, 312]], "#6b4a2a", 11, 3); p.band([[150, 300], [250, 300]], "#6b4a2a", 11, 3); p.ell(200, 300, 9, 7, "#d9b24a", 3); }
+  if (expr === "nervous") p.ell(200 + 58, 120 + hy, 5, 9, "#9fd4ff", 2.5);
+};
+
 /** the dog (side view facing right, 500 x 400, feet on 380): sits, wags, catches a treat */
 export const dogSide = (p: Pen, o: { sit?: boolean; wag?: number; mouth?: number; expr?: "happy" | "neutral" | "shock" }) => {
   const { sit = true, wag = 0, mouth = 0, expr = "happy" } = o;

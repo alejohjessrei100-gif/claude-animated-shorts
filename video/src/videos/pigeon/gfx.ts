@@ -278,3 +278,9 @@ export const fxConfetti = (p: Pen, t: number, seed: number) => {
     p.poly([[x - w, y - w * 0.5 * flip], [x + w, y - w * 0.5 * flip], [x + w, y + w * 0.5 * flip], [x - w, y + w * 0.5 * flip]], cols[i % 6], 0);
   }
 };
+/** "HE" stencil (US high-explosive marking) for the top of the warhead: letters stacked along the bomb, yellow, transparent ground */
+export const heTex = () => ctex("heStencil", 256, 512, (g) => {
+  g.clearRect(0, 0, 256, 512); g.fillStyle = "#e8bd3e"; g.textAlign = "center"; g.textBaseline = "middle";
+  g.font = "900 210px sans-serif"; g.fillText("H", 128, 140); g.fillText("E", 128, 380);
+  g.fillStyle = "rgba(0,0,0,0)"; for (const y of [60, 300]) g.clearRect(0, y + 70, 256, 10); // stencil bridges
+});

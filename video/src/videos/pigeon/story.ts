@@ -48,13 +48,14 @@ export const SHOTS: ShotDef[] = [
   { id: 9, a: 556, b: 615, light: "golden", place: "range", sunAz: 95, sunEl: 14 }, // "But in the tests(565), the birds"
   { id: 10, a: 615, b: 647, light: "night", place: "cone" }, // "keep the bomb locked(615) on target(630)."
   { id: 11, a: 647, b: 711, light: "night", place: "cone" }, // "Wait(647), how does a bird steer a bomb?" (iris)
-  { id: 12, a: 711, b: 890, light: "night", place: "cone" }, // "You see(711), a lens(726) ... drifts(793), the pecks(814) tilt(826) ... steers(863) the bomb."
+  { id: 12, a: 711, b: 848, light: "night", place: "cone" }, // "You see(711), a lens(726) ... drifts(793), the pecks(814) tilt(826) the screen,"
   { id: 13, a: 890, b: 976, light: "night", place: "cone" }, // "And if one pigeon gets it wrong(919), the other two outvote(954) it."
   { id: 14, a: 976, b: 1043, light: "day", place: "yard" },  // "Ever trained a dog(989) with treats(1004)? Same idea(1021),"
   { id: 15, a: 1043, b: 1076, light: "night", place: "cone" }, // "but with explosives(1053)."
   { id: 16, a: 1076, b: 1122, light: "night", place: "war" }, // "The military cancelled(1091) it anyway."
   { id: 17, a: 1122, b: 1203, light: "night", place: "lab" }, // "Skinner said the problem was that nobody took them seriously(1180)."
   { id: 18, a: 1203, b: TOTAL, light: "night", place: "stage" }, // "Eighty years later ... a prize(1263) for it: the Ig Nobel Peace Prize(1308)."
+  { id: 19, a: 848, b: 890, light: "golden", place: "range", sunAz: 95, sunEl: 14 }, // "and that steers(863) the bomb." (outside: the fins swing, the bomb banks)
 ];
 export const XFADE: Record<number, number> = { 3: 8, 8: 8, 9: 6, 14: 8, 16: 8, 17: 8, 18: 8 };
 export const FLASH_AT = -100;
@@ -68,10 +69,14 @@ export const layersAt = (f: number): { id: number; alpha: number }[] => {
 };
 
 // ---------------- the bomb in flight (range shots) ----------------
-export type BombState = { pos: V3; pitch: number; roll: number; fin: number };
+export type BombState = { pos: V3; pitch: number; roll: number; fin: number; yaw?: number };
 export const TARGET: V3 = [RANGE[0], 0, -300];
 /** glide path toward the raft: shot 1 high and far, shot 9 low and close; fins twitch with the pecks */
 export const bombAt = (t: number): BombState => {
+  if (t >= F(840) && t < F(895)) { // shot 19: the screen tilt reaches the fins; the bomb banks and turns toward the raft
+    const s = t - F(848), turn = smooth((t - F(856)) / 0.8), bump = smooth((t - F(850)) / 0.25) * (1 - smooth((t - F(874)) / 0.35));
+    return { pos: [RANGE[0] + 20 - 7 * turn * Math.max(0, s), 45 - 3 * s, -40 - 40 * s], pitch: -0.1, roll: 0.38 * bump, yaw: 0.32 * turn, fin: 0.5 * bump };
+  }
   const u = t < F(300) ? clamp01(t / F(90)) * 0.35 : 0.55 + 0.45 * clamp01((t - F(556)) / F(59));
   const z = 120 - 380 * u, y = 70 - 58 * u;
   return { pos: [RANGE[0] + 6 * Math.sin(t * 0.7), y, z], pitch: -0.12, roll: 0.05 * Math.sin(t * 1.3), fin: 0.18 * Math.sin(t * 9) };
@@ -143,7 +148,7 @@ export const TRAIN_BOX: V3 = Lb(-0.35, TABLE_H, 0.12);      // training box on t
 export const TRAIN_SCREEN_X = TRAIN_BOX[0] - 0.21 + 0.022;
 export const CONE_ON_BENCH: V3 = Lb(0.45, TABLE_H, 0.22);   // the cut-open nose section on the bench
 export const GENERALS: V3[] = [Wr(-0.9, 0, -0.75), Wr(0.0, 0, -0.95), Wr(0.9, 0, -0.75), Wr(1.45, 0, 0.1)];
-export const BOY: V3 = Yd(-0.6, 0, 0.0), DOG: V3 = Yd(0.45, 0, 0.15);
+export const BOY: V3 = Yd(-0.45, 0, 0.0), DOG: V3 = Yd(0.38, 0, 0.15);
 export const DAUGHTER: V3 = Sg(0.15, 0.6, -0.45);           // standing on the stage (stage top at 0.6)
 export const PODIUM: V3 = Sg(-0.55, 0.6, -0.15);
 export const BIRD_STAGE: V3 = Sg(-0.55, 0.6 + 1.12, -0.12); // a pigeon perched on the podium top
@@ -152,42 +157,48 @@ export const BIRD_STAGE: V3 = Sg(-0.55, 0.6 + 1.12, -0.12); // a pigeon perched 
 const S1a = (f: number) => { const b = B(f); return { pos: [b[0] + 5.2, b[1] + 1.4, b[2] + 4.2] as V3, look: [b[0], b[1] - 0.1, b[2] - 0.5] as V3, fov: 40, roll: -0.05 }; };
 const S1b = (f: number) => { const b = B(f); return { pos: [b[0] + 4.2, b[1] + 0.8, b[2] - 6.5] as V3, look: [b[0], b[1], b[2] + 0.3] as V3, fov: 42, roll: 0.04 }; };
 // 2 inside the nose: 3/4 from the front, above the screens: three heads over three screens
-const S2a = (f: number) => dolly(Co(0.3, 1.05, -1.25), Co(0, 0.3, BIRD_Z - CONE[2]), pushK(f, 90, 0.004, 0.009, 28), { fov: 50, roll: 0.04 }); // high: all three heads over their screens
+const S2a = (f: number) => dolly(Co(1.12, 0.74, -1.02), Co(0.07, 0.27, BIRD_Z - CONE[2]), pushK(f, 90, 0.002, 0.005, 28), { fov: 52, roll: 0.04 }); // front quarter: three faces over their screens, in a row
 // 3 lab wide (night), 4 Skinner at the training box, 5 insert peck + seed, 6 strapping into the cone
 const S3a = (f: number) => dolly(Lb(-2.4, 2.0, 4.2), Lb(0.0, 1.0, -0.4), pushK(f, 140, 0.0035), { fov: 46 });
 const S4a = (f: number) => dolly(Lb(-1.25, 1.45, 2.1), Lb(-0.15, 1.1, -0.1), pushK(f, 208, 0.0025), { fov: 42, roll: 0.03 });
 const S4b = (f: number) => dolly(Lb(-0.85, 1.12, 1.2), add(TRAIN_BOX, [0, 0.18, 0]), pushK(f, 250, 0.003), { fov: 40, roll: -0.03 });
-const S5a = (f: number) => dolly(add(TRAIN_BOX, [0.42, 0.18, 0.55]), add(TRAIN_BOX, [0, 0.14, -0.02]), pushK(f, 316, 0.004, 0.009, 24), { fov: 38, roll: 0.04 });
-const S6a = (f: number) => dolly(Lb(1.0, 1.55, 1.85), add(CONE_ON_BENCH, [0, 0.15, 0]), pushK(f, 367, 0.0028), { fov: 42, roll: -0.03 });
+const S5a = (f: number) => dolly(add(TRAIN_BOX, [0.3, 0.3, 0.95]), add(TRAIN_BOX, [-0.08, 0.13, 0.0]), pushK(f, 316, 0.002, 0.006, 24), { fov: 40, roll: 0.04 }); // bird, screen and seed tray all in
+const S6a = (f: number) => dolly(Lb(1.65, 1.55, 0.95), Lb(0.3, 1.02, -0.02), pushK(f, 367, 0.0018), { fov: 46, roll: -0.03 }); // from the open side: into the nose section, Skinner behind it
 // 7 the three screens light up (low, along the row of stations)
 const S7a = (f: number) => dolly(Co(0.85, 0.62, 0.6), Co(0, 0.24, -0.16), pushK(f, 433, 0.004), { fov: 44, roll: -0.04 }); // behind and above: birds + lit screens
 // 8 war room: generals laughing round the map table; then the doubter
 const S8a = (f: number) => dolly(Wr(0.2, 1.9, 2.6), Wr(0.2, 1.0, -0.3), pushK(f, 476, 0.003), { fov: 46 });
 const S8b = (f: number) => dolly(Wr(0.5, 1.6, 0.9), add(GENERALS[1], [0, 1.5, 0]), pushK(f, 512, 0.0025, 0.007, 25), { fov: 40, roll: 0.04 });
 // 9 the test: the bomb dives on the raft
-const S9a = (f: number) => { const b = B(f); return { pos: [b[0] - 1.6, b[1] + 1.3, b[2] + 6.5] as V3, look: [TARGET[0], 1, TARGET[2]] as V3, fov: 40, roll: 0.05 }; }; // behind the bomb, down its line at the raft
+const S9a = (f: number) => { // behind and above the bomb, down its line: the bomb low in frame, the raft ahead of it
+  const b = B(f), d = [TARGET[0] - b[0], 0, TARGET[2] - b[2]], n = Math.hypot(d[0], d[2]), u = [d[0] / n, 0, d[2] / n];
+  const pos: V3 = [b[0] - u[0] * 8 + u[2] * 0.3, b[1] + 2.8, b[2] - u[2] * 8 - u[0] * 0.3];
+  const look: V3 = [b[0] + (TARGET[0] - b[0]) * 0.3, b[1] + (TARGET[1] - b[1]) * 0.3, b[2] + (TARGET[2] - b[2]) * 0.3];
+  return { pos, look, fov: 48, roll: 0.04 };
+};
 // 10 inside: furious pecking, locked on (side view)
 const S10a = (f: number) => dolly(Co(0.75, 0.6, 0.5), Co(0, 0.24, -0.16), pushK(f, 615, 0.0045), { fov: 44, roll: 0.04 }); // behind and above: all three pecking their screens
 // 11 iris close-up on the middle bird ("Wait")
 const S11a = (f: number) => dolly(Co(0.2, 0.52, -0.5), Co(0, 0.36, BIRD_Z - CONE[2]), pushK(f, 647, 0.003, 0.008, 24), { fov: 38 });
 // 12 the explanation: side-on cut-away from the lens back to the fins
-const S12a = (f: number) => dolly(Co(1.35, 0.55, -0.45), Co(0, 0.36, -0.55), pushK(f, 711, 0.003), { fov: 50 }); // the lens and the screens together
+const S12a = (f: number) => dolly(Co(0.55, 1.95, 0.55), Co(-0.02, 0.28, -0.5), pushK(f, 711, 0.0025), { fov: 52 }); // high: the lens at the top, its light down to the screens, the birds below
 const S12b = (f: number) => dolly(Co(0.95, 0.5, 0.25), Co(0, 0.24, -0.16), pushK(f, 780, 0.003), { fov: 42 });
-const S12c = (f: number) => dolly(Co(1.25, 0.75, 2.15), Co(0, 0.35, 1.45), pushK(f, 848, 0.002), { fov: 46, roll: -0.03 }); // the tail fins, past the end of the hull
+const S19a = (f: number) => { const b = B(f); return { pos: [b[0] + 3.0, b[1] + 1.4, b[2] + 6.4] as V3, look: [b[0] - 0.3, b[1] - 0.1, b[2] - 1.0] as V3, fov: 42, roll: 0.03 }; }; // chase: the fins swing and the bomb banks
 // 13 the outvote: front 3/4 above the screens
-const S13a = (f: number) => dolly(Co(0.25, 1.05, -1.25), Co(0, 0.28, BIRD_Z - CONE[2]), pushK(f, 890, 0.003, 0.007, 30), { fov: 50, roll: 0.03 }); // all three in shot
+const S13a = (f: number) => dolly(Co(0.45, 0.52, -0.62), Co(0, 0.3, BIRD_Z - CONE[2]), pushK(f, 890, 0.003), { fov: 44, roll: 0.03 }); // close: the middle bird pecks wrong, nervous
+const S13b = (f: number) => dolly(Co(1.1, 0.8, -1.0), Co(-0.02, 0.27, BIRD_Z - CONE[2]), pushK(f, 936, 0.0015), { fov: 52, roll: 0.02 }); // pull out: the other two glare, then outvote it
 // 14 the yard: boy + dog
-const S14a = (f: number) => dolly(Yd(0.1, 1.0, 2.9), Yd(0.0, 0.65, 0.0), pushK(f, 972, 0.003, 0.006, 24), { fov: 42, roll: -0.03 });
+const S14a = (f: number) => dolly(Yd(0.0, 1.05, 3.9), Yd(-0.02, 0.62, 0.0), pushK(f, 972, 0.002, 0.005, 24), { fov: 44, roll: -0.03 }); // the boy and the dog both whole
 // 15 the pigeon in a helmet, pull back to the cone ("explosives")
-const S15a = (f: number) => dolly(Co(0.5, 0.36, BIRD_Z - CONE[2] + 0.3), Co(0, 0.3, BIRD_Z - CONE[2]), 1, { fov: 36 });
-const S15b = (f: number) => ({ pos: Co(1.6, 0.9, 1.4) as V3, look: Co(0, 0.35, -0.2) as V3, fov: 50, roll: 0.03 });
+const S15a = (f: number) => dolly(Co(0.45, 0.52, -0.62), Co(0, 0.3, BIRD_Z - CONE[2]), 1, { fov: 40 }); // close: the helmeted pilot gets its seed
+const S15b = (f: number) => dolly(Co(0.9, 2.2, -0.95), Co(0, 0.3, 0.45), pushK(f, 1066, 0.002), { fov: 50, roll: 0.03 }); // pull up and back: the pilots sit right in front of the warhead
 // 16 the stamp
 const S16a = (f: number) => dolly(Wr(0.25, 1.75, 1.3), Wr(0.0, 0.8, -0.05), pushK(f, 1072, 0.003, 0.008, 22), { fov: 42, roll: 0.03 });
 // 17 Skinner, deflated, a pigeon on his shoulder (iris)
 const S17a = (f: number) => dolly(Lb(-0.2, 1.55, 1.5), add(SKINNER, [0.05, 1.5, 0]), pushK(f, 1118, 0.0025, 0.006, 26), { fov: 40, roll: -0.02 });
 // 18 the stage: wide, then in on the trophy
 const S18a = (f: number) => dolly(Sg(0.4, 1.7, 5.2), Sg(-0.1, 1.4, -0.3), pushK(f, 1199, 0.003), { fov: 46 });
-const S18b = (f: number) => dolly(Sg(0.5, 1.9, 2.4), add(DAUGHTER, [-0.2, 1.4, 0]), pushK(f, 1262, 0.0025, 0.006, 30), { fov: 40, roll: 0.03 });
+const S18b = (f: number) => dolly(Sg(0.25, 2.0, 3.0), Sg(-0.08, 1.65, -0.3), pushK(f, 1262, 0.001, 0.0035, 30), { fov: 46, roll: 0.03 }); // the raised trophy and the podium pigeon together
 
 const CAMS: Record<number, Key[]> = {
   1: [{ f: 0, s: S1a }, { f: 52, dur: 34, s: S1b }],
@@ -201,10 +212,11 @@ const CAMS: Record<number, Key[]> = {
   9: [{ f: 553, s: S9a }],
   10: [{ f: 615, s: S10a }],
   11: [{ f: 647, s: S11a }],
-  12: [{ f: 711, s: S12a }, { f: 772, dur: 26, s: S12b }, { f: 844, dur: 30, s: S12c }],
-  13: [{ f: 890, s: S13a }],
+  12: [{ f: 711, s: S12a }, { f: 772, dur: 26, s: S12b }],
+  19: [{ f: 848, s: S19a }],
+  13: [{ f: 890, s: S13a }, { f: 934, dur: 18, s: S13b }],
   14: [{ f: 972, s: S14a }],
-  15: [{ f: 1043, s: S15a }, { f: 1050, dur: 24, s: S15b }],
+  15: [{ f: 1043, s: S15a }, { f: 1053, dur: 18, s: S15b }],
   16: [{ f: 1072, s: S16a }],
   17: [{ f: 1118, s: S17a }],
   18: [{ f: 1199, s: S18a }, { f: 1255, dur: 30, s: S18b }],
@@ -243,6 +255,7 @@ export const DOF: Dof[] = [
   { f: 647, cInf: 5, focus: () => Co(0, 0.32, BIRD_Z - CONE[2]) },
   { f: 711, cInf: 0 },
   { f: 890, cInf: 4, focus: () => Co(0, 0.27, BIRD_Z - CONE[2]) },
+  { f: 934, dur: 18, cInf: 1.5, focus: () => Co(0, 0.27, BIRD_Z - CONE[2]) },
   { f: 976, cInf: 4, focus: () => Yd(0, 0.6, 0) },
   { f: 1043, cInf: 0 },
   { f: 1076, cInf: 3, focus: () => Wr(0, 0.8, -0.05) },
