@@ -145,8 +145,8 @@ def sfx():
     # race day: crowd + karts (shot 8), crowd gasp on "glides"
     cheer = curve(N, [(0, 0.2), (B["family"] - 0.3, 0.3), (B["family"] + 0.4, 0.8), (fr(406), 0.6), (B["glides"] + 0.2, 1.0), (fr(441), 0.4)])
     place(S, span(crowd(N, cheer) * 0.09, B["unlucky"] - 0.15, fr(441), 0.2, 0.2), 0)
-    for k, (f0, v) in enumerate([(388, 17), (396, 16), (404, 18)]):
-        kx, t0 = kart(fr(f0) + 8 / v, v)
+    for f_pass, v, d in [(400, 9, 1.0), (412, 9, 2.2), (422, 10, 1.6)]:  # karts pass the low lens (world.ts KARTS)
+        kx, t0 = kart(fr(f_pass), v, dist=d)
         place(S, kx, t0, 0.33)
     for f0, v in [(352, 15)]:
         kx, t0 = kart(fr(f0) + 8 / v, v, dist=7)

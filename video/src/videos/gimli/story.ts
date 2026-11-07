@@ -165,7 +165,7 @@ const S7b = (f: number) => dolly(C(-0.3, 1.36, -1.12), C(-0.7, 1.32, 0.38), push
 // Gimli
 const S3a = (f: number) => dolly([2, 1.6, -66], [9, 3.0, -36], pushK(f, 130, 0.003), { fov: 46, roll: 0.03 });
 const S8a = (f: number) => dolly([-42, 10, -128], [-6, 1.2, -46], pushK(f, 315, 0.0018), { fov: 44 });
-const S8b = (f: number) => dolly([-6.5, 0.7, -86], [-10.5, 0.8, -52], pushK(f, 370, 0.0025), { fov: 40, roll: -0.04 });
+const S8b = (f: number) => dolly([-8.4, 0.55, -89], [-11.2, 0.75, -62], pushK(f, 370, 0.0025), { fov: 38, roll: -0.04 });
 const S9a = (f: number) => {
   const p = planePoint(P(9, f), [0, 0, 0]);
   return { pos: [21, 1.35, -64] as V3, look: [p[0] * 0.6 + 14 * 0.4, p[1] * 0.75 + 3, p[2] * 0.75 - 64 * 0.25] as V3, fov: 50, roll: 0.05 };
@@ -246,7 +246,7 @@ export const DOF: Dof[] = [
   { f: 243, cInf: 10, focus: () => C(0, 1.25, 0.35) }, // both pilots
   { f: 254, dur: 26, cInf: 11, focus: () => C(-0.62, 1.3, 0.38) }, // captain
   { f: 315, cInf: 0 }, // race wide
-  { f: 370, cInf: 10, focus: () => [-9.2, 0.8, -74] }, // kart lane
+  { f: 370, cInf: 10, focus: () => [-9.6, 0.8, -82] }, // kart lane
   { f: 406, cInf: 0 }, // glide in (the jet must read)
   { f: 441, cInf: 9 }, // nose gear (focus = look)
   { f: 469, cInf: 0 },

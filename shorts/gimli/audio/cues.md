@@ -1,7 +1,7 @@
 # Gimli Glider: sound cues
 
 - Integrated **-14.0 LUFS**, true peak **-1.2 dBTP**, max limiter GR 1.6 dB
-- Stems at mix gain: voice -14.6, music -23.6, sfx -27.6 LUFS
+- Stems at mix gain: voice -14.6, music -23.6, sfx -27.4 LUFS
 - Length 29.9000 s (897 frames at 30 fps), 48 kHz stereo 24-bit
 
 | beat | time (s) | sound |

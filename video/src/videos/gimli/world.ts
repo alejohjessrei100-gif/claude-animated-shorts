@@ -204,10 +204,10 @@ const sightLines = (): Ray[] => {
 
 // karts on race day: two lanes left of the guard rail, driving toward -z (past the low lens of shot 8b)
 const KARTS: { kit: string; x: number; t0: number; v: number; park: V3 }[] = [
-  { kit: "car:kart-oobi", x: -9.0, t0: 388 / FPS, v: 17, park: [-13.5, 0, -63] },
-  { kit: "car:kart-oodi", x: -14.0, t0: 396 / FPS, v: 16, park: [-17.2, 0, -66] },
-  { kit: "car:kart-ooli", x: -9.4, t0: 404 / FPS, v: 18, park: [-26.5, 0, -88] },
-  { kit: "car:kart-oopi", x: -13.6, t0: 352 / FPS, v: 15, park: [-24.8, 0, -91] },
+  { kit: "car:kart-oobi", x: -9.2, t0: 367 / FPS, v: 9, park: [-13.5, 0, -63] }, // passes the low lens (z -88) at f400
+  { kit: "car:kart-oodi", x: -11.6, t0: 379 / FPS, v: 9, park: [-17.2, 0, -66] },
+  { kit: "car:kart-ooli", x: -10.4, t0: 392 / FPS, v: 10, park: [-26.5, 0, -88] },
+  { kit: "car:kart-oopi", x: -13.6, t0: 352 / FPS, v: 8, park: [-24.8, 0, -91] },
 ];
 
 const SUN_SHOT: Record<number, { az?: number; el?: number }> = {
@@ -373,7 +373,7 @@ export class World {
     const hay = lam("hay", () => ({ color: "#d9b35a" }));
     for (let z = -94; z < -30; z += 9) for (const x of [-21.6]) { const hb = cyl(0.6, 0.6, 1.1, 14); hb.rotateZ(Math.PI / 2); rb.add(hb, hay, at(x, 0.6, z)); }
     rb.build(this.race);
-    for (const k of KARTS) { const o = kitClone(kit, k.kit, 0.95); if (o) { this.karts.push({ o, k }); this.race.add(o); } }
+    for (const k of KARTS) { const o = kitClone(kit, k.kit, 1.1); if (o) { this.karts.push({ o, k }); this.race.add(o); } }
     R.add(this.race);
 
     // ---- podium (shot 17) ----
@@ -529,7 +529,7 @@ export class World {
     this.cockpit.visible = s.place === "cockpit";
     for (const g of this.fgs) g.o.visible = f >= g.a && f < g.b && g.a < s.b && g.b > s.a;
     for (const { o, k } of this.karts) {
-      if (id === 8) { o.position.set(k.x, 0, -78 + k.v * (k.t0 - t)); o.rotation.y = 0; }
+      if (id === 8) { o.position.set(k.x, 0, -78 + k.v * (k.t0 - t)); o.rotation.y = Math.PI; } // nose toward -z (the way they drive)
       else { o.position.set(...k.park); o.rotation.y = 0.5 + k.x * 0.1; }
     }
     const dead = f >= 233 || id > 6;
