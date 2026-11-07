@@ -7,6 +7,7 @@ import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { staticFile } from "remotion";
 import { Batch, boxGeo, V, lam, Kit, Ray, kitClone, prop, setSight, quad } from "./build";
+import { mergeGeometries } from "three/examples/jsm/utils/BufferGeometryUtils.js";
 import { ctex, cloudHD, grassHD } from "./paint";
 import { LIGHTS, LOOK, LightPreset } from "./lights";
 import { TONE, CHAR, untone, twoTone } from "./shade";
@@ -39,6 +40,14 @@ export const loadKit = () => {
 };
 
 // ---------------- helpers ----------------
+const rr = (i: number, k: number) => { const v = Math.sin(i * 91.7 + k * 271.3) * 43758.5453; return v - Math.floor(v); };
+/** ground height: flat airfield (|x| < 240, |z| < 760), rolling hills beyond */
+export const hillY = (x: number, z: number) => {
+  const k = Math.max((Math.abs(x) - 240) / 220, (Math.abs(z) - 780) / 260);
+  if (k <= 0) return 0;
+  const ramp = Math.min(1, k) ** 2 * (3 - 2 * Math.min(1, k));
+  return ramp * (16 + 11 * Math.sin(x * 0.0105 + 1.3) * Math.cos(z * 0.0085 - 0.4) + 7 * Math.sin(x * 0.023 + z * 0.017) + 4 * Math.cos(z * 0.031 - x * 0.012));
+};
 const discTex = () => ctex("sunDisc", 128, 128, (g) => {
   const gr = g.createRadialGradient(64, 64, 58, 64, 64, 64); gr.addColorStop(0, "rgba(255,255,255,1)"); gr.addColorStop(1, "rgba(255,255,255,0)");
   g.fillStyle = gr; g.fillRect(0, 0, 128, 128);
@@ -230,6 +239,7 @@ export class World {
   private clouds: THREE.Mesh[] = [];
   private sea: { m: THREE.Mesh; mat: THREE.MeshBasicMaterial; k: number }[] = [];
   private seaTex: Record<"day" | "golden", THREE.Texture[]>;
+  private puffs: { g: THREE.Mesh; x: number; z: number; y: number }[] = [];
   private fgs: { o: THREE.Object3D; a: number; b: number }[] = [];
   private jet: Jet;
   private race = new THREE.Group(); private podium = new THREE.Group(); private cockpit = new THREE.Group();
@@ -274,22 +284,44 @@ export class World {
     }
     // sea of clouds under the cruising jet: two scrolling layers (the jet flies toward -z, so the clouds stream to +z)
     this.seaTex = { day: [cloudSeaTex(LOOK.day.cloud, 1), cloudSeaTex(LOOK.day.cloud, 2)], golden: [cloudSeaTex(LOOK.golden.cloud, 1), cloudSeaTex(LOOK.golden.cloud, 2)] };
-    for (const [k, y] of [[0, 552], [1, 538]] as const) {
+    for (const [k, y] of [[0, 536], [1, 526]] as const) {
       const mat = new THREE.MeshBasicMaterial({ map: this.seaTex.day[k], transparent: true, alphaTest: 0.5, depthWrite: true, fog: true, side: THREE.DoubleSide });
       const m = new THREE.Mesh(new THREE.PlaneGeometry(5200, 5200), mat);
       m.rotation.x = -Math.PI / 2; m.position.set(SKY[0], y, SKY[2]); m.layers.set(NOINK); m.frustumCulled = false;
       this.sea.push({ m, mat, k }); R.add(m);
     }
 
+    // ---- 3D cumulus under the jet: lit, outlined sphere clusters drifting toward +z (the flat sea fills the gaps) ----
+    const puffMat = lam("cloudPuff", () => ({ color: "#ffffff" }));
+    for (let i = 0; i < 64; i++) {
+      const parts: THREE.BufferGeometry[] = [], n = 5 + Math.floor(rr(i, 1) * 5), big = 9 + rr(i, 2) * 10;
+      for (let k = 0; k < n; k++) {
+        const s = big * (0.55 + 0.5 * rr(i * 7 + k, 3)), sg = new THREE.SphereGeometry(s, 22, 14);
+        sg.scale(1, 0.72, 1);
+        sg.translate((k - n / 2) * big * 0.75 + rr(i, k + 4) * 4, s * 0.25 + (k % 2) * big * 0.18, (rr(i, k + 9) - 0.5) * big);
+        parts.push(sg);
+      }
+      const geo = mergeGeometries(parts, false); geo.computeVertexNormals();
+      const m = new THREE.Mesh(geo, puffMat);
+      m.rotation.y = rr(i, 20) * Math.PI; m.castShadow = false; m.receiveShadow = false;
+      this.puffs.push({ g: m, x: (rr(i, 21) - 0.5) * 900, z: (rr(i, 22) - 0.5) * 1700, y: 540 + rr(i, 23) * 18 }); R.add(m);
+    }
     // ---- ground: grass, runway, apron, guard rail, hangars, tower, trees (static batch) ----
+    const r = (i: number, k: number) => { const v = Math.sin(i * 127.1 + k * 311.7) * 43758.5453; return v - Math.floor(v); };
+    const TREES0 = ["tree_oak", "tree_default", "tree_fat", "tree_detailed", "tree_cone"];
     setSight(sightLines());
     const b = new Batch();
     const grass = lam("grassHD", () => ({ map: grassHD() }));
     const rw = runwayTex(), runway = lam("runway", () => ({ map: rw }));
     const conc = concreteTex(), apron = lam("apron", () => ({ map: conc }));
-    for (const [x0, x1] of [[-1400, -23], [23, 1400]]) b.add(flat(x0, x1, -1400, 1400, 0, (x1 - x0) / 4, 700), grass);
-    b.add(flat(-23, 23, -1400, -1100, 0, 12, 75), grass);
-    b.add(flat(-23, 23, -1100, 1100, 0.01, 1, 2200 / 60), runway);
+    // ground: flat airfield, then rolling hills (user review: "make the world more 3D")
+    const terrain = new THREE.PlaneGeometry(3000, 3000, 150, 150);
+    terrain.rotateX(-Math.PI / 2);
+    const tp = terrain.attributes.position as THREE.BufferAttribute, tuv = terrain.attributes.uv as THREE.BufferAttribute;
+    for (let i = 0; i < tp.count; i++) { tp.setY(i, hillY(tp.getX(i), tp.getZ(i))); tuv.setXY(i, tuv.getX(i) * 750, tuv.getY(i) * 750); }
+    terrain.computeVertexNormals();
+    b.add(terrain, grass);
+    b.add(flat(-23, 23, -770, 770, 0.01, 1, 1540 / 60), runway);
     b.add(flat(-215, -105, 80, 215, 0.02, 110 / 8, 135 / 8), apron);
     b.add(flat(-105, -23, 110, 150, 0.015, 82 / 8, 40 / 8), apron); // taxiway
     b.add(flat(-110, -40, -175, -100, 0.02, 70 / 8, 75 / 8), apron); // hangar apron
@@ -316,8 +348,14 @@ export class World {
     b.add(boxGeo(V(-74, 0, -44), V(-69, 15, -39)), towerM);
     b.add(boxGeo(V(-75.5, 15, -45.5), V(-67.5, 18.2, -37.5)), glass);
     b.add(boxGeo(V(-76, 18.2, -46), V(-67, 18.8, -37)), towerM);
+    // trees on the hills: clumps and single trees, so every wide shot has layers of depth
+    for (let i = 0; i < 260; i++) {
+      const a = r(i, 11) * Math.PI * 2, d = 300 + r(i, 12) * 700, x = Math.cos(a) * d * 1.1, z = Math.sin(a) * d * 1.25;
+      const y = hillY(x, z);
+      if (y < 2) continue;
+      prop(b, kit, TREES0[i % 5], x, y - 0.4, z, 9 + r(i, 13) * 9, r(i, 14) * 6);
+    }
     // trees around the field (left out wherever a lens looks through them)
-    const r = (i: number, k: number) => { const v = Math.sin(i * 127.1 + k * 311.7) * 43758.5453; return v - Math.floor(v); };
     const TREES = ["tree_oak", "tree_default", "tree_fat", "tree_detailed", "tree_cone"];
     for (let i = 0; i < 140; i++) {
       const side = i % 2 ? 1 : -1, x = side * (58 + r(i, 1) * 70), z = -420 + i * 7.5 + r(i, 2) * 6;
@@ -338,6 +376,14 @@ export class World {
     const hose = new THREE.TubeGeometry(new THREE.CatmullRomCurve3([V(tx + 1.2, 1.4, tz + 2), V(tx + 3.5, 0.15, tz + 4), V(APRON[0] - 9.5, 0.4, APRON[2] + 1.0), V(APRON[0] - 9.5, 2.1, APRON[2] + 1.5)]), 24, 0.09, 8);
     b.add(hose, lam("hose", () => ({ color: "#222228" })));
     prop(b, kit, "car:van", APRON[0] + 22, 0, APRON[2] - 26, 2.3, 0.8);
+    // terminal building behind the apron (Montreal): long low block, a glass band, roof edge, a little tower
+    const term = lam("terminal", () => ({ color: "#e8e2d4" })), tglass = lam("termGlass", () => ({ color: "#3b5a7a" }));
+    b.add(boxGeo(V(-262, 0, 222), V(-96, 11, 240)), term);
+    b.add(boxGeo(V(-260, 4.2, 221.7), V(-98, 8.6, 222.1)), tglass);
+    b.add(boxGeo(V(-264, 11, 220.5), V(-94, 12, 241.5)), lam("termRoof", () => ({ color: "#9a9ea6" })));
+    b.add(boxGeo(V(-128, 0, 214), V(-120, 22, 222)), term);
+    b.add(boxGeo(V(-129.5, 22, 212.5), V(-118.5, 25.5, 223.5)), tglass);
+    for (let k = 0; k < 6; k++) prop(b, kit, "car:truck", -250 + k * 26, 0, 205, 2.6, Math.PI / 2);
     prop(b, kit, "car:delivery-flat", APRON[0] + 18, 0, APRON[2] + 22, 2.0, -0.6);
     b.build(R);
 
@@ -517,6 +563,11 @@ export class World {
       m.lookAt(cam.position.x, m.position.y, cam.position.z);
       (m.material as THREE.MeshBasicMaterial).map = this.cloudMaps[s.light][i % 4];
     });
+    for (const p of this.puffs) {
+      p.g.visible = high;
+      const z = ((((p.z + 30 * t + 850) % 1700) + 1700) % 1700) - 850; // drift toward +z at 30 m/s, wrapped
+      p.g.position.set(SKY[0] + p.x, p.y, SKY[2] + z);
+    }
     for (const c2 of this.sea) {
       c2.m.visible = high;
       c2.mat.map = this.seaTex[s.light][c2.k];

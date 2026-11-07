@@ -6,7 +6,7 @@
 import * as THREE from "three";
 import { Pen, bodyFront, bodySide, fxBurst, fxShadow, fxContact, Outfit, Expr, FrontOpts, SideOpts, CAPTAIN, FIRST_OFFICER, BOSS, CREW, folk, kid } from "./toon";
 import {
-  FPS, SHOTS, V3, clamp01, smooth, PlaneState, planePoint, BEAT, COCKPIT, GRILL, PODIUM, APRON, HANGAR_SPOT, NOSE_GEAR, ENGINE_L, ENGINE_R, WING_TANK,
+  FPS, SHOTS, V3, clamp01, smooth, PlaneState, planePoint, BEAT, COCKPIT, GRILL, PODIUM, APRON, NOSE_GEAR, ENGINE_L, ENGINE_R, WING_TANK, S16_POS, S16_LOOK,
 } from "./story";
 import { fxWeight, fxTank, fxGlider, fxSparks, fxDust, fxConfetti, fxWarn } from "./gfx";
 import { NOINK } from "./ink";
@@ -371,10 +371,10 @@ export const stage = (id: number, t: number, ps: PlaneState, cam: CamInfo): Stag
     }
     case 16: { // the airline boss wags a finger; the pilots look at their shoes
       const scold = t >= BEAT.punished - L2;
-      const [hx, , hz] = HANGAR_SPOT;
-      put(cam, t, out, id, { i: 80, o: BOSS, key: "boss", x: hx - 0.2, z: hz + 0.75, expr: scold ? "stern" : "neutral", fo: { wave: scold ? wave(t, 1, 14) : undefined, facing: -1 } });
-      put(cam, t, out, id, { i: 90, o: CAPTAIN, key: "cap", x: hx + 0.25, z: hz - 0.55, expr: scold ? "pained" : "nervous", fo: { headTilt: 6 } });
-      put(cam, t, out, id, { i: 91, o: FIRST_OFFICER, key: "fo", x: hx + 0.5, z: hz - 1.4, expr: "nervous", fo: { headTilt: -5 } });
+      const [hb, hc, hf] = fan(S16_POS, S16_LOOK, [[8.6, -0.55], [9.4, 0.1], [9.9, 0.58]], 0.216);
+      put(cam, t, out, id, { i: 80, o: BOSS, key: "boss", x: hb[0], z: hb[1], expr: scold ? "stern" : "neutral", fo: { wave: scold ? wave(t, 1, 14) : undefined, facing: 1 } });
+      put(cam, t, out, id, { i: 90, o: CAPTAIN, key: "cap", x: hc[0], z: hc[1], expr: scold ? "pained" : "nervous", fo: { headTilt: 6, facing: -1 } });
+      put(cam, t, out, id, { i: 91, o: FIRST_OFFICER, key: "fo", x: hf[0], z: hf[1], expr: "nervous", fo: { headTilt: -5, facing: -1 } });
       break;
     }
     case 17: { // the award: medals on, confetti, everyone clapping

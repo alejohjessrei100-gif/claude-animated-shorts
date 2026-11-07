@@ -17,7 +17,11 @@ The style reference is a channel studied privately (`references/`: STYLE_BIBLE.m
 
 User rules that apply:
 - Length: 20-30 s (about 75-110 words at ~3.7 words/s). The bridge short (67 s) predates this rule.
-- No captions or labels in the video.
+- Captions ON (user request 2026-11-07): one word at a time, hard swap on each word onset (words.json), heavy white
+  sans (Montserrat ExtraBold 800, local woff2 in public/fonts) with a thick black outline, centred ~65 % down the frame
+  (`Captions.tsx` in the Gimli project). No other labels or text in the picture.
+- Lens blur never on the subject: focus tracks the subject, cInf <= 6 px; wides and fast-moving shots stay sharp.
+- Every place needs depth: hills / tree layers / buildings behind the action (3/4 camera angles, never a flat wall).
 - English only.
 - Voice: one steady tone.
 - Jokes are researched real facts.

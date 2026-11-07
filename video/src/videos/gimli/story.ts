@@ -188,8 +188,9 @@ const S14a = (f: number) => {
   return { pos: [48, 7.5, 452] as V3, look: [p[0], p[1] + 1.5, p[2]] as V3, fov: 40, roll: 0.02 };
 };
 // hangar (lens looks -x: screen right = -z)
-const H = (x: number, y: number, z: number) => add(HANGAR_SPOT, [x, y, z]);
-const S16a = (f: number) => dolly(H(9.0, 1.7, -0.25), H(0, 1.4, -0.25), pushK(f, 735, 0.0025, 0.006, 30), { fov: 42 });
+// 3/4 view: the hangar door recedes, the apron, the other hangars and the tower give the room depth
+export const S16_POS: V3 = [HANGAR_SPOT[0] + 6.5, 1.9, HANGAR_SPOT[2] + 10.5], S16_LOOK: V3 = [HANGAR_SPOT[0] + 1.0, 1.45, HANGAR_SPOT[2] - 1.5]; // looking down the hangar row
+const S16a = (f: number) => dolly(S16_POS, S16_LOOK, pushK(f, 735, 0.0025, 0.006, 30), { fov: 42 });
 
 const CAMS: Record<number, Key[]> = {
   1: [{ f: 0, s: S1a }],
@@ -236,28 +237,30 @@ export const camAt = (id: number, f: number): Cam => {
 /** cInf = blur-disc radius in px at 1080x1920 for things at infinity (0 = sharp); focus = world point (else the look point) */
 export type Dof = { f: number; dur?: number; cInf: number; focus?: (f: number) => V3 };
 export const DOF: Dof[] = [
+  // User review (2026-11-07): the subject must never go soft. Focus is always ON the subject (moving subjects are
+  // tracked), and blur is mild (cInf <= 6 px at 1080): only far backgrounds soften; wides and moving shots stay sharp.
   { f: 0, cInf: 0 }, // cruise wide
-  { f: 58, cInf: 8 }, // engine (focus = look)
+  { f: 58, cInf: 3 }, // engine (focus = look = the engine)
   { f: 84, dur: 40, cInf: 0 }, // pull-back: sharp
-  { f: 130, cInf: 12, focus: () => [3.8, 1.5, -58.3] }, // survivors cheering, jet soft behind
+  { f: 130, cInf: 4, focus: () => [6.5, 2.0, -52] }, // survivors + the jet behind them: deep focus between both
   { f: 168, cInf: 0 },
-  { f: 203, cInf: 10 }, // engine CU
-  { f: 226, cInf: 12 }, // screens
-  { f: 243, cInf: 10, focus: () => C(0, 1.25, 0.35) }, // both pilots
-  { f: 254, dur: 26, cInf: 11, focus: () => C(-0.62, 1.3, 0.38) }, // captain
+  { f: 203, cInf: 3 }, // engine CU
+  { f: 226, cInf: 4 }, // screens
+  { f: 243, cInf: 4, focus: () => C(0, 1.25, 0.38) }, // both pilots
+  { f: 254, dur: 26, cInf: 5, focus: () => C(-0.62, 1.3, 0.38) }, // captain
   { f: 315, cInf: 0 }, // race wide
-  { f: 370, cInf: 10, focus: () => [-9.6, 0.8, -82] }, // kart lane
-  { f: 406, cInf: 0 }, // glide in (the jet must read)
-  { f: 441, cInf: 9 }, // nose gear (focus = look)
-  { f: 469, cInf: 0 },
-  { f: 512, cInf: 12 }, // grill CU
+  { f: 370, cInf: 3, focus: (f) => [-9.6, 0.8, Math.max(-86, -78 + 9 * (367 / FPS - f / FPS))] }, // tracks the lead kart
+  { f: 406, cInf: 0 }, // glide in
+  { f: 441, cInf: 0 }, // nose gear collapse (fast, keep it all sharp)
+  { f: 469, cInf: 0 }, // slide toward the grill
+  { f: 512, cInf: 4, focus: () => [GRILL[0], 1.0, GRILL[2]] }, // grill CU: the grill and the jet nose read
   { f: 537, cInf: 0 }, // apron
-  { f: 605, cInf: 12, focus: () => A(-12.2, 1.6, -9.6) }, // crew MS
+  { f: 605, cInf: 5, focus: () => A(-12.2, 1.7, -9.6) }, // crew MS
   { f: 663, cInf: 0 }, // takeoff
-  { f: 697, cInf: 6 }, // wing tank
-  { f: 735, cInf: 10, focus: () => H(0, 1.55, -0.25) }, // boss + pilots
-  { f: 789, cInf: 6, focus: () => [PODIUM[0], 2.3, PODIUM[2]] }, // podium
-  { f: 824, dur: 30, cInf: 11, focus: () => [PODIUM[0], 2.5, PODIUM[2]] },
+  { f: 697, cInf: 0 }, // wing tank
+  { f: 735, cInf: 4, focus: () => [HANGAR_SPOT[0] + 2.6, 1.5, HANGAR_SPOT[2] + 2.6] }, // boss + pilots
+  { f: 789, cInf: 3, focus: () => [PODIUM[0], 2.3, PODIUM[2]] }, // podium
+  { f: 824, dur: 30, cInf: 5, focus: () => [PODIUM[0], 2.5, PODIUM[2]] },
 ];
 export const dofAt = (f: number) => {
   let i = 0; while (i + 1 < DOF.length && f >= DOF[i + 1].f) i++;

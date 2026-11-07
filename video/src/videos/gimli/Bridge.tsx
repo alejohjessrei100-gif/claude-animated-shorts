@@ -19,6 +19,7 @@ import { LensBlur, GrainEffect } from "./lensblur";
 import { GradeEffect, GRADES, GRADE_STRENGTH, gradeFor } from "./grade";
 import { Kit } from "./build";
 import { TOTAL, FLASH_AT, SHOTS, layersAt, dofAt } from "./story";
+import { Captions } from "./Captions";
 
 export const GIMLI_FRAMES = TOTAL;
 
@@ -113,6 +114,7 @@ export const GimliShort: React.FC = () => {
     <AbsoluteFill style={{ background: "#cfe3f2" }}>
       {layersAt(f).map((l, i) => <ShotView key={i ? "over" : "base"} id={l.id} kit={kit} alpha={l.alpha} />)}
       {flash > 0 && <AbsoluteFill style={{ background: "#ffffff", opacity: flash }} />}
+      {(getInputProps() as { captions?: boolean }).captions === false ? null : <Captions />}
     </AbsoluteFill>
   );
 };
