@@ -29,6 +29,9 @@ User rules that apply:
 - Standard mix: music +3 dB, SFX -6 dB, voice unchanged.
 - Final export 2K vertical: 1440x2560, `--scale 1.3333`.
 - Opus max verifies every check.
+- **Every frame is checked before delivery (user rule, 2026-11-07).** Nothing goes to the user until every frame of the
+  final file has been looked at (step 10b) and every error found is fixed and re-rendered. Never deliver on the automated
+  numbers alone.
 - Save after every step.
 - "Just do it" once the script is approved.
 
@@ -83,7 +86,21 @@ User rules that apply:
     - Mux with `-map 0:v:0 -map 1:a:0` (Remotion writes a silent audio track).
     - QA: `python scripts/short_qa.py final.mp4 out/<name>/qa shots.json` checks every frame for black, white, frozen and pop frames, plus loudness and sheets.
     - Fix anything it finds, then run a deep Opus audit.
-11. **Deliver.** SendUserFile the final mp4, update memory, write notes.
+10b. **Every-frame review (mandatory, user rule).** `short_qa.py` writes one contact sheet per 2 s (60 frames, frame numbers
+    burned in) to `out/<name>/qa/sheet_*.jpg`. Open and inspect **every sheet** (all frames, not a sample) against this list:
+    - clipping: characters, props or toast passing through tables, chairs, walls, plates, each other
+    - see-through or missing surfaces (open box bottoms, single-sided walls seen from behind, the camera inside geometry)
+    - things popping in or out, flicker / z-fighting (coplanar decals, overlapping objects)
+    - lighting or colour flashes, especially across crossfades
+    - contact: hands actually on what they push / hold / draw on; feet on the floor; nobody floating
+    - framing: the subject in frame (a vertical frame is only ~22 deg wide), not hidden behind furniture, not cut by an edge
+    - focus: the subject sharp (blur only on backgrounds)
+    - captions: right word, readable, never covering a face
+    - motion: no dead holds (>= 12 f still), no jumps outside planned cuts / impacts
+    Write every finding with its frame numbers to `out/<name>/qa/REVIEW.md`, fix it, re-render only the affected frame range,
+    splice it in frame-exact, then re-run `short_qa.py` and re-inspect the sheets of every patched range. Repeat until the
+    review is clean. Only then deliver.
+11. **Deliver.** SendUserFile the final mp4, update memory, write notes (include the review rounds and what they caught).
 
 ## Final look values (bridge after 4 verifier rounds; all in `templates/bridge/`)
 Start every new short from `templates/bridge/` (copy to `src/videos/<name>/`): the look lives in these values, the
@@ -158,6 +175,18 @@ lighting 5-6, ink 6, textures 5-6, characters 7, depth 6-7, composition 6-7 (fro
 - Scratch `.ts` files inside `out/` break `tsc`: name them `.txt`.
 - 2K renders run ~4 fps (≈10 min for 67 s). Stills at 0.5 take 3-8 s each after a ~40 s bundle.
 - Film grain at 2.5 % made the 2K file 910 MB instead of ~250 MB and will turn to mush on YouTube; the reference has none. Keep it off.
+
+## Errors the user caught in the toast short (check every video for these)
+- **Open box bottoms:** `boxGeo` builds no bottom face unless `bottom = true`; any low camera sees through tables, desks and
+  seats. Build furniture with closed boxes.
+- **Hands behind tables:** a character is a flat card; anything drawn on it is behind a tabletop in front of it, so a hand
+  "pushing toast" vanishes into the table. Use a real 3D arm from the shoulder to the object (toast `world.ts` Arm3D).
+- **Crossfade light flashes:** shade.ts TONE / CHAR uniforms are global; with two canvases in a crossfade, set them in
+  `scene.onBeforeRender` so each scene renders with its own light.
+- **Popping props:** never grow a pile by spawning objects; new objects arrive on screen (falling, carried).
+- **Z-fighting:** decals at the same height as a rug / floor flicker; overlapping instanced props flicker. Separate them.
+- **Characters in furniture:** chairs placed at a character's spot poke through the card.
+- **Narrow frame:** a 1080x1920 frame at fov 40 is only ~22 deg wide; a character 13 deg off axis is out of shot.
 
 ## Readability traps the verifier caught (check every new prop/shot for these)
 - **A swing drawn as one rope that disappears behind the kid reads as a HANGING.** Always two ropes to a wide plank
