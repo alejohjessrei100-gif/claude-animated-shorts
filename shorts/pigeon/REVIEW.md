@@ -17,3 +17,16 @@ Checked and fine: the crossfades (140-148, 476-484, 553-559, 972-980, 1072-1080,
 flash; the iris opens and closes smoothly; hands/beaks touch what they push (the peck lands on the screen, Skinner's 3D arm
 holds the bird, the stamp lands on the folder, the boy holds the biscuit until the toss); captions are readable and never
 cover a face; no clipping through the cradles, the box or the podium.
+
+## Round 2: `final/pigeon_v2.mp4` (patched 0-89, 140-315, 476-530, 647-710, 786-800, 1091-1126, spliced frame-exact)
+Automated: 1335 frames, no black / white / frozen frames, -14.0 LUFS, -1.6 dBTP. New spike at 786 = the planned cut.
+Re-inspected every sheet of the patched ranges and each splice seam (89/90, 139/140, 315/316, 475/476, 530/531, 646/647,
+710/711, 785/786, 800/801, 1090/1091, 1126/1127): no jumps, no colour shifts at the seams.
+- 0-89: the whole bomb in frame, orbiting; glide into the front quarter on "missile" with the lens glowing.
+- 144-315: Skinner stands behind the training box; the glide ends on the ship screen face-on with the bird pecking it and
+  Skinner's face in frame.
+- 476-512: all four generals laughing; the glide into the doubting general for "Pigeons? Really?".
+- 647-710: the bird cocks its head both ways; the "?" pops in at 657 over its cap, inside the iris.
+- 786: clean cut to the side view on "When"; the card views no longer switch mid-move.
+- 1091-1121: the stamp slams, lifts at 1101-1110 in the general's 3D arm and shows the red X over the pigeon file.
+Clean: delivered.
