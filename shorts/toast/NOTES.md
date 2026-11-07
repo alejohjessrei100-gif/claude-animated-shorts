@@ -10,3 +10,13 @@
 - Sound: `audio/toast_sound.py` (synth SFX on every landing and beat, original F-major score per scene, mix rules from SKILL.md).
 - Render: 3 chunks + one patch (693-750: push-in added so shot 11 never holds dead still). Container restart cost one chunk.
 - QA: no black / white / frozen frames; frame-diff spikes only at planned iris open/close and the coin reveal.
+
+## v2 (2026-11-07, user review: clipping, glitches, hands not touching the bread)
+- Boxes closed underneath (tables/desks/seats were see-through from low angles); chairs moved behind the kids; plate moved
+  off the slice's path; classroom crane below the wall tops.
+- Glitches: crossfaded scenes shared global light uniforms (one drew with the other's light), now re-applied per scene
+  before rendering; toast piles fixed per shot on a jittered grid (no popping, no overlapping slices); splats lifted off
+  the rug (z-fighting); the iris fades out instead of snapping open.
+- Hands: drawn on the flat cards they were always hidden behind the tabletop. Every push, the swat and the marker now use a
+  real 3D arm from the shoulder to the slice (world.ts Arm3D, cast.ts pushing()); the dad pushes the hook slice.
+- Re-encoded at CRF 18 (40.5 MB, under GitHub's 50 MB guideline). QA: no black/white/frozen frames.
