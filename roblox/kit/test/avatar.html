@@ -1,0 +1,43 @@
+<!doctype html><html><head><meta charset="utf-8">
+<style>html,body{margin:0;background:#000}canvas{display:block;width:1080px;height:1920px}</style>
+<script type="importmap">{"imports":{"three":"/node_modules/three/build/three.module.js","three/addons/":"/node_modules/three/examples/jsm/"}}</script>
+</head><body><canvas id="c" width="1080" height="1920"></canvas>
+<script type="module">
+import * as THREE from "three";
+import { makeCore, baseplate } from "/kit/10_core.js";
+import { makeAvatar, poseAvatar, SKIN, shirtArt, FACES } from "/kit/20_r6.js";
+const core = makeCore({ canvas: document.getElementById("c") });
+baseplate(core);
+const { scene, camera } = core;
+// cast for the colour stage (original characters)
+const CAST = {
+  grey: makeAvatar({ grey: true }),
+  hero: makeAvatar({ skin: SKIN.yellow, shirt: "#3d7be0", pants: "#2f3b52", hat: "hairShort", hatColor: "#4a3020", shirtArt: shirtArt("star", "#ffd84a") }),
+  gran: makeAvatar({ skin: SKIN.light, shirt: "#b768c9", pants: "#5b4a6b", hat: "bun", hatColor: "#d9d9de", glasses: true }),
+  mayor: makeAvatar({ skin: SKIN.tan, shirt: "#2b2b33", pants: "#2b2b33", hat: "tophat", hatColor: "#1e1e24", shirtArt: shirtArt("tie", "#c0303a", "#ffffff") }),
+  baker: makeAvatar({ skin: SKIN.brown, shirt: "#f4f4f0", pants: "#3a4a6a", hat: "chef", shirtArt: shirtArt("apron", "#f0b9c4", "#d06a80") }),
+  kid2: makeAvatar({ skin: SKIN.dark, shirt: "#e8553d", pants: "#3c5a8a", hat: "cap", hatColor: "#2c6e3f", shirtArt: shirtArt("stripes", "#ffffff") }),
+};
+for (const a of Object.values(CAST)) { scene.add(a.root); a.root.visible = false; }
+const look = (p, t, fov = 42) => { camera.position.set(...p); camera.fov = fov; camera.updateProjectionMatrix(); camera.lookAt(...t); core.followShadow(new THREE.Vector3(t[0], 0, t[2])); };
+const only = (names) => { for (const [k, a] of Object.entries(CAST)) a.root.visible = names.includes(k); };
+window.shot = (kind, arg) => {
+  for (const a of Object.values(CAST)) { a.root.position.set(0, 0, 0); a.root.rotation.set(0, 0, 0); poseAvatar(a, "idle", "idle", 0, { t: 0.3 }); }
+  if (kind === "grey") { only(["grey"]); CAST.grey.root.rotation.y = -0.45; look([2.6, 3.6, 9.5], [0, 2.7, 0], 40); }
+  else if (kind === "colors") {
+    const order = ["hero", "gran", "mayor", "baker", "kid2"]; only(order);
+    const spots = { hero: [0, 1.6], gran: [-2.8, 0.7], kid2: [2.8, 0.7], mayor: [-1.45, -1.6], baker: [1.45, -1.6] };
+    order.forEach((n, i) => { const a = CAST[n], [x, z] = spots[n]; a.root.position.set(x, 0, z); a.root.rotation.y = -x * 0.06; poseAvatar(a, "idle", "idle", 0, { t: i, face: ["grin", "smile", "proud", "happy", "wink"][i] }); });
+    look([0, 7.5, 21.5], [0, 2.9, 0], 40);
+  } else if (kind === "face") {
+    only(["hero"]); poseAvatar(CAST.hero, "idle", "idle", 0, { t: 0.3, face: arg[0], talk: arg[1] ? 1 : 0 });
+    CAST.hero.setFace(arg[0], !!arg[1]); look([0.9, 5.0, 4.2], [0, 4.6, 0], 30);
+  } else if (kind === "pose") {
+    only(["hero"]); CAST.hero.root.rotation.y = -0.5; poseAvatar(CAST.hero, arg[0], arg[0], 0, { t: 0.5, face: arg[1] });
+    CAST.hero.setFace(arg[1]); look([3.2, 4.0, 10.5], [0, 2.4, 0], 42);
+  }
+  core.render();
+};
+window.FACE_NAMES = Object.keys(FACES);
+window.READY = true;
+</script></body></html>

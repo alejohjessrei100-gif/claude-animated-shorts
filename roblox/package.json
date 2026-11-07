@@ -1,0 +1,10 @@
+{
+  "name": "roblox-style-story-shorts",
+  "private": true,
+  "type": "module",
+  "description": "Blocky-avatar narrated story Shorts built 100% in code (three.js + headless Chromium + ffmpeg)",
+  "dependencies": {
+    "three": "0.178.0",
+    "@fontsource/poppins": "5.2.6"
+  }
+}
