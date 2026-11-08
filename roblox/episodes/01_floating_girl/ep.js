@@ -57,10 +57,10 @@ export async function build(ctx) {
   T.room(S, { x: HALL, z: 0, w: 14, d: 60, h: 11, floor: (r) => T.TEX.tile("#e9e9e4", "#c9ccd2", r), wall: "#e6e1d3" });
   T.lockers(S, HALL - 6.4, -24, 7, "#4f7fb8");
   for (const [sx, rot, colr] of [[-6.4, Math.PI / 2, "#4f7fb8"], [6.4, -Math.PI / 2, "#c94f4f"]]) { const g = new THREE.Group(); g.position.set(HALL + sx, 0, sx < 0 ? -24 : 24); g.rotation.y = rot; S.add(g); T.lockers(g, 0, 0, 25, colr); }
-  T.room(S, { x: CLASS, z: 0, w: 30, d: 26, h: 11, wall: "#f0e6cc", windows: [{ wall: "back", at: -9, w: 4, h: 4, y: 3.5 }, { wall: "back", at: 9, w: 4, h: 4, y: 3.5 }] });
+  T.room(S, { x: CLASS, z: 0, w: 30, d: 26, h: 11, wall: "#f0e6cc", front: true, windows: [{ wall: "back", at: -9, w: 4, h: 4, y: 3.5 }, { wall: "back", at: 9, w: 4, h: 4, y: 3.5 }] });
   T.chalkboard(S, CLASS, 6, -12.6, 12, 5);
   for (let r = 0; r < 3; r++) for (let c = -1; c <= 1; c++) { T.desk(S, CLASS + c * 7, -3 + r * 6.5); T.chair(S, CLASS + c * 7, -0.5 + r * 6.5, Math.PI); }
-  T.room(S, { x: CAF, z: 0, w: 40, d: 30, h: 12, floor: (r) => T.TEX.tile("#f2f0ea", "#d9b9b0", r), wall: "#f2e6d0" });
+  T.room(S, { x: CAF, z: 0, w: 40, d: 30, h: 12, floor: (r) => T.TEX.tile("#f2f0ea", "#d9b9b0", r), wall: "#f2e6d0", front: true });
   for (const z of [-7, 4]) for (const x of [-9, 9]) T.longTable(S, CAF + x, z, 14);
   T.room(S, { x: BED, z: 0, w: 18, d: 16, h: 10, wall: "#cfe0f2", windows: [{ wall: "back", at: 4, w: 4, h: 4, y: 3.5 }] });
   T.bed(S, BED - 3, -2.5, 0);
@@ -112,14 +112,15 @@ const facing = (from, to) => Math.atan2(to[0] - from[0], to[1] - from[1]); // ya
 // ------------------------------------------------------------------ scenes
 const SC = {
   openTown(t) { // sad people hover; a happy kid walks on the ground
-    show("sadMan", -23.5, SW + hover(t, 1.0, 0.12), 7.2, 0.4, "sad", "sad", t);
-    show("sadWoman", -18.5, SW + hover(t, 1.5, 0.18, 1) + 1.2 * smooth(tw(3), tw(7), t), 7.6, -0.3, "sad", "cry", t);
-    show("happyKid", -10 + 1.2 * t, SW, 6.6, Math.PI / 2, "walk", "grin", t, { cycle: "walk" });
+    show("sadMan", -28.6, SW + hover(t, 1.3, 0.12), 7.2, 0.25, "sad", "sad", t);
+    show("sadWoman", -25, SW + hover(t, 2.3, 0.18, 1) + 1.6 * smooth(tw(3), tw(7), t), 7.6, -0.1, "sad", "cry", t);
+    show("town3", -21.8, SW + hover(t, 0.55, 0.06, 2), 7.0, -0.35, "sad", "worried", t);
+    show("happyKid", -18.6 - 1.0 * t, SW, 6.2, -Math.PI / 2, "walk", "grin", t, { cycle: "walk" });
   },
   badDay(t) {
     const drop = tw(9) + 0.05, lift = tw(14);
     const sad = t > drop + 0.35;
-    const av = show("kidIce", 0, SW + 0.35 * smooth(lift - 0.1, lift + 0.35, t), 7, -0.25, sad ? "sad" : "talk", sad ? (t > lift ? "cry" : "sad") : "grin", t);
+    const av = show("kidIce", 0, SW + 0.6 * smooth(lift - 0.1, lift + 0.35, t), 7, -0.25, sad ? "sad" : "talk", sad ? (t > lift ? "cry" : "sad") : "grin", t);
     if (t < drop) { attach(P.cone, av, "rs", [0, 0.35, 0]); scoop.position.copy(P.cone.position).add(V(0, 0.5, 0)); scoop.visible = true; }
     else { attach(P.cone, av, "rs", [0, 0.35, 0]); const u = Math.min(1, (t - drop) / 0.35); scoop.visible = true; scoop.position.copy(P.cone.position).add(V(0.3 * u, 0.5 - (P.cone.position.y + 0.5 - SW - 0.2) * u * u, 0.2 * u)); scoop.scale.set(1 + 0.6 * (u >= 1), 1 - 0.55 * (u >= 1), 1 + 0.6 * (u >= 1)); }
   },
@@ -179,10 +180,9 @@ const SC = {
   },
   ceiling(t) {
     const pip = show("pip", CLASS, 10.0, 3.0, 0, "armsUp", "cry", t, { rx: Math.PI / 2 });
-    tape.forEach((tp, i) => { tp.visible = true; tp.rotation.set(0, Math.PI / 2, 0); tp.position.set(CLASS, 9.5, 3.0 + [1.0, 2.6, 5.2][i]); }); // bands across legs, waist, chest
-    const seats = [[-7, 9.6], [7, 9.6], [-7, 3.1], [7, 3.1], [-3.5, 16], [3.5, 16]];
-    seats.forEach(([x, z], i) => show(`kid${i}`, CLASS + x, 0, z - 0.2, Math.PI, t > tw(106) - 0.2 ? (i % 2 ? "cheer" : "lookUp") : "lookUp", t > tw(103) ? "laugh" : "grin", t, { seed: i }));
-    ROPE.set(V(CLASS + 0.2, 10.6, 5.0), V(CLASS + 0.5, 6.4, 5.2), 0.2); // the string dangles from her backpack
+    tape.forEach((tp, i) => { if (i > 1) return; tp.visible = true; tp.rotation.set(0, Math.PI / 2, 0); tp.scale.set(2.2, 1, 0.9); tp.position.set(CLASS, 9.45, 3.0 + [1.2, 3.2][i]); }); // two wide bands: legs, chest
+    const seats = [[-2.5, 7.5], [2.5, 7.5], [-4.5, 10.5], [0, 14.6], [4.5, 10.5], [-3.6, 4.4]];
+    seats.forEach(([x, z], i) => show(`kid${i}`, CLASS + x, 0, z, Math.PI, t > tw(106) - 0.2 ? (i % 2 ? "cheer" : "lookUp") : "lookUp", t > tw(103) ? "laugh" : "grin", t, { seed: i }));
   },
   recess(t) {
     show("pip", CLASS + 9, hover(t, 1.1, 0.08), -9.2, Math.PI - 0.15, "sad", "sad", t);
@@ -201,11 +201,14 @@ const SC = {
       if (t < climbB) { const u = smooth(climbA, climbB, t); show("boy", stopX + 0.5, SW + 1.6 * u + 3.5 * u * u, stopZ - 2.2 + 1.2 * u, Math.PI, "climb", "nervous", t); }
       else show("boy", stopX + 0.3, 5.4, stopZ - 0.2, Math.PI - 0.2 + 0.15 * Math.sin(t * 2), t > tw(161) ? "wave" : "scared", "shock", t);
     }
+    const slot = (k, r) => { const a = (k / 5) * Math.PI * 2 + 1.23; return [79 + r * Math.cos(a), 3 + r * Math.sin(a)]; };
+    const ringR = 2.6 + 2.4 * smooth(tw(257), tw(258) + 0.3, t);
     // crowd on the hill (edge at x ~ 74): faces the town (-x)
-    const crowd = [[77, -8], [78.5, -4], [77.5, 6.5], [80, 9], [81, -11], [82, -1.5], [79.5, 12]];
+    const crowd = [[79.5, -9], [82.5, -4.5], [83.5, 5.5], [85.5, 7.5], [81, -12.5], [84.5, -1.5], [79, -15]]; // clear corridors toward -x and +z, off the truck
     const hug = t > tw(250) - 0.1;
     crowd.forEach(([x, z], i) => {
-      if (hug && i < 5) { const a = (i / 5) * Math.PI * 2 + 0.6, rr = 2.6 + 2.4 * smooth(tw(257), tw(258) + 0.3, t), px = 79 + rr * Math.cos(a), pz = 3 + rr * Math.sin(a); show(`town${i}`, px, HILL.h, pz, facing([px, pz], [79, 3]), "hug", "happy", t, { seed: i }); return; }
+      if (hug && i === 1) { show("town1", 82.5, HILL.h, -6, -Math.PI / 2, "cheer", "laugh", t, { seed: 1 }); return; } // mom takes slot 1
+      if (hug && i < 5) { const [px, pz] = slot(i, ringR); show(`town${i}`, px, HILL.h, pz, facing([px, pz], [79, 3]), t > tw(257) ? "cheer" : "hug", "happy", t, { seed: i }); return; }
       const cheer = t > tw(245) - 0.1;
       show(`town${i}`, x, HILL.h, z, -Math.PI / 2 + (i - 3) * 0.08, cheer ? "cheer" : t > tw(160) ? (i % 2 ? "point" : "scared") : "idle", cheer ? "laugh" : "shock", t, { seed: i });
     });
@@ -219,10 +222,11 @@ const SC = {
     if (boatG.visible) { show("rower0", bx - 1.5, by + 0.4, 0.5, -Math.PI / 2 + 2.6 * bb, "point", "determined", t); show("rower1", bx + 1.8, by + 0.4, 0.8, -Math.PI / 2 + 2.6 * bb, "scared", "worried", t); }
     // cars float off down the street
     for (const [car, x0, z0, rot] of [[C.car1, -12, 2.5, Math.PI / 2], [C.car2, 6, -2.5, -Math.PI / 2]]) {
-      const f = Math.max(0, t - tw(127)); car.position.set(x0 + 3.2 * f, Math.max(0, L - 1.1) + (f > 0 ? 0.15 * Math.sin(t * 2 + x0) : 0), z0 + 0.4 * Math.sin(f)); car.rotation.set(0.04 * Math.sin(t * 1.9 + x0), rot + 0.25 * f, 0.05 * Math.sin(t * 2.4));
+      const f = Math.min(7, Math.max(0, t - tw(127))); car.position.set(x0 + 3.2 * f, Math.max(0, L - 1.1) + (f > 0 ? 0.15 * Math.sin(t * 2 + x0) : 0), z0 + 0.4 * Math.sin(f)); car.rotation.set(0.04 * Math.sin(t * 1.9 + x0), rot + 0.25 * f, 0.05 * Math.sin(t * 2.4));
     }
     // Pip + mom on the hill edge
-    const momX = 76.4, momZ = 2.2;
+    const [sx1, sz1] = slot(1, ringR), wk = smooth(tw(245) + 0.1, tw(250), t);
+    const momX = 80.2 + (sx1 - 80.2) * wk, momZ = -0.2 + (sz1 + 0.2) * wk;
     const flyA = tw(213), rise = tw(218), toStop = tw(228), grab = tw(233), back = tw(238), home = tw(245), land = tw(265);
     let px = 75.8, pz = 0.6, py = HILL.h + hover(t, 1.2, 0.12), face = "sad", pose = "sad", ry = -Math.PI / 2 + 0.2;
     if (t >= tw(170) && t < tw(199)) { face = t < tw(182) ? "worried" : "sad"; pose = t < tw(175) ? "idle" : "lookUp"; }
@@ -238,12 +242,14 @@ const SC = {
       else if (t < home) { const u = smooth(back, home, t); p = (u < 0.5 ? pStop.clone().lerp(pUp, u * 2) : pUp.clone().lerp(pHome, u * 2 - 1)); }
       else p = pHome.clone().setY(HILL.h + Math.max(0, 1.4 * (1 - smooth(land - 0.5, land + 0.45, t))) + (t < land ? 0.08 * Math.sin(t * 2) : 0));
       px = p.x; py = p.y; pz = p.z; ry = t < back ? -Math.PI / 2 : t < home ? Math.PI / 2 : -Math.PI / 2 + 0.4;
-      pose = t < grab ? "armsUp" : t < home ? "wave" : "idle";
+      pose = t < grab ? "armsUp" : t < back ? "wave" : "idle";
       if (t >= tw(250) && t < tw(258)) pose = "cheer";
       if (t >= tw(258)) pose = "idle";
     }
     const pip = show("pip", px, py, pz, ry, pose, face, t);
-    show("mom", momX, HILL.h, momZ, -Math.PI / 2 - 0.5, t > tw(245) ? "cheer" : t > tw(213) ? "lookUp" : "talk", t > tw(245) ? "laugh" : t > tw(213) ? "surprised" : "worried", t);
+    const momRy = hug ? facing([momX, momZ], [79, 3]) : -Math.PI / 2 - 0.2;
+    const mom = show("mom", momX, HILL.h, momZ, momRy, hug ? (t > tw(257) ? "cheer" : "hug") : t > tw(245) ? "cheer" : t > tw(213) ? "lookUp" : "talk", t > tw(245) ? "laugh" : t > tw(213) ? "surprised" : "worried", t);
+    if (t < tw(210) + 0.3) reachTo(mom, "rs", loopW(pip)); // holding the string out toward Pip
     if (untie) reachTo(pip, "rs", loopW(pip), 0.95); // her hand goes back over her shoulder to the knot
     const mh = handW(C.mom, "rs");
     if (t < tw(210) + 0.3) ROPE.set(loopW(pip), mh, 0.15);
@@ -251,10 +257,13 @@ const SC = {
     if (t >= grab && t < back) { // hand in hand: he reaches up from the roof, she reaches down
       const boy = show("boy", stopX + 0.3, 5.4, stopZ - 0.2, Math.PI / 2 + 0.3, "idle", "surprised", t);
       reachTo(pip, "ls", handW(boy, "ls").add(V(0, 0.9, 0))); reachTo(boy, "ls", handW(pip, "ls"));
-    } else if (t >= back && t < home) { // the boy hangs from Pip's hand
-      const hp = handW(pip, "ls");
-      const boy = show("boy", hp.x, hp.y - 5.2 * 0.72 + 0.1, hp.z, t < back ? Math.PI : Math.PI / 2, "wave", t < back ? "shock" : "happy", t);
-      reachTo(boy, "ls", hp); reachTo(pip, "ls", handW(boy, "ls"), 0.6);
+    } else if (t >= back && t < home) { // the boy hangs beside her, hand in hand (meeting point out to her left side)
+      pip.root.updateMatrixWorld(true);
+      const left = V(1, 0, 0).applyQuaternion(pip.root.quaternion), up = V(0, 1, 0);
+      const M = pip.root.position.clone().addScaledVector(left, 2.4).addScaledVector(up, 2.6);
+      const br = M.clone().addScaledVector(left, -1.08).addScaledVector(up, -3.6);
+      const boy = show("boy", br.x, br.y, br.z, ry, "idle", "happy", t);
+      reachTo(boy, "ls", M); reachTo(pip, "ls", M);
     } else if (t >= home) show("boy", 81.2, HILL.h, 4.5, -Math.PI / 2 - 0.6, "cheer", "laugh", t);
   },
 };
@@ -281,10 +290,10 @@ export function SHOTS(ctx) {
   const pip = () => C.pip.root.position;
   const pipAt = (dy = 2.6) => (t) => { const p = C.pip.root.position; return [p.x, p.y + dy, p.z]; };
   return [
-    { w: 0, scene: "openTown", at: [-18, 3.4, 7], dist: 24, yaw: 28, pitch: 10, move: "push", K: 0.3, fov: 44, name: "rule" },
-    { w: 3, scene: "openTown", at: [-18.5, 5.0, 7.6], dist: 12, yaw: -20, pitch: 4, move: "rise", K: 0.25, name: "lighter" },
+    { w: 0, scene: "openTown", at: [-25, 3.4, 7.4], dist: 26, yaw: 3, pitch: 3, move: "push", K: 0.2, fov: 44, name: "rule" },
+    { w: 3, scene: "openTown", at: [-25, 6.0, 7.6], dist: 11, yaw: -18, pitch: 0, move: "rise", K: 0.25, name: "lighter" },
     { w: 7, scene: "badDay", at: [0, 3.6, 7], dist: 7.5, yaw: 15, pitch: 6, move: "push", K: 0.22, name: "badDay" },
-    { w: 12, scene: "badDay", at: [0, 0.9, 7], dist: 6.5, yaw: -10, pitch: 2, move: "slideR", K: 0.25, name: "feetLift" },
+    { w: 12, scene: "badDay", at: [0, 2.3, 7], dist: 9, yaw: -22, pitch: 4, move: "slideR", K: 0.2, name: "feetLift" },
     { w: 20, scene: "pet", at: [BED + 2, 3.4, 1.5], dist: 9.5, yaw: -25, pitch: 8, move: "push", K: 0.2, name: "pet" },
     { w: 23, scene: "pet", at: [BED - 3, 3.6, -3.6], dist: 9, yaw: 15, pitch: 30, move: "orbitL", K: 0.2, name: "bedFloat" },
     { w: 32, scene: "funeral", at: [-45, 3.3, 7.2], dist: 9, yaw: 5, pitch: 6, move: "push", K: 0.2, name: "bricks" },
@@ -299,33 +308,33 @@ export function SHOTS(ctx) {
     { w: 84, scene: "hallBully", tug: true, at: [HALL + 0.8, 2.8, 3.2], dist: 9, yaw: -50, pitch: 10, move: "push", K: 0.15, name: "tug" },
     { w: 91, scene: "hallBully", bob: true, at: [HALL, 3.4, 2], dist: 8, yaw: -20, pitch: 4, move: "orbitR", K: 0.2, name: "bob" },
     { w: 95, scene: "ceiling", at: [CLASS, 9.6, 5.5], dist: 8.5, yaw: -30, pitch: -60, move: "push", K: 0.15, fov: 50, name: "ceiling" },
-    { w: 102, scene: "ceiling", at: [CLASS - 2, 5, 6], dist: 17, yaw: 160, pitch: 16, move: "pull", K: 0.2, name: "classLaughs" },
+    { w: 102, scene: "ceiling", at: [CLASS, 6.5, 7], dist: 15, yaw: 180, pitch: -10, fov: 54, move: "pull", K: 0.12, name: "classLaughs" },
     { w: 107, scene: "recess", at: [CLASS + 9, 4.2, -10], dist: 12, yaw: 20, pitch: 6, move: "push", K: 0.18, name: "recess" },
     { w: 113, scene: "flood", at: [10, 5, 0], dist: 55, yaw: 15, pitch: 18, move: "push", K: 0.25, fov: 46, name: "storm" },
     { w: 116, scene: "flood", at: [0, 2, 0], dist: 22, yaw: 25, pitch: 8, move: "shake", K: 0.3, name: "flooded" },
-    { w: 119, scene: "flood", at: [-25, 2.2, 0], dist: 18, yaw: 100, pitch: 8, move: "slideR", K: 0.3, name: "rushed" },
+    { w: 119, scene: "flood", at: [-20, 1.5, 0], dist: 30, yaw: 70, pitch: 25, move: "slideR", K: 0.25, name: "rushed" },
     { w: 126, scene: "flood", follow: () => [C.car2.position.x - 4, 3, 0], dist: 26, yaw: 30, pitch: 18, move: "push", K: 0.15, name: "cars" },
     { w: 130, scene: "flood", at: [20, 5, 8], dist: 16, yaw: -30, pitch: 8, move: "rise", K: 0.2, name: "busStop" },
     { w: 141, scene: "flood", at: [20, 5.5, 8], dist: 14, yaw: 20, pitch: 2, move: "push", K: 0.2, name: "rising" },
-    { w: 146, scene: "flood", at: [50, 7, 9], dist: 50, yaw: 95, pitch: 25, move: "push", K: 0.15, name: "ladder" },
+    { w: 146, scene: "flood", at: [40, 8, 9], dist: 72.6, yaw: 84.3, pitch: 14.4, fov: 38, move: "push", K: 0.08, name: "ladder" },
     { w: 153, scene: "flood", follow: () => [boatG.position.x, 3.0, boatG.position.z], dist: 22, yaw: 25, pitch: 18, move: "shake", K: 0.25, name: "boat" },
-    { w: 160, scene: "flood", at: [79, HILL.h + 3, -3], dist: 14, yaw: -95, pitch: 8, move: "push", K: 0.2, name: "hill" },
+    { w: 160, scene: "flood", at: [79, HILL.h + 2.6, 0], dist: 22, yaw: -80, pitch: 10, move: "push", K: 0.15, name: "hill" },
     { w: 165, scene: "flood", at: [20, 5.5, 8], dist: 30, yaw: 30, pitch: 20, move: "pull", K: 0.3, name: "reach" },
     { w: 170, scene: "flood", follow: pipAt(2.6), dist: 7, yaw: -75, pitch: 4, move: "push", K: 0.18, name: "looked" },
-    { w: 175, scene: "flood", follow: () => { const p = loopW(C.pip); return [p.x, p.y - 0.2, p.z]; }, dist: 4.5, yaw: 100, pitch: 12, move: "push", K: 0.15, name: "string" },
+    { w: 175, scene: "flood", follow: () => { const a = loopW(C.pip), b = handW(C.mom, "rs"); return [(a.x + b.x) / 2, (a.y + b.y) / 2 - 0.3, (a.z + b.z) / 2]; }, dist: 9, yaw: -15, pitch: 10, move: "push", K: 0.15, name: "string" },
     { w: 182, scene: "dadLeft", memory: true, filter: MEM, at: [-4.5, 3.4, -9.5], dist: 17, yaw: 4, pitch: 8, move: "push", K: 0.2, name: "memDad" },
     { w: 187, scene: "lunch", memory: true, filter: MEM, at: [CAF - 9, 3, 6.6], dist: 11, yaw: 200, pitch: 12, move: "pull", K: 0.2, name: "memLunch" },
     { w: 193, scene: "hallBully", memory: true, tug: true, filter: MEM, at: [HALL + 0.8, 2.8, 3.2], dist: 9, yaw: -50, pitch: 10, move: "push", K: 0.2, name: "memTug" },
     { w: 199, scene: "flood", follow: pipAt(3.0), dist: 4.6, yaw: -80, pitch: 4, move: "push", K: 0.2, name: "feel" },
-    { w: 209, scene: "flood", follow: () => { const p = loopW(C.pip); return [p.x, p.y, p.z]; }, dist: 5.5, yaw: 115, pitch: 16, move: "push", K: 0.12, name: "untie" },
-    { w: 213, scene: "flood", follow: () => [C.pip.root.position.x, C.pip.root.position.y + 1.2, C.pip.root.position.z], dist: 12, yaw: -100, pitch: 2, move: "rise", K: 0.2, name: "feetLeft" },
+    { w: 209, scene: "flood", follow: () => { const p = loopW(C.pip); return [p.x - 0.4, p.y, p.z]; }, dist: 7, yaw: 200, pitch: 8, move: "push", K: 0.12, name: "untie" },
+    { w: 213, scene: "flood", at: [75.8, HILL.h + 3.6, 0.6], dist: 12, yaw: -90, pitch: 0, move: "rise", K: 0.25, name: "feetLeft" },
     { w: 218, scene: "flood", follow: pipAt(1.5), dist: 26, yaw: -60, pitch: -4, move: "pull", K: 0.2, fov: 48, name: "rose" },
     { w: 228, scene: "flood", follow: pipAt(1.8), dist: 14, yaw: 40, pitch: 10, move: "push", K: 0.15, name: "straight" },
     { w: 233, scene: "flood", at: [21.4, 6.6, 7.7], dist: 12, yaw: 10, pitch: 8, move: "push", K: 0.15, name: "grab" },
-    { w: 238, scene: "flood", follow: pipAt(-0.6), dist: 18, yaw: 20, pitch: 10, move: "orbitL", K: 0.2, name: "floatBack" },
+    { w: 238, scene: "flood", follow: pipAt(-0.6), dist: 16, yaw: -90, pitch: 8, move: "orbitL", K: 0.15, name: "floatBack" },
     { w: 245, scene: "flood", at: [79, HILL.h + 3, 2], dist: 18, yaw: -100, pitch: 12, move: "push", K: 0.2, name: "town" },
     { w: 250, scene: "flood", at: [79, HILL.h + 3.2, 3], dist: 10, yaw: -80, pitch: 18, move: "orbitR", K: 0.25, name: "hug" },
     { w: 258, scene: "flood", follow: pipAt(2.6), dist: 5.5, yaw: -60, pitch: 15, move: "push", K: 0.15, name: "firstTime" },
-    { w: 265, scene: "flood", follow: () => [C.pip.root.position.x, HILL.h + 0.9, C.pip.root.position.z], dist: 6, yaw: -45, pitch: 6, move: "push", K: 0.12, name: "touched" },
+    { w: 265, scene: "flood", at: [79, HILL.h + 2.2, 3], dist: 11, yaw: -85, pitch: 3, move: "push", K: 0.1, name: "touched" },
   ];
 }

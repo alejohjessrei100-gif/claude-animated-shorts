@@ -282,6 +282,6 @@ export function rope(parent, colr = "#f4f1ea") {
   const m = new THREE.Mesh(new THREE.BufferGeometry(), col(colr, 0.6)); m.castShadow = true; m.frustumCulled = false; parent.add(m);
   return { mesh: m, set(a, b, sag = 0.4, segs = 24) {
     const pts = []; for (let i = 0; i <= segs; i++) { const u = i / segs; const p = a.clone().lerp(b, u); p.y -= sag * 4 * u * (1 - u); pts.push(p); }
-    m.geometry.dispose(); m.geometry = new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), segs, 0.045, 6, false); m.visible = true;
+    m.geometry.dispose(); m.geometry = new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), segs, 0.065, 6, false); m.visible = true;
   } };
 }
