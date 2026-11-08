@@ -1,2 +1,2 @@
-- mix -14.5 LUFS, true peak -2.0 dBTP, 57.377 s
+- mix -14.6 LUFS, true peak -2.2 dBTP, 57.377 s
 - voice -14.3 LUFS, music bed -26.3 LUFS (-12 dB under the voice), accent 'flooded' at 24.747

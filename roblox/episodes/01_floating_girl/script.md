@@ -14,4 +14,4 @@ to her backpack; at the climax she rises over the flood.
 | 7 | Flaw saves | 62-88 | She let herself feel all of it at once... untied the string... floated him back |
 | 8 | Callback | end | And for the first time in years, Pip's feet touched the ground. |
 
-Voice: ElevenLabs "Adam" (premade), eleven_multilingual_v2, sped up x1.5 with a pitch change (kit/voice_make.py).
+Voice: the user's ElevenLabs "Adam - Radio Announcer" recording, aligned offline, pauses trimmed, x1.5 and +4 semitones (kit/voice_post.py).
