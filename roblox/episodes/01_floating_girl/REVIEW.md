@@ -52,3 +52,8 @@ All 3442 frames re-inspected (29 sheets). Automated: no black / white / frozen f
 |---|---|---|
 | 1614-1682, 1945-2029, 2105-2165, 2920-2949 | the stronger sun now makes a wide white glare on the flood water at the left edge | water roughness 0.25 -> 0.62 (matte): the glare is gone, the ripples stay |
 Water shots (1462-2220, 2701-3076) re-rendered and spliced.
+
+## Round 5: `out/ep01/v5/floating_girl_v5.mp4` (water shots re-rendered and spliced at 1461/1462, 2220/2221, 2700/2701, 3076/3077)
+Automated: 3442 frames, no black / white / frozen frames, -14.5 LUFS, -1.7 dBTP; frame-diff spikes only on planned cuts.
+Every frame of 1440-2240 and 2680-3100 re-inspected: no glare on the water anywhere, ripples and rain intact, no jumps at
+any splice seam. Clean: delivered.
