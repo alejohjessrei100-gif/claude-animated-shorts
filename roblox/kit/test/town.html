@@ -1,0 +1,52 @@
+<!doctype html><html><head><meta charset="utf-8">
+<style>html,body{margin:0;background:#000}canvas{display:block;width:1080px;height:1920px}</style>
+<script type="importmap">{"imports":{"three":"/node_modules/three/build/three.module.js","three/addons/":"/node_modules/three/examples/jsm/"}}</script>
+</head><body><canvas id="c" width="1080" height="1920"></canvas>
+<script type="module">
+import * as THREE from "three";
+import { makeCore, baseplate } from "/kit/10_core.js";
+import { makeAvatar, poseAvatar, SKIN, shirtArt } from "/kit/20_r6.js";
+import * as T from "/kit/45_town.js";
+const core = makeCore({ canvas: document.getElementById("c") });
+baseplate(core);
+const { scene, camera } = core, S = scene;
+// ---- the street (z = 0 road along x), houses on the north side, the school at the end
+T.road(S, -80, -5, 80, 5); T.sidewalk(S, -80, -9, 80, -5); T.sidewalk(S, -80, 5, 80, 9);
+T.house(S, { x: -30, z: -20, wall: "#e9e2cf", roof: "#5a4a6a" }); T.house(S, { x: -8, z: -20, wall: "#cfe3f0", roof: "#7a3b36", door: "#2f5f9a" }); T.house(S, { x: 14, z: -20, wall: "#f2d9a0", roof: "#3b5a46" });
+T.school(S, { x: 0, z: -60 });
+for (const x of [-42, -19, 3, 25]) T.tree(S, x, -12, 0.9);
+for (const x of [-36, -14, 8, 30]) T.lamp(S, x, 7.5);
+T.fence(S, -38, -12.5, -22); T.bush(S, -4, -13); T.bush(S, 20, -13);
+T.car(S, -10, 2.5, Math.PI / 2, "#d64545"); T.car(S, 22, -2.5, -Math.PI / 2, "#3d7be0");
+for (const x of [-60, -50, 40, 52, 64]) T.tree(S, x, -24 - (x % 7), 1.1);
+// ---- interiors far from the street (each its own place)
+const HALL = new THREE.Vector3(300, 0, 0), CLASS = new THREE.Vector3(400, 0, 0), CAF = new THREE.Vector3(500, 0, 0), BED = new THREE.Vector3(600, 0, 0);
+const hall = T.room(S, { x: HALL.x, z: 0, w: 14, d: 60, h: 11, floor: (r) => T.TEX.tile("#e9e9e4", "#c9ccd2", r), wall: "#e6e1d3" });
+T.lockers(S, HALL.x - 6.4, -24, 26, "#4f7fb8", 1); hall.children.forEach(() => {});
+{ const g = new THREE.Group(); g.position.set(HALL.x + 6.4, 0, 24); g.rotation.y = -Math.PI / 2; S.add(g); T.lockers(g, 0, 0, 24, "#c94f4f", 1); }
+{ const g = new THREE.Group(); g.position.set(HALL.x - 6.4, 0, -24); g.rotation.y = Math.PI / 2; S.add(g); T.lockers(g, 0, 0, 24, "#4f7fb8", 1); }
+T.room(S, { x: CLASS.x, z: 0, w: 30, d: 26, h: 11, wall: "#f0e6cc", windows: [{ wall: "back", at: -9, w: 4, h: 4, y: 3.5 }, { wall: "back", at: 9, w: 4, h: 4, y: 3.5 }] });
+T.chalkboard(S, CLASS.x, 6, -12.6, 12, 5);
+for (let r = 0; r < 3; r++) for (let c = -1; c <= 1; c++) { T.desk(S, CLASS.x + c * 7, -3 + r * 6.5); T.chair(S, CLASS.x + c * 7, -0.5 + r * 6.5, Math.PI); }
+T.room(S, { x: CAF.x, z: 0, w: 40, d: 30, h: 12, floor: (r) => T.TEX.tile("#f2f0ea", "#d9b9b0", r), wall: "#f2e6d0" });
+for (const z of [-7, 4]) for (const x of [-9, 9]) T.longTable(S, CAF.x + x, z, 14);
+T.room(S, { x: BED.x, z: 0, w: 18, d: 16, h: 10, wall: "#cfe0f2", windows: [{ wall: "back", at: 4, w: 4, h: 4, y: 3.5 }] });
+T.bed(S, BED.x - 4, -2.5, 0);
+// ---- cast for scale
+const kid = makeAvatar({ skin: SKIN.light, shirt: "#3d7be0", pants: "#2f3b52", hat: "hairShort", hatColor: "#4a3020", shirtArt: shirtArt("star", "#ffd84a") });
+const girl = makeAvatar({ skin: SKIN.brown, shirt: "#e05a8a", pants: "#3a3f5a", hat: "hairLong", hatColor: "#2a1c14" });
+S.add(kid.root, girl.root);
+const look = (p, t, fov = 42) => { camera.position.set(...p); camera.fov = fov; camera.updateProjectionMatrix(); camera.lookAt(...t); core.followShadow(new THREE.Vector3(t[0], 0, t[2])); };
+const put = (av, x, z, ry, pose = "idle", face = "smile") => { av.root.position.set(x, 0, z); av.root.rotation.y = ry; poseAvatar(av, pose, pose, 0, { t: 0.4, face }); };
+window.shot = (k) => {
+  if (k === "street") { put(kid, -2, 7, 0.3, "wave", "happy"); put(girl, 2.5, 7.5, -0.3, "talk", "grin"); look([6, 14, 34], [0, 6, -10], 44); }
+  if (k === "streetLow") { put(kid, -1, 7, -0.6, "walk", "smile"); put(girl, 2.5, 6.5, -0.4, "point", "surprised"); look([5, 3.2, 17], [-2, 4.5, -10], 40); }
+  if (k === "school") { put(kid, -2, -46, 0.2, "lookUp", "surprised"); put(girl, 2, -45, -0.2, "idle", "nervous"); look([4, 5, -28], [0, 9, -55], 48); }
+  if (k === "hall") { put(kid, HALL.x - 2, 8, Math.PI * 0.95, "walk", "sad"); put(girl, HALL.x + 2.5, 2, Math.PI * 1.05, "talk", "smirk"); look([HALL.x, 6, 26], [HALL.x, 4, -10], 46); }
+  if (k === "class") { put(kid, CLASS.x - 3, -8, 0.1, "point", "determined"); put(girl, CLASS.x + 7, 9.6, Math.PI, "sit", "surprised"); look([CLASS.x + 3, 9, 20], [CLASS.x - 1, 3.5, -4], 48); }
+  if (k === "caf") { put(kid, CLASS.x, 0, 0, "idle"); put(kid, CAF.x - 9, 6.6, Math.PI, "sit", "sad"); put(girl, CAF.x + 2, 10, -0.6, "talk", "smile"); look([CAF.x + 8, 9, 26], [CAF.x - 3, 3, 0], 46); }
+  if (k === "bed") { put(kid, BED.x - 4, 2, 0.4, "sleepy" in {} ? "idle" : "idle", "sleepy"); put(girl, BED.x + 4, 3, -0.7, "talk", "worried"); look([BED.x + 2, 7, 15], [BED.x - 1, 3.5, -2], 48); }
+  core.render();
+};
+window.READY = true;
+</script></body></html>
