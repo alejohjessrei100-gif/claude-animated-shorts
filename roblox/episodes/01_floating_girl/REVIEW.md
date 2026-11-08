@@ -57,3 +57,11 @@ Water shots (1462-2220, 2701-3076) re-rendered and spliced.
 Automated: 3442 frames, no black / white / frozen frames, -14.5 LUFS, -1.7 dBTP; frame-diff spikes only on planned cuts.
 Every frame of 1440-2240 and 2680-3100 re-inspected: no glare on the water anywhere, ripples and rain intact, no jumps at
 any splice seam. Clean: delivered.
+
+## User feedback after v2 (not caught by my reviews)
+- Heads poked through the hair: the hair was a squashed half-sphere that did not follow the head's flat-topped rounded
+  shape, so the head's rounded top edge showed as a skin-coloured band under the hair on every character with hair or a
+  bun. Missed in all five review rounds. Fixed in kit/20_r6.js: the hair is now a shell built from the head's own profile,
+  0.065 studs outside it all the way round, so the head cannot show through. Needs a full re-render (hair is in nearly
+  every shot); waiting for the user's go.
+- Music lowered to 25% (mix rebuilt; goes in with the re-render).

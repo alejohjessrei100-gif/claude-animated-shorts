@@ -114,7 +114,16 @@ function accessory(kind, color = "#3b2a20") {
   const g = new THREE.Group(), M = mat(color, 0.7);
   const add = (geo, m, x, y, z, rx = 0, ry = 0, rz = 0) => { const o = new THREE.Mesh(geo, m); o.position.set(x, y, z); o.rotation.set(rx, ry, rz); o.castShadow = true; g.add(o); return o; };
   /** a hair cap: the top of a sphere (radius r) squashed to height h, its rim at y0 (head centre = 0, head top = 0.61) */
-  const cap = (r, h, y0) => { const o = add(new THREE.SphereGeometry(r, 32, 16, 0, Math.PI * 2, 0, Math.PI * 0.55), M, 0, y0, -0.03); o.scale.set(1, h / r, 1); return o; };
+  /** a hair shell: the head's own profile (rounded cylinder r 0.62, half-height 0.61, edge 0.2) pushed out by `t` all
+   *  the way round, from y0 up over the crown. It follows the head exactly, so the head can never poke through it.
+   *  (The old squashed-sphere cap let the head's rounded top edge show as a band of skin; the old args are kept.) */
+  const cap = (_r, _h, y0, t = 0.065) => {
+    const R = 0.62, top = 0.61, e = 0.2, pts = [new THREE.Vector2(R - 0.01, y0), new THREE.Vector2(R + t, y0)];
+    pts.push(new THREE.Vector2(R + t, top - e));
+    for (let i = 1; i <= 10; i++) { const a = (i / 10) * (Math.PI / 2); pts.push(new THREE.Vector2(R - e + (e + t) * Math.cos(a), top - e + (e + t) * Math.sin(a))); }
+    pts.push(new THREE.Vector2(0.001, top + t));
+    return add(new THREE.LatheGeometry(pts, 64), M, 0, 0, 0);
+  };
   /** a fringe of n rounded bangs across the forehead */
   const bangs = (n) => { for (let i = 0; i < n; i++) { const u = (i + 0.5) / n - 0.5, a = u * 1.6; add(box(0.46, 0.2, 0.12, 0.08), M, Math.sin(a) * 0.64, 0.31 - Math.abs(u) * 0.04, Math.cos(a) * 0.64, -0.15, a, u * 0.25); } };
   switch (kind) {
