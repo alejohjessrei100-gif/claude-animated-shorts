@@ -59,7 +59,7 @@ export function tblock(parent, a, b, texFn, unit = 4, rough = 0.85) {
 }
 const glassM = () => mat("glass", () => new THREE.MeshStandardMaterial({ color: "#9fd0f0", roughness: 0.08, metalness: 0.1, transparent: true, opacity: 0.55, depthWrite: false }));
 /** window in a wall plane facing +z (wall surface at z): a frame, sill and glass pane (see-through, not a solid box) */
-export function windowZ(parent, x, y, z, w = 2.4, h = 2.4, dir = 1, frame = "#ffffff") {
+export function windowZ(parent, x, y, z, w = 2.4, h = 2.4, dir = 1, frame = "#ffffff", backing = true) {
   const F = col(frame, 0.5), t = 0.18, g = new THREE.Group(); parent.add(g);
   g.position.set(x, y, z); g.rotation.y = dir > 0 ? 0 : Math.PI;
   block(g, [-w / 2, -h / 2, 0.0], [w / 2, -h / 2 + t, 0.18], F); block(g, [-w / 2, h / 2 - t, 0.0], [w / 2, h / 2, 0.18], F);
@@ -68,7 +68,7 @@ export function windowZ(parent, x, y, z, w = 2.4, h = 2.4, dir = 1, frame = "#ff
   block(g, [-w / 2 - 0.15, -h / 2 - 0.2, 0], [w / 2 + 0.15, -h / 2, 0.35], F);
   const p = new THREE.Mesh(new THREE.PlaneGeometry(w - 2 * t, h - 2 * t), glassM()); p.position.z = 0.04; g.add(p);
   // a dark interior behind the glass so windows read as openings into a room
-  const back = new THREE.Mesh(new THREE.PlaneGeometry(w - 2 * t, h - 2 * t), col("#2b3346", 1)); back.position.z = 0.025; g.add(back);
+  if (backing) { const back = new THREE.Mesh(new THREE.PlaneGeometry(w - 2 * t, h - 2 * t), col("#2b3346", 1)); back.position.z = 0.025; g.add(back); }
   return g;
 }
 export function doorZ(parent, x, z, w = 2.2, h = 4, color = "#7a4a2e", dir = 1) {
@@ -158,7 +158,7 @@ export function room(parent, { x = 0, z = 0, w = 24, d = 18, h = 11, floor = (re
     const ws = windows.filter((o) => o.wall === (sign < 0 ? "back" : "front")).sort((a, b) => a.at - b.at);
     let cx = -w / 2;
     for (const o of ws) { block(g, [cx, 0, zw - T / 2], [o.at - o.w / 2, h, zw + T / 2], WM); block(g, [o.at - o.w / 2, 0, zw - T / 2], [o.at + o.w / 2, o.y, zw + T / 2], WM); block(g, [o.at - o.w / 2, o.y + o.h, zw - T / 2], [o.at + o.w / 2, h, zw + T / 2], WM);
-      if (o.kind !== "door") windowZ(g, o.at, o.y + o.h / 2, zw + (sign < 0 ? T / 2 : -T / 2), o.w, o.h, sign < 0 ? 1 : -1); cx = o.at + o.w / 2; }
+      if (o.kind !== "door") windowZ(g, o.at, o.y + o.h / 2, zw + (sign < 0 ? T / 2 : -T / 2), o.w, o.h, sign < 0 ? 1 : -1, "#ffffff", false); cx = o.at + o.w / 2; }
     block(g, [cx, 0, zw - T / 2], [w / 2, h, zw + T / 2], WM);
   };
   wallZ(-d / 2, -1); if (front) wallZ(d / 2, 1);
@@ -207,4 +207,81 @@ export function bed(parent, x, z, rot = 0, sheet = "#6a8fd6") {
   block(g, [-2.15, 2.3, -1], [2.15, 2.55, 3.9], col(sheet, 0.9)); block(g, [-1.6, 2.3, -3.7], [1.6, 2.9, -2.4], col("#ffffff", 0.9));
   block(g, [-2.2, 0, -4.4], [2.2, 4.2, -4], col("#8a5a3c", 0.7));
   return g;
+}
+
+// ------------------------------------------------------------------ flood-story pieces
+/** a grass mound (squashed sphere cap) + its height function */
+export function hill(parent, cx, cz, r = 40, sy = 0.3, base = -3, colr = "#5fbf4a") {
+  const m = new THREE.Mesh(new THREE.SphereGeometry(r, 48, 24, 0, Math.PI * 2, 0, Math.PI / 2), col(colr, 0.95));
+  m.scale.set(1, sy, 1); m.position.set(cx, base, cz); m.receiveShadow = true; m.castShadow = true; parent.add(m);
+  return (x, z) => { const d2 = (x - cx) ** 2 + (z - cz) ** 2; return d2 >= r * r ? 0 : Math.max(0, base + sy * Math.sqrt(r * r - d2)); };
+}
+export function busStop(parent, x, z, rot = 0) {
+  const g = new THREE.Group(); parent.add(g); g.position.set(x, 0, z); g.rotation.y = rot;
+  const metal = col("#4a5260", 0.4);
+  for (const sx of [-3.4, 3.4]) for (const sz of [-1.2, 1.2]) block(g, [sx - 0.15, 0, sz - 0.15], [sx + 0.15, 5, sz + 0.15], metal);
+  block(g, [-3.8, 5, -1.7], [3.8, 5.4, 1.7], col("#d9483b", 0.5)); // roof
+  block(g, [-3.4, 0.4, -1.3], [3.4, 4.6, -1.2], glassM()); // back glass
+  block(g, [-2.6, 1.6, -1.0], [2.6, 1.9, 0.0], col("#8a5a3c", 0.7)); // bench
+  block(g, [3.6, 0, 1.5], [3.8, 7, 1.7], metal); block(g, [3.2, 6.2, 1.45], [4.6, 7.4, 1.75], col("#2f6fd0", 0.5)); // sign
+  return g;
+}
+export function fireTruck(parent, x, y, z, rot = 0) {
+  const g = new THREE.Group(); parent.add(g); g.position.set(x, y, z); g.rotation.y = rot;
+  const red = col("#d42a2a", 0.45);
+  block(g, [-2.6, 1, -7], [2.6, 4.6, 5], red); block(g, [-2.6, 1, 5], [2.6, 6, 8.5], red); // body + cab
+  block(g, [-2.4, 3.8, 7.2], [2.4, 5.6, 8.55], glassM());
+  block(g, [-2.6, 4.6, -7], [2.6, 4.9, 5], col("#c9ccd2", 0.4));
+  for (const sx of [-1, 1]) for (const sz of [-4.5, 0, 6]) { const w = new THREE.Mesh(new THREE.CylinderGeometry(1.1, 1.1, 0.8, 18), col("#202228", 0.8)); w.rotation.z = Math.PI / 2; w.position.set(sx * 2.6, 1.1, sz); w.castShadow = true; g.add(w); }
+  block(g, [-1.4, 6, 6.8], [1.4, 6.5, 7.6], col("#3d7be0", 0.3)); // light bar
+  // turntable + ladder (group `ladder`: extend along its local -z; set ladder.userData.len)
+  const turn = new THREE.Group(); turn.position.set(0, 5.2, -2); g.add(turn);
+  block(turn, [-1, 0, -1], [1, 0.8, 1], col("#c9ccd2", 0.4));
+  const ladder = new THREE.Group(); ladder.position.set(0, 0.8, 0); turn.add(ladder);
+  const rails = [], rungs = [];
+  for (const sx of [-0.6, 0.6]) { const r = block(ladder, [sx - 0.1, 0, -1], [sx + 0.1, 0.25, 0], col("#c9ccd2", 0.35)); rails.push(r); }
+  for (let i = 0; i < 40; i++) rungs.push(block(ladder, [-0.6, 0.05, -i - 0.6], [0.6, 0.2, -i - 0.5], col("#c9ccd2", 0.35)));
+  const setLen = (L) => { for (const r of rails) { r.scale.z = L; r.position.z = -L / 2; } rungs.forEach((k, i) => (k.visible = i + 0.6 < L)); };
+  setLen(10);
+  return { g, turn, ladder, setLen };
+}
+export function boat(parent) {
+  const g = new THREE.Group(); parent.add(g);
+  const hull = col("#e8e4dc", 0.5), trim = col("#e05a2a", 0.5);
+  block(g, [-2, 0, -4], [2, 0.4, 4], hull); // floor
+  for (const sx of [-1, 1]) block(g, [sx * 2 - 0.2, 0, -4], [sx * 2 + 0.2, 1.6, 4], hull);
+  block(g, [-2, 0, 3.8], [2, 1.6, 4.2], hull); block(g, [-2, 0, -4.2], [2, 1.6, -3.8], hull);
+  block(g, [-2.25, 1.5, -4.3], [2.25, 1.8, 4.3], trim);
+  return g;
+}
+/** flood water: a wide translucent plane with a scrolling ripple texture; set level + flow each frame */
+export function water(parent, x0, z0, x1, z1) {
+  const t = ctex("ripples", 256, 256, (g, r) => {
+    g.fillStyle = "#3f78a8"; g.fillRect(0, 0, 256, 256);
+    for (let i = 0; i < 90; i++) { g.strokeStyle = `rgba(220,240,255,${0.15 + r() * 0.35})`; g.lineWidth = 2 + r() * 3; const y = r() * 256, x = r() * 256, L = 20 + r() * 60; g.beginPath(); g.moveTo(x, y); g.quadraticCurveTo(x + L / 2, y - 6, x + L, y); g.stroke(); }
+  }, [(x1 - x0) / 14, (z1 - z0) / 14]);
+  const m = new THREE.Mesh(new THREE.PlaneGeometry(x1 - x0, z1 - z0, 1, 1), new THREE.MeshStandardMaterial({ map: t, color: "#cfe6ff", roughness: 0.25, metalness: 0.05, transparent: true, opacity: 0.9 }));
+  m.rotation.x = -Math.PI / 2; m.position.set((x0 + x1) / 2, -1, (z0 + z1) / 2); m.receiveShadow = true; parent.add(m);
+  return { mesh: m, set(level, t2, flow = 0.6) { m.position.y = level; m.visible = level > 0.02; t.offset.set((-t2 * flow) % 1, (t2 * 0.03) % 1); } };
+}
+/** rain: thin streaks (instanced) in a box around a moving centre */
+export function rain(parent, n = 1400, size = 70, height = 40) {
+  const geo = new THREE.BoxGeometry(0.04, 1.6, 0.04), m = new THREE.MeshBasicMaterial({ color: "#d6e4f2", transparent: true, opacity: 0.45, depthWrite: false, fog: true });
+  const inst = new THREE.InstancedMesh(geo, m, n); inst.frustumCulled = false; parent.add(inst);
+  let s = 7; const r = () => ((s = (s * 16807) % 2147483647) / 2147483647);
+  const seeds = Array.from({ length: n }, () => [r() * size - size / 2, r() * height, r() * size - size / 2, 0.7 + r() * 0.6]);
+  const M = new THREE.Matrix4(), q = new THREE.Quaternion().setFromEuler(new THREE.Euler(0, 0, 0.18));
+  return { mesh: inst, set(on, t, c) {
+    inst.visible = on; if (!on) return;
+    seeds.forEach(([x, y, z, sp], i) => { const yy = ((y - t * 38 * sp) % height + height) % height; M.compose(new THREE.Vector3(c.x + x, yy, c.z + z), q, new THREE.Vector3(1, 1, 1)); inst.setMatrixAt(i, M); });
+    inst.instanceMatrix.needsUpdate = true;
+  } };
+}
+/** a string: a thin tube from a to b that sags by `sag` (0 = taut); rebuilt each frame */
+export function rope(parent, colr = "#f4f1ea") {
+  const m = new THREE.Mesh(new THREE.BufferGeometry(), col(colr, 0.6)); m.castShadow = true; m.frustumCulled = false; parent.add(m);
+  return { mesh: m, set(a, b, sag = 0.4, segs = 24) {
+    const pts = []; for (let i = 0; i <= segs; i++) { const u = i / segs; const p = a.clone().lerp(b, u); p.y -= sag * 4 * u * (1 - u); pts.push(p); }
+    m.geometry.dispose(); m.geometry = new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), segs, 0.045, 6, false); m.visible = true;
+  } };
 }

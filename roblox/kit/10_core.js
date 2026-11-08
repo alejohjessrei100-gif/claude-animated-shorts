@@ -34,7 +34,8 @@ export function makeCore({ canvas, pixelRatio = 1, shadows = true, skyTop, skyHo
 
   const scene = new THREE.Scene();
   const sunDir = new THREE.Vector3(0.45, 0.75, 0.5).normalize();
-  scene.add(skyDome(skyTop, skyHorizon, sunDir));
+  const sky = skyDome(skyTop, skyHorizon, sunDir);
+  scene.add(sky);
   scene.fog = new THREE.Fog(new THREE.Color(skyHorizon ?? "#bfe3ff"), 60, 260);
 
   const hemi = new THREE.HemisphereLight("#dbefff", "#8a9a6a", 1.15);
@@ -53,7 +54,16 @@ export function makeCore({ canvas, pixelRatio = 1, shadows = true, skyTop, skyHo
   /** keep the shadow box centred on what the camera is looking at */
   const followShadow = (target) => { sun.target.position.copy(target); sun.position.copy(target).addScaledVector(sunDir, 60); sun.target.updateMatrixWorld(); };
 
-  return { THREE, renderer, scene, camera, sun, hemi, sunDir, followShadow, render: () => renderer.render(scene, camera) };
+  const DAY = { top: new THREE.Color(skyTop ?? "#4f9cf0"), hor: new THREE.Color(skyHorizon ?? "#bfe3ff"), sun: 2.3, hemi: 1.15, ground: new THREE.Color("#8a9a6a") };
+  /** mood: 0 = sunny day, 1 = storm (grey sky, dim sun, close fog); interior: neutral bounce (no green tint on ceilings) */
+  const setMood = (storm = 0, interior = false) => {
+    const grey = new THREE.Color("#5d6672"), greyH = new THREE.Color("#8d96a0");
+    sky.material.uniforms.top.value.copy(DAY.top).lerp(grey, storm); sky.material.uniforms.hor.value.copy(DAY.hor).lerp(greyH, storm);
+    scene.fog.color.copy(DAY.hor).lerp(greyH, storm); scene.fog.near = 60 - 30 * storm; scene.fog.far = 260 - 140 * storm;
+    sun.intensity = DAY.sun * (1 - 0.6 * storm); hemi.intensity = DAY.hemi * (1 - 0.25 * storm);
+    hemi.groundColor.copy(interior ? new THREE.Color("#c9b49a") : DAY.ground);
+  };
+  return { THREE, renderer, scene, camera, sun, hemi, sky, sunDir, followShadow, setMood, render: () => renderer.render(scene, camera) };
 }
 
 /** a simple ground: grass baseplate with a subtle stud-grid texture (canvas) */

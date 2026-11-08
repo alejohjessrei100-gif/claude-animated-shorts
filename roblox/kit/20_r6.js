@@ -155,10 +155,22 @@ export function makeAvatar(o = {}) {
   // short sleeves: shirt colour on the top half of each arm
   if (!grey) for (const s of [ls, rs]) mesh(box(1.02, 0.9, 1.02, 0.06), mShirt, s, 0, 0.05, 0);
   const lh = limb(hip, 0.5, 0, mPants, false), rh = limb(hip, -0.5, 0, mPants, false);
+  // hand anchors (the end of each arm) for held props, and an optional backpack with a loop for a string
+  const hands = {};
+  for (const [k, j] of [["rs", rs], ["ls", ls]]) { const a = new THREE.Object3D(); a.position.set(0, -1.6, 0); j.add(a); hands[k] = a; }
+  let loop = null;
+  if (o.backpack && !grey) {
+    const bp = new THREE.Group(); bp.position.set(0, 1.05, -0.5); torso.add(bp);
+    mesh(box(1.5, 1.6, 0.7, 0.18), mat(o.backpack, 0.6), bp, 0, 0, -0.35);
+    mesh(box(1.1, 0.7, 0.25, 0.1), mat(o.backpack, 0.6), bp, 0, -0.3, -0.78);
+    for (const sx of [-0.55, 0.55]) mesh(box(0.22, 1.9, 0.12, 0.05), mat("#3a3f4a", 0.6), torso, sx, 1.05, 0.52); // straps over the shoulders
+    loop = new THREE.Object3D(); loop.position.set(0, 0.85, -0.45); bp.add(loop);
+    const ring = new THREE.Mesh(new THREE.TorusGeometry(0.12, 0.035, 8, 16), mat("#d9d9d9", 0.4)); ring.position.copy(loop.position); bp.add(ring);
+  }
   const sc = o.scale ?? 1; root.scale.setScalar(sc);
   let faceName = o.face ?? "smile", faceOpen = false;
   const setFace = (name, open = false) => { if (grey || (name === faceName && open === faceOpen)) return; faceName = name; faceOpen = open; mHead.map = faceTexture(skin, name, open); mHead.needsUpdate = true; };
-  return { root, j: { hip, torso, neck, head, ls, rs, lh, rh }, setFace, meta: o, get face() { return faceName; } };
+  return { root, j: { hip, torso, neck, head, ls, rs, lh, rh }, hands, loop, setFace, meta: o, get face() { return faceName; } };
 }
 
 // ------------------------------------------------------------------ poses
