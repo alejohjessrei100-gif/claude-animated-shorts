@@ -21,3 +21,14 @@ Automated: no black / white / frozen frames; -14.6 LUFS, -2.2 dBTP; 40 frame-dif
 Checked and fine: one-word captions in sync with the voice; the bad-day kid, the pet, the funeral bricks, the reveal, dad leaving,
 mom tying the string, the windy day, the tug and bob, the sepia memories, the climb, the boat losing to the current, the
 hug and the "first time in years" smile.
+
+## Round 2: `out/ep01/v2/floating_girl_v2.mp4` (all frames re-rendered; every sheet of the changed shots re-inspected)
+Automated: 3442 frames, no black / white / frozen frames, -14.6 LUFS. All round-1 fixes confirmed in the frames.
+
+| frames | finding | fix |
+|---|---|---|
+| 3005-3076 | carrying the boy back: the camera sits behind Pip, so the boy hangs hidden behind her legs | camera on her far side (yaw -135): the boy hangs beside her, hand in hand |
+| 3150-3256 | the hug: mom's bun and a hugging arm fill the lower frame and cover Pip | seen from above (pitch 38) through the gap in the ring: Pip's smiling face inside the hug |
+| 3257-3337 | "first time in years": a ring member's bun covers the right third | camera through the widened gap (yaw -90): clean close-up |
+| 1484-3440 (rain) | raindrops passing right in front of the lens read as wide white bars (e.g. 2539, 2613, 3064, 3364, 3438) | rain keeps a 6-stud clear radius round the camera |
+Flood half (1398-3442) re-rendered and spliced at 1397/1398.

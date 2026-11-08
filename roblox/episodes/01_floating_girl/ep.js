@@ -331,10 +331,10 @@ export function SHOTS(ctx) {
     { w: 218, scene: "flood", follow: pipAt(1.5), dist: 26, yaw: -60, pitch: -4, move: "pull", K: 0.2, fov: 48, name: "rose" },
     { w: 228, scene: "flood", follow: pipAt(1.8), dist: 14, yaw: 40, pitch: 10, move: "push", K: 0.15, name: "straight" },
     { w: 233, scene: "flood", at: [21.4, 6.6, 7.7], dist: 12, yaw: 10, pitch: 8, move: "push", K: 0.15, name: "grab" },
-    { w: 238, scene: "flood", follow: pipAt(-0.6), dist: 16, yaw: -90, pitch: 8, move: "orbitL", K: 0.15, name: "floatBack" },
+    { w: 238, scene: "flood", follow: pipAt(-0.8), dist: 17, yaw: -135, pitch: 10, move: "orbitL", K: 0.12, name: "floatBack" },
     { w: 245, scene: "flood", at: [79, HILL.h + 3, 2], dist: 18, yaw: -100, pitch: 12, move: "push", K: 0.2, name: "town" },
-    { w: 250, scene: "flood", at: [79, HILL.h + 3.2, 3], dist: 10, yaw: -80, pitch: 18, move: "orbitR", K: 0.25, name: "hug" },
-    { w: 258, scene: "flood", follow: pipAt(2.6), dist: 5.5, yaw: -60, pitch: 15, move: "push", K: 0.15, name: "firstTime" },
+    { w: 250, scene: "flood", at: [79, HILL.h + 3.4, 3], dist: 11, yaw: -90, pitch: 38, move: "orbitR", K: 0.1, name: "hug" },
+    { w: 258, scene: "flood", follow: pipAt(2.6), dist: 5.5, yaw: -90, pitch: 12, move: "push", K: 0.15, name: "firstTime" },
     { w: 265, scene: "flood", at: [79, HILL.h + 2.2, 3], dist: 11, yaw: -85, pitch: 3, move: "push", K: 0.1, name: "touched" },
   ];
 }

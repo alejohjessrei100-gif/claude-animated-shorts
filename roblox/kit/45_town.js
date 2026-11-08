@@ -273,7 +273,12 @@ export function rain(parent, n = 1400, size = 70, height = 40) {
   const M = new THREE.Matrix4(), q = new THREE.Quaternion().setFromEuler(new THREE.Euler(0, 0, 0.18));
   return { mesh: inst, set(on, t, c) {
     inst.visible = on; if (!on) return;
-    seeds.forEach(([x, y, z, sp], i) => { const yy = ((y - t * 38 * sp) % height + height) % height; M.compose(new THREE.Vector3(c.x + x, yy, c.z + z), q, new THREE.Vector3(1, 1, 1)); inst.setMatrixAt(i, M); });
+    seeds.forEach(([x, y, z, sp], i) => {
+      const yy = ((y - t * 38 * sp) % height + height) % height;
+      let dx = x, dz = z; const d = Math.hypot(dx, dz), near = 6; // no streak closer than `near` to the lens (they read as white bars)
+      if (d < near) { const k = near / Math.max(d, 1e-3); dx *= k; dz *= k; }
+      M.compose(new THREE.Vector3(c.x + dx, yy, c.z + dz), q, new THREE.Vector3(1, 1, 1)); inst.setMatrixAt(i, M);
+    });
     inst.instanceMatrix.needsUpdate = true;
   } };
 }
