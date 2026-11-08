@@ -1,0 +1,1352 @@
+[
+{
+"word": "In",
+"start": 0.033,
+"end": 0.167
+},
+{
+"word": "this",
+"start": 0.167,
+"end": 0.307
+},
+{
+"word": "world",
+"start": 0.307,
+"end": 0.62
+},
+{
+"word": "sadness",
+"start": 0.713,
+"end": 1.153
+},
+{
+"word": "makes",
+"start": 1.153,
+"end": 1.327
+},
+{
+"word": "you",
+"start": 1.327,
+"end": 1.42
+},
+{
+"word": "lighter",
+"start": 1.42,
+"end": 1.827
+},
+{
+"word": "Have",
+"start": 1.92,
+"end": 2.033
+},
+{
+"word": "a",
+"start": 2.033,
+"end": 2.08
+},
+{
+"word": "bad",
+"start": 2.08,
+"end": 2.273
+},
+{
+"word": "day",
+"start": 2.273,
+"end": 2.527
+},
+{
+"word": "and",
+"start": 2.527,
+"end": 2.693
+},
+{
+"word": "your",
+"start": 2.693,
+"end": 2.76
+},
+{
+"word": "feet",
+"start": 2.76,
+"end": 3.02
+},
+{
+"word": "lift",
+"start": 3.02,
+"end": 3.173
+},
+{
+"word": "an",
+"start": 3.173,
+"end": 3.24
+},
+{
+"word": "inch",
+"start": 3.24,
+"end": 3.533
+},
+{
+"word": "off",
+"start": 3.533,
+"end": 3.64
+},
+{
+"word": "the",
+"start": 3.64,
+"end": 3.693
+},
+{
+"word": "ground",
+"start": 3.693,
+"end": 4.06
+},
+{
+"word": "Lose",
+"start": 4.153,
+"end": 4.307
+},
+{
+"word": "a",
+"start": 4.307,
+"end": 4.353
+},
+{
+"word": "pet",
+"start": 4.353,
+"end": 4.727
+},
+{
+"word": "and",
+"start": 4.747,
+"end": 4.853
+},
+{
+"word": "you",
+"start": 4.853,
+"end": 4.913
+},
+{
+"word": "float",
+"start": 4.913,
+"end": 5.167
+},
+{
+"word": "above",
+"start": 5.167,
+"end": 5.34
+},
+{
+"word": "your",
+"start": 5.34,
+"end": 5.413
+},
+{
+"word": "bed",
+"start": 5.413,
+"end": 5.627
+},
+{
+"word": "for",
+"start": 5.627,
+"end": 5.793
+},
+{
+"word": "a",
+"start": 5.793,
+"end": 5.813
+},
+{
+"word": "week",
+"start": 5.813,
+"end": 6.14
+},
+{
+"word": "Grown-ups",
+"start": 6.233,
+"end": 6.58
+},
+{
+"word": "carry",
+"start": 6.58,
+"end": 6.787
+},
+{
+"word": "bricks",
+"start": 6.787,
+"end": 7.067
+},
+{
+"word": "in",
+"start": 7.067,
+"end": 7.12
+},
+{
+"word": "their",
+"start": 7.12,
+"end": 7.2
+},
+{
+"word": "pockets",
+"start": 7.2,
+"end": 7.513
+},
+{
+"word": "after",
+"start": 7.513,
+"end": 7.667
+},
+{
+"word": "funerals",
+"start": 7.667,
+"end": 8.12
+},
+{
+"word": "just",
+"start": 8.167,
+"end": 8.36
+},
+{
+"word": "to",
+"start": 8.36,
+"end": 8.413
+},
+{
+"word": "stay",
+"start": 8.413,
+"end": 8.62
+},
+{
+"word": "down",
+"start": 8.62,
+"end": 8.947
+},
+{
+"word": "And",
+"start": 9.04,
+"end": 9.273
+},
+{
+"word": "nobody",
+"start": 9.273,
+"end": 9.613
+},
+{
+"word": "floated",
+"start": 9.613,
+"end": 9.9
+},
+{
+"word": "higher",
+"start": 9.9,
+"end": 10.16
+},
+{
+"word": "than",
+"start": 10.16,
+"end": 10.293
+},
+{
+"word": "Pip",
+"start": 10.293,
+"end": 10.54
+},
+{
+"word": "Ever",
+"start": 10.633,
+"end": 10.78
+},
+{
+"word": "since",
+"start": 10.78,
+"end": 10.927
+},
+{
+"word": "her",
+"start": 10.927,
+"end": 10.993
+},
+{
+"word": "dad",
+"start": 10.993,
+"end": 11.207
+},
+{
+"word": "left",
+"start": 11.207,
+"end": 11.487
+},
+{
+"word": "she",
+"start": 11.527,
+"end": 11.673
+},
+{
+"word": "drifted",
+"start": 11.673,
+"end": 11.92
+},
+{
+"word": "a",
+"start": 11.92,
+"end": 11.967
+},
+{
+"word": "whole",
+"start": 11.967,
+"end": 12.24
+},
+{
+"word": "foot",
+"start": 12.24,
+"end": 12.54
+},
+{
+"word": "above",
+"start": 12.54,
+"end": 12.733
+},
+{
+"word": "the",
+"start": 12.733,
+"end": 12.78
+},
+{
+"word": "ground",
+"start": 12.78,
+"end": 13.16
+},
+{
+"word": "Her",
+"start": 13.253,
+"end": 13.313
+},
+{
+"word": "mom",
+"start": 13.313,
+"end": 13.567
+},
+{
+"word": "tied",
+"start": 13.567,
+"end": 13.72
+},
+{
+"word": "a",
+"start": 13.72,
+"end": 13.74
+},
+{
+"word": "string",
+"start": 13.74,
+"end": 13.993
+},
+{
+"word": "to",
+"start": 13.993,
+"end": 14.067
+},
+{
+"word": "her",
+"start": 14.067,
+"end": 14.14
+},
+{
+"word": "backpack",
+"start": 14.14,
+"end": 14.533
+},
+{
+"word": "so",
+"start": 14.533,
+"end": 14.633
+},
+{
+"word": "she",
+"start": 14.633,
+"end": 14.713
+},
+{
+"word": "wouldn't",
+"start": 14.713,
+"end": 14.9
+},
+{
+"word": "blow",
+"start": 14.9,
+"end": 15.08
+},
+{
+"word": "away",
+"start": 15.08,
+"end": 15.293
+},
+{
+"word": "on",
+"start": 15.293,
+"end": 15.38
+},
+{
+"word": "windy",
+"start": 15.38,
+"end": 15.593
+},
+{
+"word": "days",
+"start": 15.593,
+"end": 15.947
+},
+{
+"word": "Kids",
+"start": 16.04,
+"end": 16.253
+},
+{
+"word": "called",
+"start": 16.253,
+"end": 16.44
+},
+{
+"word": "her",
+"start": 16.44,
+"end": 16.58
+},
+{
+"word": "Balloon",
+"start": 16.58,
+"end": 16.953
+},
+{
+"word": "Girl",
+"start": 16.953,
+"end": 17.267
+},
+{
+"word": "They'd",
+"start": 17.36,
+"end": 17.493
+},
+{
+"word": "tug",
+"start": 17.493,
+"end": 17.66
+},
+{
+"word": "her",
+"start": 17.66,
+"end": 17.747
+},
+{
+"word": "string",
+"start": 17.747,
+"end": 17.987
+},
+{
+"word": "in",
+"start": 17.987,
+"end": 18.04
+},
+{
+"word": "the",
+"start": 18.04,
+"end": 18.087
+},
+{
+"word": "hallway",
+"start": 18.087,
+"end": 18.433
+},
+{
+"word": "and",
+"start": 18.433,
+"end": 18.493
+},
+{
+"word": "watch",
+"start": 18.493,
+"end": 18.673
+},
+{
+"word": "her",
+"start": 18.673,
+"end": 18.74
+},
+{
+"word": "bob",
+"start": 18.74,
+"end": 19.08
+},
+{
+"word": "Somebody",
+"start": 19.173,
+"end": 19.48
+},
+{
+"word": "taped",
+"start": 19.48,
+"end": 19.707
+},
+{
+"word": "her",
+"start": 19.707,
+"end": 19.787
+},
+{
+"word": "to",
+"start": 19.787,
+"end": 19.867
+},
+{
+"word": "the",
+"start": 19.867,
+"end": 19.933
+},
+{
+"word": "ceiling",
+"start": 19.933,
+"end": 20.267
+},
+{
+"word": "once",
+"start": 20.267,
+"end": 20.553
+},
+{
+"word": "and",
+"start": 20.553,
+"end": 20.653
+},
+{
+"word": "the",
+"start": 20.653,
+"end": 20.7
+},
+{
+"word": "whole",
+"start": 20.7,
+"end": 20.9
+},
+{
+"word": "class",
+"start": 20.9,
+"end": 21.227
+},
+{
+"word": "laughed",
+"start": 21.227,
+"end": 21.627
+},
+{
+"word": "So",
+"start": 21.72,
+"end": 22.02
+},
+{
+"word": "Pip",
+"start": 22.147,
+"end": 22.313
+},
+{
+"word": "stopped",
+"start": 22.313,
+"end": 22.573
+},
+{
+"word": "going",
+"start": 22.573,
+"end": 22.74
+},
+{
+"word": "to",
+"start": 22.74,
+"end": 22.78
+},
+{
+"word": "recess",
+"start": 22.78,
+"end": 23.233
+},
+{
+"word": "Then",
+"start": 23.327,
+"end": 23.627
+},
+{
+"word": "one",
+"start": 23.627,
+"end": 23.853
+},
+{
+"word": "afternoon",
+"start": 23.853,
+"end": 24.293
+},
+{
+"word": "the",
+"start": 24.387,
+"end": 24.467
+},
+{
+"word": "river",
+"start": 24.467,
+"end": 24.747
+},
+{
+"word": "flooded",
+"start": 24.747,
+"end": 25.173
+},
+{
+"word": "Water",
+"start": 25.267,
+"end": 25.533
+},
+{
+"word": "rushed",
+"start": 25.533,
+"end": 25.84
+},
+{
+"word": "through",
+"start": 25.84,
+"end": 25.973
+},
+{
+"word": "the",
+"start": 25.973,
+"end": 26.02
+},
+{
+"word": "streets",
+"start": 26.02,
+"end": 26.333
+},
+{
+"word": "so",
+"start": 26.333,
+"end": 26.533
+},
+{
+"word": "fast",
+"start": 26.533,
+"end": 26.927
+},
+{
+"word": "that",
+"start": 26.927,
+"end": 27.06
+},
+{
+"word": "cars",
+"start": 27.06,
+"end": 27.36
+},
+{
+"word": "started",
+"start": 27.36,
+"end": 27.6
+},
+{
+"word": "floating",
+"start": 27.6,
+"end": 27.987
+},
+{
+"word": "A",
+"start": 28.08,
+"end": 28.107
+},
+{
+"word": "little",
+"start": 28.107,
+"end": 28.28
+},
+{
+"word": "boy",
+"start": 28.28,
+"end": 28.48
+},
+{
+"word": "climbed",
+"start": 28.48,
+"end": 28.747
+},
+{
+"word": "onto",
+"start": 28.747,
+"end": 28.913
+},
+{
+"word": "the",
+"start": 28.913,
+"end": 28.96
+},
+{
+"word": "roof",
+"start": 28.96,
+"end": 29.16
+},
+{
+"word": "of",
+"start": 29.16,
+"end": 29.247
+},
+{
+"word": "a",
+"start": 29.247,
+"end": 29.273
+},
+{
+"word": "bus",
+"start": 29.273,
+"end": 29.44
+},
+{
+"word": "stop",
+"start": 29.44,
+"end": 29.773
+},
+{
+"word": "and",
+"start": 29.773,
+"end": 29.86
+},
+{
+"word": "the",
+"start": 29.86,
+"end": 29.9
+},
+{
+"word": "water",
+"start": 29.9,
+"end": 30.213
+},
+{
+"word": "kept",
+"start": 30.213,
+"end": 30.46
+},
+{
+"word": "rising",
+"start": 30.46,
+"end": 30.84
+},
+{
+"word": "The",
+"start": 30.933,
+"end": 30.98
+},
+{
+"word": "fire",
+"start": 30.98,
+"end": 31.22
+},
+{
+"word": "truck's",
+"start": 31.22,
+"end": 31.42
+},
+{
+"word": "ladder",
+"start": 31.42,
+"end": 31.66
+},
+{
+"word": "wasn't",
+"start": 31.66,
+"end": 31.927
+},
+{
+"word": "long",
+"start": 31.927,
+"end": 32.1
+},
+{
+"word": "enough",
+"start": 32.1,
+"end": 32.347
+},
+{
+"word": "The",
+"start": 32.44,
+"end": 32.487
+},
+{
+"word": "rescue",
+"start": 32.487,
+"end": 32.793
+},
+{
+"word": "boat",
+"start": 32.793,
+"end": 32.967
+},
+{
+"word": "couldn't",
+"start": 32.967,
+"end": 33.147
+},
+{
+"word": "fight",
+"start": 33.147,
+"end": 33.347
+},
+{
+"word": "the",
+"start": 33.347,
+"end": 33.4
+},
+{
+"word": "current",
+"start": 33.4,
+"end": 33.753
+},
+{
+"word": "Grown-ups",
+"start": 33.847,
+"end": 34.22
+},
+{
+"word": "screamed",
+"start": 34.22,
+"end": 34.553
+},
+{
+"word": "from",
+"start": 34.553,
+"end": 34.68
+},
+{
+"word": "the",
+"start": 34.68,
+"end": 34.733
+},
+{
+"word": "hill",
+"start": 34.733,
+"end": 35.04
+},
+{
+"word": "but",
+"start": 35.107,
+"end": 35.213
+},
+{
+"word": "nobody",
+"start": 35.213,
+"end": 35.56
+},
+{
+"word": "could",
+"start": 35.56,
+"end": 35.68
+},
+{
+"word": "reach",
+"start": 35.68,
+"end": 35.9
+},
+{
+"word": "him",
+"start": 35.9,
+"end": 36.027
+},
+{
+"word": "Pip",
+"start": 36.12,
+"end": 36.333
+},
+{
+"word": "looked",
+"start": 36.333,
+"end": 36.533
+},
+{
+"word": "at",
+"start": 36.533,
+"end": 36.593
+},
+{
+"word": "the",
+"start": 36.593,
+"end": 36.647
+},
+{
+"word": "boy",
+"start": 36.647,
+"end": 36.947
+},
+{
+"word": "Then",
+"start": 37.04,
+"end": 37.293
+},
+{
+"word": "at",
+"start": 37.293,
+"end": 37.413
+},
+{
+"word": "the",
+"start": 37.413,
+"end": 37.473
+},
+{
+"word": "string",
+"start": 37.473,
+"end": 37.767
+},
+{
+"word": "on",
+"start": 37.767,
+"end": 37.84
+},
+{
+"word": "her",
+"start": 37.84,
+"end": 37.907
+},
+{
+"word": "backpack",
+"start": 37.907,
+"end": 38.34
+},
+{
+"word": "She",
+"start": 38.433,
+"end": 38.527
+},
+{
+"word": "thought",
+"start": 38.527,
+"end": 38.7
+},
+{
+"word": "about",
+"start": 38.7,
+"end": 38.853
+},
+{
+"word": "her",
+"start": 38.853,
+"end": 38.927
+},
+{
+"word": "dad",
+"start": 38.927,
+"end": 39.287
+},
+{
+"word": "About",
+"start": 39.38,
+"end": 39.573
+},
+{
+"word": "every",
+"start": 39.573,
+"end": 39.787
+},
+{
+"word": "lunch",
+"start": 39.787,
+"end": 40.007
+},
+{
+"word": "she",
+"start": 40.007,
+"end": 40.18
+},
+{
+"word": "ate",
+"start": 40.18,
+"end": 40.267
+},
+{
+"word": "alone",
+"start": 40.267,
+"end": 40.6
+},
+{
+"word": "About",
+"start": 40.693,
+"end": 40.9
+},
+{
+"word": "every",
+"start": 40.9,
+"end": 41.153
+},
+{
+"word": "tug",
+"start": 41.153,
+"end": 41.293
+},
+{
+"word": "on",
+"start": 41.293,
+"end": 41.54
+},
+{
+"word": "that",
+"start": 41.54,
+"end": 41.66
+},
+{
+"word": "string",
+"start": 41.66,
+"end": 42.0
+},
+{
+"word": "And",
+"start": 42.093,
+"end": 42.167
+},
+{
+"word": "she",
+"start": 42.167,
+"end": 42.267
+},
+{
+"word": "let",
+"start": 42.267,
+"end": 42.427
+},
+{
+"word": "herself",
+"start": 42.427,
+"end": 42.747
+},
+{
+"word": "feel",
+"start": 42.747,
+"end": 43.04
+},
+{
+"word": "all",
+"start": 43.04,
+"end": 43.233
+},
+{
+"word": "of",
+"start": 43.233,
+"end": 43.313
+},
+{
+"word": "it",
+"start": 43.313,
+"end": 43.447
+},
+{
+"word": "at",
+"start": 43.447,
+"end": 43.547
+},
+{
+"word": "once",
+"start": 43.547,
+"end": 43.927
+},
+{
+"word": "She",
+"start": 44.02,
+"end": 44.18
+},
+{
+"word": "untied",
+"start": 44.18,
+"end": 44.553
+},
+{
+"word": "the",
+"start": 44.553,
+"end": 44.607
+},
+{
+"word": "string",
+"start": 44.607,
+"end": 44.947
+},
+{
+"word": "Her",
+"start": 45.04,
+"end": 45.093
+},
+{
+"word": "feet",
+"start": 45.093,
+"end": 45.34
+},
+{
+"word": "left",
+"start": 45.34,
+"end": 45.533
+},
+{
+"word": "the",
+"start": 45.533,
+"end": 45.587
+},
+{
+"word": "ground",
+"start": 45.587,
+"end": 45.913
+},
+{
+"word": "and",
+"start": 46.007,
+"end": 46.087
+},
+{
+"word": "she",
+"start": 46.087,
+"end": 46.193
+},
+{
+"word": "rose",
+"start": 46.193,
+"end": 46.54
+},
+{
+"word": "over",
+"start": 46.54,
+"end": 46.72
+},
+{
+"word": "the",
+"start": 46.72,
+"end": 46.767
+},
+{
+"word": "water",
+"start": 46.767,
+"end": 47.113
+},
+{
+"word": "higher",
+"start": 47.2,
+"end": 47.44
+},
+{
+"word": "than",
+"start": 47.44,
+"end": 47.533
+},
+{
+"word": "the",
+"start": 47.533,
+"end": 47.573
+},
+{
+"word": "rooftops",
+"start": 47.573,
+"end": 48.053
+},
+{
+"word": "straight",
+"start": 48.147,
+"end": 48.493
+},
+{
+"word": "to",
+"start": 48.493,
+"end": 48.567
+},
+{
+"word": "the",
+"start": 48.567,
+"end": 48.633
+},
+{
+"word": "bus",
+"start": 48.633,
+"end": 48.82
+},
+{
+"word": "stop",
+"start": 48.82,
+"end": 49.1
+},
+{
+"word": "She",
+"start": 49.193,
+"end": 49.307
+},
+{
+"word": "grabbed",
+"start": 49.307,
+"end": 49.54
+},
+{
+"word": "the",
+"start": 49.54,
+"end": 49.593
+},
+{
+"word": "boy's",
+"start": 49.593,
+"end": 49.807
+},
+{
+"word": "hand",
+"start": 49.807,
+"end": 50.033
+},
+{
+"word": "and",
+"start": 50.1,
+"end": 50.187
+},
+{
+"word": "floated",
+"start": 50.187,
+"end": 50.513
+},
+{
+"word": "him",
+"start": 50.513,
+"end": 50.627
+},
+{
+"word": "back",
+"start": 50.627,
+"end": 50.773
+},
+{
+"word": "to",
+"start": 50.773,
+"end": 50.84
+},
+{
+"word": "the",
+"start": 50.84,
+"end": 50.913
+},
+{
+"word": "hill",
+"start": 50.913,
+"end": 51.213
+},
+{
+"word": "The",
+"start": 51.307,
+"end": 51.373
+},
+{
+"word": "whole",
+"start": 51.373,
+"end": 51.667
+},
+{
+"word": "town",
+"start": 51.667,
+"end": 51.967
+},
+{
+"word": "was",
+"start": 51.967,
+"end": 52.12
+},
+{
+"word": "waiting",
+"start": 52.12,
+"end": 52.433
+},
+{
+"word": "They",
+"start": 52.527,
+"end": 52.613
+},
+{
+"word": "hugged",
+"start": 52.613,
+"end": 52.827
+},
+{
+"word": "her",
+"start": 52.827,
+"end": 52.94
+},
+{
+"word": "so",
+"start": 52.94,
+"end": 53.213
+},
+{
+"word": "hard",
+"start": 53.213,
+"end": 53.46
+},
+{
+"word": "she",
+"start": 53.46,
+"end": 53.573
+},
+{
+"word": "started",
+"start": 53.573,
+"end": 53.813
+},
+{
+"word": "laughing",
+"start": 53.813,
+"end": 54.22
+},
+{
+"word": "And",
+"start": 54.313,
+"end": 54.393
+},
+{
+"word": "for",
+"start": 54.393,
+"end": 54.473
+},
+{
+"word": "the",
+"start": 54.473,
+"end": 54.533
+},
+{
+"word": "first",
+"start": 54.533,
+"end": 54.833
+},
+{
+"word": "time",
+"start": 54.833,
+"end": 55.04
+},
+{
+"word": "in",
+"start": 55.04,
+"end": 55.12
+},
+{
+"word": "years",
+"start": 55.12,
+"end": 55.573
+},
+{
+"word": "Pip's",
+"start": 55.653,
+"end": 55.907
+},
+{
+"word": "feet",
+"start": 55.907,
+"end": 56.22
+},
+{
+"word": "touched",
+"start": 56.22,
+"end": 56.48
+},
+{
+"word": "the",
+"start": 56.48,
+"end": 56.54
+},
+{
+"word": "ground",
+"start": 56.54,
+"end": 56.927
+}
+]

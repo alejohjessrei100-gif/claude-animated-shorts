@@ -28,7 +28,7 @@ for i, w in enumerate(orig):
     for p in SPOKEN.get(w.lower(), w.lower().strip("'").replace("-", " ")).split():
         norm.append(p); owner.append(i)
 d = Decoder(bestpath=False)
-PRON = {"ig": "IH G", "pecks": "P EH K S"}  # words missing from the dictionary, as CMU phones; extend per script
+PRON = {"ig": "IH G", "pecks": "P EH K S", "pip": "P IH P", "pip's": "P IH P S"}  # words missing from the dictionary, as CMU phones; extend per script
 for wd in sorted(set(norm)):
     if d.lookup_word(wd) is None and wd in PRON:
         d.add_word(wd, PRON[wd], True); continue
