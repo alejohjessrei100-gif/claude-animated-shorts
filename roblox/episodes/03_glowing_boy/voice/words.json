@@ -1,0 +1,682 @@
+[
+{
+"word": "In",
+"start": 0.033,
+"end": 0.167
+},
+{
+"word": "this",
+"start": 0.167,
+"end": 0.307
+},
+{
+"word": "town",
+"start": 0.307,
+"end": 0.613
+},
+{
+"word": "whenever",
+"start": 0.7,
+"end": 0.993
+},
+{
+"word": "you",
+"start": 0.993,
+"end": 1.093
+},
+{
+"word": "get",
+"start": 1.093,
+"end": 1.22
+},
+{
+"word": "scared",
+"start": 1.22,
+"end": 1.687
+},
+{
+"word": "you",
+"start": 1.76,
+"end": 1.88
+},
+{
+"word": "glow",
+"start": 1.88,
+"end": 2.273
+},
+{
+"word": "A",
+"start": 2.367,
+"end": 2.413
+},
+{
+"word": "little",
+"start": 2.413,
+"end": 2.593
+},
+{
+"word": "nervous",
+"start": 2.593,
+"end": 2.993
+},
+{
+"word": "and",
+"start": 2.993,
+"end": 3.12
+},
+{
+"word": "your",
+"start": 3.12,
+"end": 3.187
+},
+{
+"word": "fingers",
+"start": 3.187,
+"end": 3.527
+},
+{
+"word": "shine",
+"start": 3.527,
+"end": 3.953
+},
+{
+"word": "Really",
+"start": 4.06,
+"end": 4.347
+},
+{
+"word": "terrified",
+"start": 4.347,
+"end": 4.807
+},
+{
+"word": "and",
+"start": 4.807,
+"end": 4.967
+},
+{
+"word": "you",
+"start": 4.967,
+"end": 5.06
+},
+{
+"word": "light",
+"start": 5.06,
+"end": 5.293
+},
+{
+"word": "up",
+"start": 5.293,
+"end": 5.407
+},
+{
+"word": "like",
+"start": 5.407,
+"end": 5.527
+},
+{
+"word": "a",
+"start": 5.527,
+"end": 5.553
+},
+{
+"word": "lamp",
+"start": 5.553,
+"end": 5.96
+},
+{
+"word": "And",
+"start": 6.053,
+"end": 6.3
+},
+{
+"word": "nobody",
+"start": 6.3,
+"end": 6.607
+},
+{
+"word": "glowed",
+"start": 6.607,
+"end": 6.847
+},
+{
+"word": "brighter",
+"start": 6.847,
+"end": 7.193
+},
+{
+"word": "than",
+"start": 7.193,
+"end": 7.347
+},
+{
+"word": "Ollie",
+"start": 7.347,
+"end": 7.707
+},
+{
+"word": "He",
+"start": 7.8,
+"end": 7.867
+},
+{
+"word": "was",
+"start": 7.867,
+"end": 7.947
+},
+{
+"word": "scared",
+"start": 7.947,
+"end": 8.14
+},
+{
+"word": "of",
+"start": 8.14,
+"end": 8.227
+},
+{
+"word": "dogs",
+"start": 8.227,
+"end": 8.7
+},
+{
+"word": "thunder",
+"start": 8.7,
+"end": 9.18
+},
+{
+"word": "and",
+"start": 9.18,
+"end": 9.38
+},
+{
+"word": "talking",
+"start": 9.38,
+"end": 9.64
+},
+{
+"word": "in",
+"start": 9.64,
+"end": 9.727
+},
+{
+"word": "class",
+"start": 9.727,
+"end": 10.12
+},
+{
+"word": "so",
+"start": 10.213,
+"end": 10.333
+},
+{
+"word": "he",
+"start": 10.333,
+"end": 10.453
+},
+{
+"word": "lit",
+"start": 10.453,
+"end": 10.607
+},
+{
+"word": "up",
+"start": 10.607,
+"end": 10.827
+},
+{
+"word": "every",
+"start": 10.827,
+"end": 11.1
+},
+{
+"word": "single",
+"start": 11.1,
+"end": 11.4
+},
+{
+"word": "day",
+"start": 11.4,
+"end": 11.68
+},
+{
+"word": "Kids",
+"start": 11.773,
+"end": 11.96
+},
+{
+"word": "called",
+"start": 11.96,
+"end": 12.133
+},
+{
+"word": "him",
+"start": 12.133,
+"end": 12.22
+},
+{
+"word": "Nightlight",
+"start": 12.22,
+"end": 12.7
+},
+{
+"word": "and",
+"start": 12.7,
+"end": 12.793
+},
+{
+"word": "threw",
+"start": 12.793,
+"end": 12.907
+},
+{
+"word": "blankets",
+"start": 12.907,
+"end": 13.267
+},
+{
+"word": "over",
+"start": 13.267,
+"end": 13.427
+},
+{
+"word": "him",
+"start": 13.427,
+"end": 13.52
+},
+{
+"word": "at",
+"start": 13.52,
+"end": 13.573
+},
+{
+"word": "recess",
+"start": 13.573,
+"end": 14.02
+},
+{
+"word": "Then",
+"start": 14.113,
+"end": 14.273
+},
+{
+"word": "one",
+"start": 14.273,
+"end": 14.42
+},
+{
+"word": "night",
+"start": 14.42,
+"end": 14.64
+},
+{
+"word": "the",
+"start": 14.733,
+"end": 14.787
+},
+{
+"word": "power",
+"start": 14.787,
+"end": 15.073
+},
+{
+"word": "went",
+"start": 15.073,
+"end": 15.207
+},
+{
+"word": "out",
+"start": 15.207,
+"end": 15.373
+},
+{
+"word": "across",
+"start": 15.373,
+"end": 15.633
+},
+{
+"word": "the",
+"start": 15.633,
+"end": 15.68
+},
+{
+"word": "whole",
+"start": 15.68,
+"end": 15.987
+},
+{
+"word": "town",
+"start": 15.987,
+"end": 16.313
+},
+{
+"word": "during",
+"start": 16.313,
+"end": 16.507
+},
+{
+"word": "the",
+"start": 16.507,
+"end": 16.547
+},
+{
+"word": "school",
+"start": 16.547,
+"end": 16.76
+},
+{
+"word": "play",
+"start": 16.76,
+"end": 17.087
+},
+{
+"word": "The",
+"start": 17.18,
+"end": 17.227
+},
+{
+"word": "halls",
+"start": 17.227,
+"end": 17.58
+},
+{
+"word": "went",
+"start": 17.58,
+"end": 17.753
+},
+{
+"word": "pitch",
+"start": 17.753,
+"end": 18.047
+},
+{
+"word": "black",
+"start": 18.047,
+"end": 18.367
+},
+{
+"word": "Kids",
+"start": 18.46,
+"end": 18.66
+},
+{
+"word": "screamed",
+"start": 18.66,
+"end": 19.2
+},
+{
+"word": "Teachers",
+"start": 19.293,
+"end": 19.593
+},
+{
+"word": "tripped",
+"start": 19.593,
+"end": 19.787
+},
+{
+"word": "over",
+"start": 19.787,
+"end": 19.927
+},
+{
+"word": "chairs",
+"start": 19.927,
+"end": 20.367
+},
+{
+"word": "Nobody",
+"start": 20.453,
+"end": 20.833
+},
+{
+"word": "could",
+"start": 20.833,
+"end": 20.933
+},
+{
+"word": "find",
+"start": 20.933,
+"end": 21.107
+},
+{
+"word": "the",
+"start": 21.107,
+"end": 21.193
+},
+{
+"word": "exits",
+"start": 21.193,
+"end": 21.56
+},
+{
+"word": "Ollie",
+"start": 21.653,
+"end": 21.9
+},
+{
+"word": "was",
+"start": 21.9,
+"end": 22.073
+},
+{
+"word": "more",
+"start": 22.073,
+"end": 22.287
+},
+{
+"word": "terrified",
+"start": 22.287,
+"end": 22.733
+},
+{
+"word": "than",
+"start": 22.733,
+"end": 22.84
+},
+{
+"word": "anyone",
+"start": 22.84,
+"end": 23.3
+},
+{
+"word": "So",
+"start": 23.393,
+"end": 23.64
+},
+{
+"word": "he",
+"start": 23.64,
+"end": 23.853
+},
+{
+"word": "shined",
+"start": 23.853,
+"end": 24.107
+},
+{
+"word": "brighter",
+"start": 24.107,
+"end": 24.393
+},
+{
+"word": "than",
+"start": 24.393,
+"end": 24.493
+},
+{
+"word": "ever",
+"start": 24.493,
+"end": 24.787
+},
+{
+"word": "He",
+"start": 24.88,
+"end": 24.94
+},
+{
+"word": "took",
+"start": 24.94,
+"end": 25.087
+},
+{
+"word": "the",
+"start": 25.087,
+"end": 25.14
+},
+{
+"word": "closest",
+"start": 25.14,
+"end": 25.487
+},
+{
+"word": "kid's",
+"start": 25.487,
+"end": 25.66
+},
+{
+"word": "hand",
+"start": 25.66,
+"end": 25.913
+},
+{
+"word": "and",
+"start": 25.913,
+"end": 26.04
+},
+{
+"word": "walked",
+"start": 26.04,
+"end": 26.307
+},
+{
+"word": "the",
+"start": 26.307,
+"end": 26.373
+},
+{
+"word": "whole",
+"start": 26.373,
+"end": 26.653
+},
+{
+"word": "school",
+"start": 26.653,
+"end": 26.947
+},
+{
+"word": "out",
+"start": 26.947,
+"end": 27.12
+},
+{
+"word": "step",
+"start": 27.213,
+"end": 27.487
+},
+{
+"word": "by",
+"start": 27.487,
+"end": 27.613
+},
+{
+"word": "step",
+"start": 27.613,
+"end": 27.933
+},
+{
+"word": "glowing",
+"start": 28.027,
+"end": 28.4
+},
+{
+"word": "the",
+"start": 28.4,
+"end": 28.507
+},
+{
+"word": "entire",
+"start": 28.507,
+"end": 28.867
+},
+{
+"word": "way",
+"start": 28.867,
+"end": 29.173
+},
+{
+"word": "They",
+"start": 29.267,
+"end": 29.36
+},
+{
+"word": "still",
+"start": 29.36,
+"end": 29.56
+},
+{
+"word": "call",
+"start": 29.56,
+"end": 29.733
+},
+{
+"word": "him",
+"start": 29.733,
+"end": 29.787
+},
+{
+"word": "Nightlight",
+"start": 29.787,
+"end": 30.173
+},
+{
+"word": "But",
+"start": 30.267,
+"end": 30.38
+},
+{
+"word": "now",
+"start": 30.38,
+"end": 30.72
+},
+{
+"word": "it's",
+"start": 30.78,
+"end": 30.867
+},
+{
+"word": "because",
+"start": 30.867,
+"end": 31.127
+},
+{
+"word": "he's",
+"start": 31.127,
+"end": 31.333
+},
+{
+"word": "the",
+"start": 31.333,
+"end": 31.38
+},
+{
+"word": "one",
+"start": 31.38,
+"end": 31.553
+},
+{
+"word": "they",
+"start": 31.553,
+"end": 31.627
+},
+{
+"word": "follow",
+"start": 31.627,
+"end": 31.893
+},
+{
+"word": "home",
+"start": 31.893,
+"end": 32.193
+}
+]

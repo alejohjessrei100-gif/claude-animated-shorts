@@ -1,0 +1,682 @@
+[
+ {
+  "word": "In",
+  "start": 0.05,
+  "end": 0.25
+ },
+ {
+  "word": "this",
+  "start": 0.25,
+  "end": 0.46
+ },
+ {
+  "word": "town",
+  "start": 0.46,
+  "end": 0.92
+ },
+ {
+  "word": "whenever",
+  "start": 1.05,
+  "end": 1.49
+ },
+ {
+  "word": "you",
+  "start": 1.49,
+  "end": 1.64
+ },
+ {
+  "word": "get",
+  "start": 1.64,
+  "end": 1.83
+ },
+ {
+  "word": "scared",
+  "start": 1.83,
+  "end": 2.53
+ },
+ {
+  "word": "you",
+  "start": 2.64,
+  "end": 2.82
+ },
+ {
+  "word": "glow",
+  "start": 2.82,
+  "end": 3.41
+ },
+ {
+  "word": "A",
+  "start": 3.55,
+  "end": 3.62
+ },
+ {
+  "word": "little",
+  "start": 3.62,
+  "end": 3.89
+ },
+ {
+  "word": "nervous",
+  "start": 3.89,
+  "end": 4.49
+ },
+ {
+  "word": "and",
+  "start": 4.49,
+  "end": 4.68
+ },
+ {
+  "word": "your",
+  "start": 4.68,
+  "end": 4.78
+ },
+ {
+  "word": "fingers",
+  "start": 4.78,
+  "end": 5.29
+ },
+ {
+  "word": "shine",
+  "start": 5.29,
+  "end": 5.93
+ },
+ {
+  "word": "Really",
+  "start": 6.09,
+  "end": 6.52
+ },
+ {
+  "word": "terrified",
+  "start": 6.52,
+  "end": 7.21
+ },
+ {
+  "word": "and",
+  "start": 7.21,
+  "end": 7.45
+ },
+ {
+  "word": "you",
+  "start": 7.45,
+  "end": 7.59
+ },
+ {
+  "word": "light",
+  "start": 7.59,
+  "end": 7.94
+ },
+ {
+  "word": "up",
+  "start": 7.94,
+  "end": 8.11
+ },
+ {
+  "word": "like",
+  "start": 8.11,
+  "end": 8.29
+ },
+ {
+  "word": "a",
+  "start": 8.29,
+  "end": 8.33
+ },
+ {
+  "word": "lamp",
+  "start": 8.33,
+  "end": 8.94
+ },
+ {
+  "word": "And",
+  "start": 9.08,
+  "end": 9.45
+ },
+ {
+  "word": "nobody",
+  "start": 9.45,
+  "end": 9.91
+ },
+ {
+  "word": "glowed",
+  "start": 9.91,
+  "end": 10.27
+ },
+ {
+  "word": "brighter",
+  "start": 10.27,
+  "end": 10.79
+ },
+ {
+  "word": "than",
+  "start": 10.79,
+  "end": 11.02
+ },
+ {
+  "word": "Ollie",
+  "start": 11.02,
+  "end": 11.56
+ },
+ {
+  "word": "He",
+  "start": 11.7,
+  "end": 11.8
+ },
+ {
+  "word": "was",
+  "start": 11.8,
+  "end": 11.92
+ },
+ {
+  "word": "scared",
+  "start": 11.92,
+  "end": 12.21
+ },
+ {
+  "word": "of",
+  "start": 12.21,
+  "end": 12.34
+ },
+ {
+  "word": "dogs",
+  "start": 12.34,
+  "end": 13.05
+ },
+ {
+  "word": "thunder",
+  "start": 13.05,
+  "end": 13.77
+ },
+ {
+  "word": "and",
+  "start": 13.77,
+  "end": 14.07
+ },
+ {
+  "word": "talking",
+  "start": 14.07,
+  "end": 14.46
+ },
+ {
+  "word": "in",
+  "start": 14.46,
+  "end": 14.59
+ },
+ {
+  "word": "class",
+  "start": 14.59,
+  "end": 15.18
+ },
+ {
+  "word": "so",
+  "start": 15.32,
+  "end": 15.5
+ },
+ {
+  "word": "he",
+  "start": 15.5,
+  "end": 15.68
+ },
+ {
+  "word": "lit",
+  "start": 15.68,
+  "end": 15.91
+ },
+ {
+  "word": "up",
+  "start": 15.91,
+  "end": 16.24
+ },
+ {
+  "word": "every",
+  "start": 16.24,
+  "end": 16.65
+ },
+ {
+  "word": "single",
+  "start": 16.65,
+  "end": 17.1
+ },
+ {
+  "word": "day",
+  "start": 17.1,
+  "end": 17.52
+ },
+ {
+  "word": "Kids",
+  "start": 17.66,
+  "end": 17.94
+ },
+ {
+  "word": "called",
+  "start": 17.94,
+  "end": 18.2
+ },
+ {
+  "word": "him",
+  "start": 18.2,
+  "end": 18.33
+ },
+ {
+  "word": "Nightlight",
+  "start": 18.33,
+  "end": 19.05
+ },
+ {
+  "word": "and",
+  "start": 19.05,
+  "end": 19.19
+ },
+ {
+  "word": "threw",
+  "start": 19.19,
+  "end": 19.36
+ },
+ {
+  "word": "blankets",
+  "start": 19.36,
+  "end": 19.9
+ },
+ {
+  "word": "over",
+  "start": 19.9,
+  "end": 20.14
+ },
+ {
+  "word": "him",
+  "start": 20.14,
+  "end": 20.28
+ },
+ {
+  "word": "at",
+  "start": 20.28,
+  "end": 20.36
+ },
+ {
+  "word": "recess",
+  "start": 20.36,
+  "end": 21.03
+ },
+ {
+  "word": "Then",
+  "start": 21.17,
+  "end": 21.41
+ },
+ {
+  "word": "one",
+  "start": 21.41,
+  "end": 21.63
+ },
+ {
+  "word": "night",
+  "start": 21.63,
+  "end": 21.96
+ },
+ {
+  "word": "the",
+  "start": 22.1,
+  "end": 22.18
+ },
+ {
+  "word": "power",
+  "start": 22.18,
+  "end": 22.61
+ },
+ {
+  "word": "went",
+  "start": 22.61,
+  "end": 22.81
+ },
+ {
+  "word": "out",
+  "start": 22.81,
+  "end": 23.06
+ },
+ {
+  "word": "across",
+  "start": 23.06,
+  "end": 23.45
+ },
+ {
+  "word": "the",
+  "start": 23.45,
+  "end": 23.52
+ },
+ {
+  "word": "whole",
+  "start": 23.52,
+  "end": 23.98
+ },
+ {
+  "word": "town",
+  "start": 23.98,
+  "end": 24.47
+ },
+ {
+  "word": "during",
+  "start": 24.47,
+  "end": 24.76
+ },
+ {
+  "word": "the",
+  "start": 24.76,
+  "end": 24.82
+ },
+ {
+  "word": "school",
+  "start": 24.82,
+  "end": 25.14
+ },
+ {
+  "word": "play",
+  "start": 25.14,
+  "end": 25.63
+ },
+ {
+  "word": "The",
+  "start": 25.77,
+  "end": 25.84
+ },
+ {
+  "word": "halls",
+  "start": 25.84,
+  "end": 26.37
+ },
+ {
+  "word": "went",
+  "start": 26.37,
+  "end": 26.63
+ },
+ {
+  "word": "pitch",
+  "start": 26.63,
+  "end": 27.07
+ },
+ {
+  "word": "black",
+  "start": 27.07,
+  "end": 27.55
+ },
+ {
+  "word": "Kids",
+  "start": 27.69,
+  "end": 27.99
+ },
+ {
+  "word": "screamed",
+  "start": 27.99,
+  "end": 28.8
+ },
+ {
+  "word": "Teachers",
+  "start": 28.94,
+  "end": 29.39
+ },
+ {
+  "word": "tripped",
+  "start": 29.39,
+  "end": 29.68
+ },
+ {
+  "word": "over",
+  "start": 29.68,
+  "end": 29.89
+ },
+ {
+  "word": "chairs",
+  "start": 29.89,
+  "end": 30.55
+ },
+ {
+  "word": "Nobody",
+  "start": 30.68,
+  "end": 31.25
+ },
+ {
+  "word": "could",
+  "start": 31.25,
+  "end": 31.4
+ },
+ {
+  "word": "find",
+  "start": 31.4,
+  "end": 31.66
+ },
+ {
+  "word": "the",
+  "start": 31.66,
+  "end": 31.79
+ },
+ {
+  "word": "exits",
+  "start": 31.79,
+  "end": 32.34
+ },
+ {
+  "word": "Ollie",
+  "start": 32.48,
+  "end": 32.85
+ },
+ {
+  "word": "was",
+  "start": 32.85,
+  "end": 33.11
+ },
+ {
+  "word": "more",
+  "start": 33.11,
+  "end": 33.43
+ },
+ {
+  "word": "terrified",
+  "start": 33.43,
+  "end": 34.1
+ },
+ {
+  "word": "than",
+  "start": 34.1,
+  "end": 34.26
+ },
+ {
+  "word": "anyone",
+  "start": 34.26,
+  "end": 34.95
+ },
+ {
+  "word": "So",
+  "start": 35.09,
+  "end": 35.46
+ },
+ {
+  "word": "he",
+  "start": 35.46,
+  "end": 35.78
+ },
+ {
+  "word": "shined",
+  "start": 35.78,
+  "end": 36.16
+ },
+ {
+  "word": "brighter",
+  "start": 36.16,
+  "end": 36.59
+ },
+ {
+  "word": "than",
+  "start": 36.59,
+  "end": 36.74
+ },
+ {
+  "word": "ever",
+  "start": 36.74,
+  "end": 37.18
+ },
+ {
+  "word": "He",
+  "start": 37.32,
+  "end": 37.41
+ },
+ {
+  "word": "took",
+  "start": 37.41,
+  "end": 37.63
+ },
+ {
+  "word": "the",
+  "start": 37.63,
+  "end": 37.71
+ },
+ {
+  "word": "closest",
+  "start": 37.71,
+  "end": 38.23
+ },
+ {
+  "word": "kid's",
+  "start": 38.23,
+  "end": 38.49
+ },
+ {
+  "word": "hand",
+  "start": 38.49,
+  "end": 38.87
+ },
+ {
+  "word": "and",
+  "start": 38.87,
+  "end": 39.06
+ },
+ {
+  "word": "walked",
+  "start": 39.06,
+  "end": 39.46
+ },
+ {
+  "word": "the",
+  "start": 39.46,
+  "end": 39.56
+ },
+ {
+  "word": "whole",
+  "start": 39.56,
+  "end": 39.98
+ },
+ {
+  "word": "school",
+  "start": 39.98,
+  "end": 40.42
+ },
+ {
+  "word": "out",
+  "start": 40.42,
+  "end": 40.68
+ },
+ {
+  "word": "step",
+  "start": 40.82,
+  "end": 41.23
+ },
+ {
+  "word": "by",
+  "start": 41.23,
+  "end": 41.42
+ },
+ {
+  "word": "step",
+  "start": 41.42,
+  "end": 41.9
+ },
+ {
+  "word": "glowing",
+  "start": 42.04,
+  "end": 42.6
+ },
+ {
+  "word": "the",
+  "start": 42.6,
+  "end": 42.76
+ },
+ {
+  "word": "entire",
+  "start": 42.76,
+  "end": 43.3
+ },
+ {
+  "word": "way",
+  "start": 43.3,
+  "end": 43.76
+ },
+ {
+  "word": "They",
+  "start": 43.9,
+  "end": 44.04
+ },
+ {
+  "word": "still",
+  "start": 44.04,
+  "end": 44.34
+ },
+ {
+  "word": "call",
+  "start": 44.34,
+  "end": 44.6
+ },
+ {
+  "word": "him",
+  "start": 44.6,
+  "end": 44.68
+ },
+ {
+  "word": "Nightlight",
+  "start": 44.68,
+  "end": 45.26
+ },
+ {
+  "word": "But",
+  "start": 45.4,
+  "end": 45.57
+ },
+ {
+  "word": "now",
+  "start": 45.57,
+  "end": 46.08
+ },
+ {
+  "word": "it's",
+  "start": 46.17,
+  "end": 46.3
+ },
+ {
+  "word": "because",
+  "start": 46.3,
+  "end": 46.69
+ },
+ {
+  "word": "he's",
+  "start": 46.69,
+  "end": 47.0
+ },
+ {
+  "word": "the",
+  "start": 47.0,
+  "end": 47.07
+ },
+ {
+  "word": "one",
+  "start": 47.07,
+  "end": 47.33
+ },
+ {
+  "word": "they",
+  "start": 47.33,
+  "end": 47.44
+ },
+ {
+  "word": "follow",
+  "start": 47.44,
+  "end": 47.84
+ },
+ {
+  "word": "home",
+  "start": 47.84,
+  "end": 48.29
+ }
+]
