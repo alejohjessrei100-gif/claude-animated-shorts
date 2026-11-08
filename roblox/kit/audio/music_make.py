@@ -10,6 +10,9 @@ import instruments as I
 
 ap = argparse.ArgumentParser(); ap.add_argument("ep"); ap.add_argument("--accent-word", default="flooded"); ap.add_argument("--bed-db", type=float, default=-12.0)
 ap.add_argument("--speedup", type=float, default=1.35)
+ap.add_argument("--bgm", default="", help="use this track as the music bed instead of the generated one")
+ap.add_argument("--bgm-gain", type=float, default=0.5, help="linear gain on the --bgm track (0.5 = 50%% volume)")
+ap.add_argument("--accent", type=int, default=1)
 a = ap.parse_args()
 words = json.load(open(os.path.join(a.ep, "voice", "words.json")))
 DUR = words[-1]["end"] + 0.45
@@ -66,8 +69,13 @@ v, sr = read_wav(os.path.join(a.ep, "voice", "voice.wav"))
 assert sr == SR, sr
 v = st(v)[:, :N]; v = np.pad(v, ((0, 0), (0, N - v.shape[1])))
 Lv = integrated(v)
-M = bed(); S, at = accent(a.accent_word)
-M = M * dbg((Lv + a.bed_db) - integrated(M))
+if a.bgm:  # the user's track at a fixed linear gain against the voice at its normal level (-16 LUFS); fade out at the end
+    bg, bsr = read_wav(a.bgm); assert bsr == SR, bsr
+    bg = st(bg); bg = np.tile(bg, (1, int(np.ceil(N / bg.shape[1])) + 1))[:, :N] if bg.shape[1] < N else bg[:, :N]
+    M = bg * a.bgm_gain * curve(N, [(0, 1), (DUR - 1.2, 1), (DUR, 0)])[None, :]
+else:
+    M = bed(); M = M * dbg((Lv + a.bed_db) - integrated(M))
+S, at = accent(a.accent_word) if a.accent else (np.zeros((2, N)), None)
 if at is not None: S = S * dbg((Lv - 2) - integrated(S[:, ns(at):ns(at + 1.5)]))
 mix0 = v + M + S
 G = -14.0 - integrated(mix0)
@@ -80,5 +88,5 @@ y = fades(y, 0.0, 0.05)
 od = os.path.join(a.ep, "audio"); os.makedirs(od, exist_ok=True)
 write_wav(os.path.join(od, "mix.wav"), y); write_wav(os.path.join(od, "music.wav"), M * dbg(G)); write_wav(os.path.join(od, "accent.wav"), S * dbg(G))
 rows = [f"- mix {integrated(y):.1f} LUFS, true peak {true_peak(y):.1f} dBTP, {y.shape[1] / SR:.3f} s",
-        f"- voice {integrated(v * dbg(G)):.1f} LUFS, music bed {integrated(M * dbg(G)):.1f} LUFS ({a.bed_db:+.0f} dB under the voice), accent '{a.accent_word}' at {at}"]
+        f"- voice {integrated(v * dbg(G)):.1f} LUFS, music {integrated(M * dbg(G)):.1f} LUFS ({integrated(M) - Lv:+.1f} LU vs the voice; {'bgm ' + os.path.basename(a.bgm) + f' at x{a.bgm_gain}' if a.bgm else 'generated bed'}), accent '{a.accent_word}' at {at}"]
 open(os.path.join(od, "cues.md"), "w").write("\n".join(rows) + "\n"); print("\n".join(rows))

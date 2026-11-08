@@ -51,15 +51,15 @@ export function wordAt(words, t) {
   if (!cur) return null;
   return t <= cur.end + 0.35 ? cur : null; // hold through tiny gaps, clear in real pauses
 }
-export function drawCaption(g, word, { y = 1222, size = 112, W = 1080 } = {}) {
+export function drawCaption(g, word, { y = 1222, size = 56, W = 1080 } = {}) { // 56 px: half the skill's 112 (user request)
   if (!word) return;
   const txt = captionWord(word);
   if (!txt) return;
   g.save();
   g.font = `800 ${size}px Poppins`; g.textAlign = "center"; g.textBaseline = "alphabetic"; g.lineJoin = "round";
-  let s = size; while (g.measureText(txt).width > W - 120 && s > 60) { s -= 4; g.font = `800 ${s}px Poppins`; }
-  g.shadowColor = "rgba(0,0,0,.55)"; g.shadowBlur = 14; g.shadowOffsetY = 4;
-  g.strokeStyle = "#000"; g.lineWidth = 13 * (s / size); g.strokeText(txt, W / 2, y);
+  let s = size; while (g.measureText(txt).width > W - 120 && s > 30) { s -= 2; g.font = `800 ${s}px Poppins`; }
+  g.shadowColor = "rgba(0,0,0,.55)"; g.shadowBlur = 7 * (s / 56); g.shadowOffsetY = 2 * (s / 56);
+  g.strokeStyle = "#000"; g.lineWidth = 6.5 * (s / 56); g.strokeText(txt, W / 2, y);
   g.shadowColor = "transparent"; g.strokeText(txt, W / 2, y);
   g.fillStyle = "#fff"; g.fillText(txt, W / 2, y);
   g.restore();

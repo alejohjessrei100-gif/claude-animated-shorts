@@ -11,6 +11,7 @@ const dur = await page.evaluate(() => window.DURATION), N = Math.round(dur * fps
 const f0 = Number(opt("--from", 0)), f1 = Math.min(N - 1, Number(opt("--to", N - 1)));
 const ff = spawn("ffmpeg", ["-v", "error", "-y", "-f", "image2pipe", "-framerate", String(fps), "-c:v", "mjpeg", "-i", "-",
   "-c:v", "libx264", "-preset", "medium", "-crf", "17", "-pix_fmt", "yuv420p", "-r", String(fps), outp], { stdio: ["pipe", "inherit", "inherit"] });
+await page.evaluate((t) => window.frameJPEG(t, 0.5), f0 / fps); // warm-up: objects first shown on a fresh page skip their first frame
 const t0 = Date.now();
 for (let f = f0; f <= f1; f++) {
   const b64 = await page.evaluate((t) => window.frameJPEG(t, 0.94), f / fps);

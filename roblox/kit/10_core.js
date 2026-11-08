@@ -2,6 +2,10 @@
 // Bright toy-plastic daylight: a warm key sun with soft shadows, a sky/ground hemisphere fill, a gradient sky dome and a
 // little aerial haze so distant blocks fall back. Everything renders into one fixed-size canvas the recorder reads.
 import * as THREE from "three";
+import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
+import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
+import { GTAOPass } from "three/addons/postprocessing/GTAOPass.js";
+import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
 
 export const W = 1080, H = 1920;
 
@@ -14,7 +18,8 @@ function skyDome(top = "#4f9cf0", horizon = "#bfe3ff", sunDir = new THREE.Vector
     fragmentShader: `uniform vec3 top; uniform vec3 hor; uniform vec3 sun; varying vec3 vDir;
       void main(){ float h = clamp(vDir.y, 0.0, 1.0); vec3 c = mix(hor, top, pow(h, 0.55));
         float s = max(dot(normalize(vDir), sun), 0.0); c += vec3(1.0,0.92,0.75) * pow(s, 60.0) * 0.6 + vec3(1.0,0.95,0.85) * pow(s, 6.0) * 0.12;
-        if (vDir.y < 0.0) c = hor; gl_FragColor = vec4(c, 1.0); }`,
+        if (vDir.y < 0.0) c = hor;
+        gl_FragColor = vec4(pow(c, vec3(2.2)) * 1.1, 1.0); }`, // the AO output pass encodes + tone-maps the sky too: pre-darken so it keeps its old deep colour
   });
   const m = new THREE.Mesh(new THREE.SphereGeometry(900, 32, 16), mat);
   m.renderOrder = -1;
@@ -22,7 +27,7 @@ function skyDome(top = "#4f9cf0", horizon = "#bfe3ff", sunDir = new THREE.Vector
 }
 
 /** core: { renderer, scene, camera, sun, canvas, render() } */
-export function makeCore({ canvas, pixelRatio = 1, shadows = true, skyTop, skyHorizon } = {}) {
+export function makeCore({ canvas, pixelRatio = 1, shadows = true, skyTop, skyHorizon, ao = true } = {}) {
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, preserveDrawingBuffer: true, powerPreference: "high-performance" });
   renderer.setPixelRatio(pixelRatio);
   renderer.setSize(W, H, false);
@@ -38,9 +43,12 @@ export function makeCore({ canvas, pixelRatio = 1, shadows = true, skyTop, skyHo
   scene.add(sky);
   scene.fog = new THREE.Fog(new THREE.Color(skyHorizon ?? "#bfe3ff"), 60, 260);
 
-  const hemi = new THREE.HemisphereLight("#dbefff", "#8a9a6a", 1.15);
+  // shading: a strong warm key, a weak sky/ground fill and a cool rim from the other side, so every block shows a lit
+  // top, a lit side and a shaded side (the toy-plastic Roblox look) instead of flat colour
+  const hemi = new THREE.HemisphereLight("#cfe4ff", "#6f7d55", 0.6);
   scene.add(hemi);
-  const sun = new THREE.DirectionalLight("#fff3df", 2.3);
+  const fill = new THREE.DirectionalLight("#9fbfff", 0.45); fill.position.set(-0.5, 0.3, -0.6); scene.add(fill, fill.target);
+  const sun = new THREE.DirectionalLight("#fff1d8", 3.2);
   sun.position.copy(sunDir).multiplyScalar(60);
   sun.castShadow = shadows;
   sun.shadow.mapSize.set(2048, 2048);
@@ -54,16 +62,32 @@ export function makeCore({ canvas, pixelRatio = 1, shadows = true, skyTop, skyHo
   /** keep the shadow box centred on what the camera is looking at */
   const followShadow = (target) => { sun.target.position.copy(target); sun.position.copy(target).addScaledVector(sunDir, 60); sun.target.updateMatrixWorld(); };
 
-  const DAY = { top: new THREE.Color(skyTop ?? "#4f9cf0"), hor: new THREE.Color(skyHorizon ?? "#bfe3ff"), sun: 2.3, hemi: 1.15, ground: new THREE.Color("#8a9a6a") };
+  const DAY = { top: new THREE.Color(skyTop ?? "#4f9cf0"), hor: new THREE.Color(skyHorizon ?? "#bfe3ff"), sun: 3.2, hemi: 0.6, ground: new THREE.Color("#6f7d55") };
   /** mood: 0 = sunny day, 1 = storm (grey sky, dim sun, close fog); interior: neutral bounce (no green tint on ceilings) */
   const setMood = (storm = 0, interior = false) => {
     const grey = new THREE.Color("#5d6672"), greyH = new THREE.Color("#8d96a0");
     sky.material.uniforms.top.value.copy(DAY.top).lerp(grey, storm); sky.material.uniforms.hor.value.copy(DAY.hor).lerp(greyH, storm);
     scene.fog.color.copy(DAY.hor).lerp(greyH, storm); scene.fog.near = 60 - 30 * storm; scene.fog.far = 260 - 140 * storm;
     sun.intensity = DAY.sun * (1 - 0.6 * storm); hemi.intensity = DAY.hemi * (1 - 0.25 * storm);
-    hemi.groundColor.copy(interior ? new THREE.Color("#c9b49a") : DAY.ground);
+    hemi.groundColor.copy(interior ? new THREE.Color("#a8957c") : DAY.ground);
+    if (interior) hemi.intensity *= 1.4; // rooms: no sky above, the ceiling lamp + bounce do more of the work
   };
-  return { THREE, renderer, scene, camera, sun, hemi, sky, sunDir, followShadow, setMood, render: () => renderer.render(scene, camera) };
+  // contact shading: GTAO (ambient occlusion) darkens creases, armpits, the ground under feet and where blocks meet
+  let composer = null;
+  if (ao) {
+    composer = new EffectComposer(renderer); composer.setPixelRatio(pixelRatio); composer.setSize(W, H);
+    composer.addPass(new RenderPass(scene, camera));
+    const gtao = new GTAOPass(scene, camera, W / 2, H / 2);
+    const fullSize = gtao.setSize.bind(gtao); gtao.setSize = (w, h) => fullSize(w / 2, h / 2); // AO at half resolution: soft anyway, ~2x cheaper
+    gtao.updateGtaoMaterial({ radius: 0.9, distanceExponent: 1.4, thickness: 1.2, scale: 1.0, samples: 12, distanceFallOff: 1.0 });
+    gtao.updatePdMaterial({ lumaPhi: 10, depthPhi: 2, normalPhi: 3, radius: 6, rings: 2, samples: 12 });
+    gtao.blendIntensity = 0.85;
+    // see-through effects that write no depth (rain, glass, the sky dome) stay out of the AO normal pass: no dark halos
+    const baseHide = gtao._overrideVisibility.bind(gtao);
+    gtao._overrideVisibility = function () { baseHide(); this.scene.traverse((o) => { const m = o.material; if (m && !Array.isArray(m) && m.depthWrite === false) o.visible = false; }); };
+    composer.addPass(gtao); composer.addPass(new OutputPass());
+  }
+  return { THREE, renderer, scene, camera, sun, hemi, fill, sky, sunDir, followShadow, setMood, render: () => (composer ? composer.render() : renderer.render(scene, camera)) };
 }
 
 /** a simple ground: grass baseplate with a subtle stud-grid texture (canvas) */

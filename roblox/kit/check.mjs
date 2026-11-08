@@ -13,7 +13,7 @@ const ti = args.indexOf("--times");
 if (ti >= 0) jobs = args[ti + 1].split(",").map((x, i) => [Number(x), `t${x}`]);
 else shots.forEach(([a, b, name, word], i) => { const us = args.includes("--all") ? [0.02, 0.5, 0.98] : [0.5]; for (const u of us) jobs.push([a + (b - a) * u, `s${String(i).padStart(2, "0")}_${Math.round(u * 100)}_${name || word}`]); });
 const list = [];
-for (const [t, name] of jobs) { const f = `${out}/${name.replace(/[^\w.-]/g, "")}.jpg`; fs.writeFileSync(f, Buffer.from(await page.evaluate((x) => window.frameJPEG(x, 0.85), t), "base64")); list.push([f, `${t.toFixed(2)}s ${name}`]); }
+for (const [t, name] of jobs) { const f = `${out}/${name.replace(/[^\w.-]/g, "")}.jpg`; await page.evaluate((x) => window.frameJPEG(x, 0.5), t); /* warm-up render */ fs.writeFileSync(f, Buffer.from(await page.evaluate((x) => window.frameJPEG(x, 0.85), t), "base64")); list.push([f, `${t.toFixed(2)}s ${name}`]); }
 await browser.close(); srv.close();
 fs.writeFileSync(`${out}/list.json`, JSON.stringify(list));
 execFileSync("python3", [path.join(ROOT, "kit/sheet.py"), `${out}/list.json`, `${out}/sheet`], { stdio: "inherit" });

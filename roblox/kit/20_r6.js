@@ -151,9 +151,10 @@ export function makeAvatar(o = {}) {
   if (o.hat && !grey) { const a = accessory(o.hat, o.hatColor); a.position.y = 0.62; neck.add(a); }
   if (o.glasses && !grey) { const a = accessory("glasses"); a.position.y = 0.62; neck.add(a); }
   const limb = (parent, x, y, m, armSide) => { const j = new THREE.Group(); j.position.set(x, y, 0); parent.add(j); mesh(LIMB, m, j, 0, armSide ? -0.5 : -1, 0); return j; };
-  const ls = limb(torso, 1.5, 1.5, mSkin, true), rs = limb(torso, -1.5, 1.5, mSkin, true);
+  const ls = limb(torso, 1.51, 1.5, mSkin, true), rs = limb(torso, -1.51, 1.5, mSkin, true); // 0.01 off the torso sides: no shared faces
   // short sleeves: shirt colour on the top half of each arm
-  if (!grey) for (const s of [ls, rs]) mesh(box(1.02, 0.9, 1.02, 0.06), mShirt, s, 0, 0.05, 0);
+  // sleeves: a shell round the top of each arm, its top 0.03 above the arm and torso tops (no coplanar faces -> no shimmer)
+  if (!grey) for (const s of [ls, rs]) mesh(box(1.06, 1.0, 1.06, 0.07), mShirt, s, 0, 0.03, 0);
   const lh = limb(hip, 0.5, 0, mPants, false), rh = limb(hip, -0.5, 0, mPants, false);
   // hand anchors (the end of each arm) for held props, and an optional backpack with a loop for a string
   const hands = {};
