@@ -32,3 +32,12 @@ Automated: 3442 frames, no black / white / frozen frames, -14.6 LUFS. All round-
 | 3257-3337 | "first time in years": a ring member's bun covers the right third | camera through the widened gap (yaw -90): clean close-up |
 | 1484-3440 (rain) | raindrops passing right in front of the lens read as wide white bars (e.g. 2539, 2613, 3064, 3364, 3438) | rain keeps a 6-stud clear radius round the camera |
 Flood half (1398-3442) re-rendered and spliced at 1397/1398.
+
+## Round 3: `out/ep01/v3/floating_girl_v3.mp4` (frames 1398-3441 re-rendered, spliced at 1397/1398; 18 sheets re-inspected)
+Automated: 3442 frames at 60 fps, no black / white / frozen frames, -14.6 LUFS, -2.2 dBTP; the splice seam 1397/1398 is
+the planned cut from recess to the storm.
+- 3005-3076: the boy hangs beside Pip, hand in hand, all the way back to the hill.
+- 3150-3256: the hug seen from above; Pip's smiling face inside the ring, nothing covering her.
+- 3257-3337: clean close-up for "first time in years".
+- Rain: only thin streaks; no white bars in front of the lens anywhere in 1398-3441.
+Clean: delivered.
