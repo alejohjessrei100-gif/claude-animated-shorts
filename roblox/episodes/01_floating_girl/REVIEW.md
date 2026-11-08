@@ -41,3 +41,14 @@ the planned cut from recess to the storm.
 - 3257-3337: clean close-up for "first time in years".
 - Rain: only thin streaks; no white bars in front of the lens anywhere in 1398-3441.
 Clean: delivered.
+
+## Round 4: `out/ep01/v4/floating_girl_v4.mp4` (user changes: pitch +6, user's music at 50%, captions half size, shading, shoulder fix)
+All 3442 frames re-inspected (29 sheets). Automated: no black / white / frozen frames, -14.5 LUFS, -1.7 dBTP.
+- Shading reads on every block (lit top / side, shaded side, contact shadow under feet); captions half size, in sync.
+- Shoulders: no shimmer where the sleeves meet the torso in any close-up (2166-2220, 2524-2639, 3257-3337).
+- Rain present in every storm frame (the first-shown-frame skip is fixed by the warm-up render).
+
+| frames | finding | fix |
+|---|---|---|
+| 1614-1682, 1945-2029, 2105-2165, 2920-2949 | the stronger sun now makes a wide white glare on the flood water at the left edge | water roughness 0.25 -> 0.62 (matte): the glare is gone, the ripples stay |
+Water shots (1462-2220, 2701-3076) re-rendered and spliced.

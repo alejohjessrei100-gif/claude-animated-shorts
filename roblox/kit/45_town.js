@@ -260,7 +260,7 @@ export function water(parent, x0, z0, x1, z1) {
     g.fillStyle = "#3f78a8"; g.fillRect(0, 0, 256, 256);
     for (let i = 0; i < 90; i++) { g.strokeStyle = `rgba(220,240,255,${0.15 + r() * 0.35})`; g.lineWidth = 2 + r() * 3; const y = r() * 256, x = r() * 256, L = 20 + r() * 60; g.beginPath(); g.moveTo(x, y); g.quadraticCurveTo(x + L / 2, y - 6, x + L, y); g.stroke(); }
   }, [(x1 - x0) / 14, (z1 - z0) / 14]);
-  const m = new THREE.Mesh(new THREE.PlaneGeometry(x1 - x0, z1 - z0, 1, 1), new THREE.MeshStandardMaterial({ map: t, color: "#cfe6ff", roughness: 0.25, metalness: 0.05, transparent: true, opacity: 0.9 }));
+  const m = new THREE.Mesh(new THREE.PlaneGeometry(x1 - x0, z1 - z0, 1, 1), new THREE.MeshStandardMaterial({ map: t, color: "#cfe6ff", roughness: 0.62, metalness: 0.0, transparent: true, opacity: 0.9 }));
   m.rotation.x = -Math.PI / 2; m.position.set((x0 + x1) / 2, -1, (z0 + z1) / 2); m.receiveShadow = true; parent.add(m);
   return { mesh: m, set(level, t2, flow = 0.6) { m.position.y = level; m.visible = level > 0.02; t.offset.set((-t2 * flow) % 1, (t2 * 0.03) % 1); } };
 }
