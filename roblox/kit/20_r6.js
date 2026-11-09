@@ -140,6 +140,28 @@ function accessory(kind, color = "#3b2a20") {
   return g;
 }
 
+// ------------------------------------------------------------------ cloth textures (canvas): fabric grain, seams, pockets
+const clothCache = new Map();
+function clothTex(kind, color) {
+  const key = kind + color; if (clothCache.has(key)) return clothCache.get(key);
+  const c = document.createElement("canvas"); c.width = c.height = 256; const g = c.getContext("2d");
+  const base = new THREE.Color(color), dk = base.clone().offsetHSL(0, 0, -0.1).getStyle(), lt = base.clone().offsetHSL(0, 0, 0.05).getStyle();
+  g.fillStyle = color; g.fillRect(0, 0, 256, 256);
+  let sd = key.length * 31; const r = () => ((sd = (sd * 16807) % 2147483647) / 2147483647);
+  for (let i = 0; i < 2600; i++) { g.fillStyle = r() < 0.5 ? dk : lt; g.globalAlpha = 0.12; g.fillRect(r() * 256, r() * 256, 2, 1); }
+  g.globalAlpha = 1; g.strokeStyle = dk; g.lineWidth = 3;
+  if (kind === "pants") { // fly seam, two front pockets, cuff line
+    g.setLineDash([6, 5]); g.beginPath(); g.moveTo(128, 0); g.lineTo(128, 70); g.stroke();
+    for (const x of [30, 226]) { g.beginPath(); g.moveTo(x, 8); g.quadraticCurveTo(x + (x < 128 ? 40 : -40), 30, x + (x < 128 ? 50 : -50), 8); g.stroke(); }
+    g.setLineDash([]); g.lineWidth = 6; g.beginPath(); g.moveTo(0, 236); g.lineTo(256, 236); g.stroke();
+  } else { // shirt: hem + side seams
+    g.lineWidth = 5; g.beginPath(); g.moveTo(0, 244); g.lineTo(256, 244); g.stroke();
+    g.setLineDash([5, 5]); g.lineWidth = 2; g.beginPath(); g.moveTo(0, 236); g.lineTo(256, 236); g.stroke(); g.setLineDash([]);
+  }
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8; clothCache.set(key, t); return t;
+}
+const clothMat = (kind, color, rough = 0.85) => new THREE.MeshStandardMaterial({ map: clothTex(kind, color), roughness: rough });
+
 // ------------------------------------------------------------------ the avatar
 /**
  * makeAvatar({ skin, shirt, pants, hat, hatColor, shirtArt, face, scale })
@@ -147,7 +169,8 @@ function accessory(kind, color = "#3b2a20") {
  */
 export function makeAvatar(o = {}) {
   const skin = o.skin ?? SKIN.yellow, shirt = o.shirt ?? "#3d7be0", pants = o.pants ?? "#2f3b52", grey = !!o.grey;
-  const mSkin = mat(grey ? "#9a9a9a" : skin), mShirt = mat(grey ? "#9a9a9a" : shirt), mPants = mat(grey ? "#9a9a9a" : pants);
+  const mSkin = mat(grey ? "#9a9a9a" : skin), mShirt = grey ? mat("#9a9a9a") : clothMat("shirt", shirt), mPants = grey ? mat("#9a9a9a") : clothMat("pants", pants);
+  const top = o.top ?? "tee", outer = o.outer ?? shirt, mOuter = grey ? mShirt : clothMat("shirt", outer);
   const mHead = new THREE.MeshStandardMaterial({ color: "#ffffff", roughness: 0.55, map: grey ? null : faceTexture(skin, o.face ?? "smile") });
   if (grey) mHead.color.set("#9a9a9a");
   const root = new THREE.Group(), hip = new THREE.Group(); hip.position.y = 2; root.add(hip);
@@ -163,8 +186,47 @@ export function makeAvatar(o = {}) {
   const ls = limb(torso, 1.51, 1.5, mSkin, true), rs = limb(torso, -1.51, 1.5, mSkin, true); // 0.01 off the torso sides: no shared faces
   // short sleeves: shirt colour on the top half of each arm
   // sleeves: a shell round the top of each arm, its top 0.03 above the arm and torso tops (no coplanar faces -> no shimmer)
-  if (!grey) for (const s of [ls, rs]) mesh(box(1.06, 1.0, 1.06, 0.07), mShirt, s, 0, 0.03, 0);
+  const long = top !== "tee";
+  if (!grey) for (const s of [ls, rs]) {
+    mesh(box(1.06, long ? 1.62 : 1.0, 1.06, 0.07), long ? mOuter : mShirt, s, 0, long ? -0.28 : 0.03, 0); // sleeve (long sleeves leave the hand bare)
+    if (long) mesh(box(1.1, 0.16, 1.1, 0.05), mat(new THREE.Color(outer).offsetHSL(0, 0, -0.12).getStyle(), 0.8), s, 0, -1.05, 0); // cuff
+  }
+  if (!grey && top === "jacket") { // open jacket: two front panels + back + collar, the shirt shows down the middle
+    const dk = new THREE.Color(outer).offsetHSL(0, 0, -0.1).getStyle();
+    for (const sx of [-1, 1]) mesh(box(0.72, 2.02, 0.1, 0.03), mOuter, torso, sx * 0.66, 1, 0.53);
+    mesh(box(2.04, 2.02, 0.1, 0.03), mOuter, torso, 0, 1, -0.53);
+    for (const sx of [-1, 1]) mesh(box(0.1, 2.02, 1.12, 0.03), mOuter, torso, sx * 1.03, 1, 0);
+    for (const sx of [-1, 1]) { const c = mesh(box(0.5, 0.5, 0.08, 0.03), mat(dk, 0.8), torso, sx * 0.5, 1.82, 0.6); c.rotation.z = sx * 0.6; }
+    for (const y of [0.55, 1.05]) mesh(box(0.08, 0.08, 0.06, 0.02), mat("#d9d9d9", 0.3), torso, -0.33, y, 0.6);
+  }
+  if (!grey && top === "hoodie") { // hood bunched behind the neck, kangaroo pocket, drawstrings
+    const dk = new THREE.Color(outer).offsetHSL(0, 0, -0.08).getStyle();
+    mesh(box(1.5, 0.55, 0.6, 0.25), mat(dk, 0.85), torso, 0, 2.05, -0.38);
+    mesh(box(1.3, 0.6, 0.06, 0.05), mat(dk, 0.85), torso, 0, 0.45, 0.53);
+    for (const sx of [-0.2, 0.2]) mesh(box(0.06, 0.6, 0.05, 0.02), mat("#f4f1ea", 0.6), torso, sx, 1.55, 0.54);
+  }
+  if (!grey && o.belt) { mesh(box(2.04, 0.22, 1.04, 0.04), mat(o.belt, 0.5), torso, 0, 0.1, 0); mesh(box(0.36, 0.26, 0.06, 0.03), mat("#d9b24a", 0.3), torso, 0, 0.1, 0.53); }
   const lh = limb(hip, 0.5, 0, mPants, false), rh = limb(hip, -0.5, 0, mPants, false);
+  // sneakers on every avatar: upper + sole + toe cap + laces; setShoes(s) grows them (0 normal .. 1 huge)
+  const shoeParts = [];
+  if (!grey && o.shoes !== false) for (const leg of [lh, rh]) {
+    const g = new THREE.Group(); g.position.set(0, -2, 0); leg.add(g);
+    const up = mesh(box(1, 1, 1, 0.12), mat(o.shoes ?? "#f2f0ea", 0.55), g, 0, 0, 0), sole = mesh(box(1, 1, 1, 0.06), mat(o.sole ?? "#c0392b", 0.7), g, 0, 0, 0);
+    const toe = mesh(box(1, 1, 1, 0.12), mat("#ffffff", 0.5), g, 0, 0, 0), lace = mesh(box(1, 1, 1, 0.02), mat("#3a3f4a", 0.6), g, 0, 0, 0);
+    shoeParts.push({ up, sole, toe, lace });
+  }
+  const setShoes = (k = 0) => { // returns how far the soles lift the body
+    k = Math.min(1.2, Math.max(0, k));
+    const w = 1.04 + 0.12 * k, h = 0.42 + 0.7 * k, d = 1.28 + 1.3 * k, z = 0.14 + 0.5 * k, so = 0.16 + 0.1 * k;
+    for (const p of shoeParts) {
+      p.up.scale.set(w, h, d); p.up.position.set(0, so + h / 2 - 0.02, z);
+      p.sole.scale.set(w + 0.06, so, d + 0.08); p.sole.position.set(0, so / 2, z);
+      p.toe.scale.set(w + 0.02, h * 0.55, 0.42 + 0.3 * k); p.toe.position.set(0, so + h * 0.27, z + d / 2 - 0.18 - 0.12 * k);
+      p.lace.scale.set(0.5, 0.08, d * 0.4); p.lace.position.set(0, so + h + 0.01, z + d * 0.12);
+    }
+    return shoeParts.length ? so : 0;
+  };
+  setShoes(o.shoeSize ?? 0);
   // hand anchors (the end of each arm) for held props, and an optional backpack with a loop for a string
   const hands = {};
   for (const [k, j] of [["rs", rs], ["ls", ls]]) { const a = new THREE.Object3D(); a.position.set(0, -1.6, 0); j.add(a); hands[k] = a; }
@@ -180,7 +242,7 @@ export function makeAvatar(o = {}) {
   const sc = o.scale ?? 1; root.scale.setScalar(sc);
   let faceName = o.face ?? "smile", faceOpen = false;
   const setFace = (name, open = false) => { if (grey || (name === faceName && open === faceOpen)) return; faceName = name; faceOpen = open; mHead.map = faceTexture(skin, name, open); mHead.needsUpdate = true; };
-  return { root, j: { hip, torso, neck, head, ls, rs, lh, rh }, hands, loop, setFace, meta: o, get face() { return faceName; } };
+  return { root, j: { hip, torso, neck, head, ls, rs, lh, rh }, hands, loop, setFace, setShoes, meta: o, get face() { return faceName; } };
 }
 
 // ------------------------------------------------------------------ poses
@@ -205,6 +267,17 @@ export const POSES = {
   think: { rsAim: [-0.05, 2.25, 0.75], ls: [-0.6, -0.5, 0], neck: [0, 0.15, 0.12] },
   scared: { rs: [-1.7, 0.5, 0], ls: [-1.7, -0.5, 0], torso: [-0.15, 0, 0], neck: [-0.1, 0, 0], y: -0.15 },
   sad: { neck: [0.4, 0, 0], torso: [0.12, 0, 0], rs: [0.05, 0, -0.05], ls: [0.05, 0, 0.05] },
+  stomp: { torso: [0.12, 0, 0], rs: [-0.3, 0, -0.35], ls: [0.3, 0, 0.35] },
+  laughPoint: { rs: [-1.6, 0.2, 0], ls: [-0.3, 0, 0.6], torso: [0.25, -0.2, 0], neck: [-0.15, 0, 0.1] },
+  bellyLaugh: { rs: [-0.6, 0, -0.5], ls: [-0.6, 0, 0.5], torso: [0.35, 0, 0], neck: [-0.35, 0, 0] },
+  brace: { rh: [-0.35, 0, -0.12], lh: [0.3, 0, 0.12], torso: [-0.18, 0, 0.12], rs: [-0.9, -0.3, -0.6], ls: [-0.4, 0, 0.5], y: -0.35 },
+  reachOut: { rs: [-1.9, -0.2, -0.1], ls: [-0.5, 0, 0.3], torso: [-0.05, -0.2, 0] },
+  flail: { rs: [-2.6, 0, -0.9], ls: [-2.2, 0, 1.1], rh: [-0.6, 0, -0.3], lh: [0.3, 0, 0.3], neck: [-0.3, 0, 0] },
+  helpDesk: { rs: [-1.2, -0.4, 0], ls: [-0.3, 0, 0.1], torso: [0.45, -0.25, 0], neck: [0.25, -0.2, 0] },
+  sitWrite: { rh: [-P / 2, 0, 0], lh: [-P / 2, 0, 0], y: -1.0, rs: [-1.1, 0.2, 0], ls: [-1.0, -0.3, 0], torso: [0.2, 0, 0], neck: [0.35, 0, 0] },
+  hugBig: { rs: [-1.5, -0.9, 0], ls: [-1.5, 0.9, 0], torso: [0.05, 0, 0], neck: [-0.15, 0, 0] },
+  fallen: { torso: [0, 0, 0], rs: [-2.6, 0, -0.4], ls: [-2.4, 0, 0.5], rh: [0.15, 0, -0.1], lh: [-0.3, 0, 0.1] },
+  hold: { rs: [-2.2, -0.1, -0.15], ls: [-2.2, 0.1, 0.15], neck: [-0.2, 0, 0] },
   run: {}, walk: {}, // procedural (cycle)
 };
 const J = ["torso", "neck", "rs", "ls", "rh", "lh"];
@@ -247,12 +320,20 @@ export function poseAvatar(av, a, b = a, k = 0, opts = {}) {
   // walk / run cycle
   const cyc = opts.cycle === "run" || a === "run" ? "run" : opts.cycle === "walk" || a === "walk" ? "walk" : null;
   if (cyc) {
-    const sp = cyc === "run" ? 11 : 7, amp = cyc === "run" ? 1.0 : 0.55, ph = t * sp;
-    out.rs[0] += amp * Math.sin(ph); out.ls[0] -= amp * Math.sin(ph);
-    out.rh[0] -= amp * Math.sin(ph); out.lh[0] += amp * Math.sin(ph);
-    out.torso[0] += cyc === "run" ? 0.2 : 0.04;
-    y += (cyc === "run" ? 0.22 : 0.1) * Math.abs(Math.sin(ph));
+    const sp = (cyc === "run" ? 11 : 7) * (opts.speed ?? 1), amp = (cyc === "run" ? 1.0 : 0.55) * (opts.stride ?? 1), ph = t * sp + (opts.blinkSeed ?? 0);
+    const sw = Math.sin(ph), lift = Math.max(0, Math.cos(ph)), heavy = opts.heavy ?? 0;
+    out.rs[0] += amp * sw * (1 - 0.5 * heavy); out.ls[0] -= amp * sw * (1 - 0.5 * heavy);
+    out.rs[2] -= 0.06 * Math.abs(sw); out.ls[2] += 0.06 * Math.abs(sw); // arms swing slightly out
+    out.rh[0] -= amp * sw * (1 - 0.6 * heavy); out.lh[0] += amp * sw * (1 - 0.6 * heavy);
+    out.torso[1] += 0.12 * sw * (cyc === "run" ? 1.4 : 1); // counter-twist against the arms
+    out.torso[2] += (0.04 + 0.08 * heavy) * Math.sin(ph); // weight shifts side to side
+    out.torso[0] += cyc === "run" ? 0.22 : 0.04 + 0.1 * heavy;
+    out.neck[0] -= 0.04 * Math.abs(Math.cos(ph)); out.neck[1] -= 0.08 * sw; // the head stays level, eyes forward
+    y += (cyc === "run" ? 0.24 : 0.1) * Math.abs(Math.sin(ph)) - 0.12 * heavy * Math.abs(Math.cos(ph)); // heavy steps drop the hips
   }
+  if (opts.look) { out.neck[1] += opts.look[0]; out.neck[0] += opts.look[1] ?? 0; out.torso[1] += 0.3 * opts.look[0]; }
+  if (opts.lean) { out.torso[0] += opts.lean[0] ?? 0; out.torso[2] += opts.lean[1] ?? 0; }
+  if (opts.add) for (const [n, v] of Object.entries(opts.add)) out[n] = out[n].map((x, i) => x + (v[i] ?? 0));
   const { j } = av;
   j.torso.rotation.set(...out.torso); j.neck.rotation.set(...out.neck);
   j.rs.rotation.set(...out.rs); j.ls.rotation.set(...out.ls); j.rh.rotation.set(...out.rh); j.lh.rotation.set(...out.lh);
