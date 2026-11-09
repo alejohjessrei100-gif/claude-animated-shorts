@@ -1,0 +1,667 @@
+[
+ {
+  "word": "In",
+  "start": 0.05,
+  "end": 0.27
+ },
+ {
+  "word": "this",
+  "start": 0.27,
+  "end": 0.47
+ },
+ {
+  "word": "town",
+  "start": 0.47,
+  "end": 0.92
+ },
+ {
+  "word": "every",
+  "start": 1.07,
+  "end": 1.35
+ },
+ {
+  "word": "time",
+  "start": 1.35,
+  "end": 1.62
+ },
+ {
+  "word": "you",
+  "start": 1.62,
+  "end": 1.72
+ },
+ {
+  "word": "do",
+  "start": 1.72,
+  "end": 1.88
+ },
+ {
+  "word": "something",
+  "start": 1.88,
+  "end": 2.27
+ },
+ {
+  "word": "kind",
+  "start": 2.27,
+  "end": 2.82
+ },
+ {
+  "word": "your",
+  "start": 3.0,
+  "end": 3.14
+ },
+ {
+  "word": "shoes",
+  "start": 3.14,
+  "end": 3.64
+ },
+ {
+  "word": "get",
+  "start": 3.64,
+  "end": 3.83
+ },
+ {
+  "word": "heavier",
+  "start": 3.83,
+  "end": 4.51
+ },
+ {
+  "word": "Help",
+  "start": 4.65,
+  "end": 4.83
+ },
+ {
+  "word": "someone",
+  "start": 4.83,
+  "end": 5.19
+ },
+ {
+  "word": "with",
+  "start": 5.19,
+  "end": 5.35
+ },
+ {
+  "word": "their",
+  "start": 5.35,
+  "end": 5.5
+ },
+ {
+  "word": "homework",
+  "start": 5.5,
+  "end": 6.07
+ },
+ {
+  "word": "and",
+  "start": 6.07,
+  "end": 6.28
+ },
+ {
+  "word": "your",
+  "start": 6.28,
+  "end": 6.38
+ },
+ {
+  "word": "sneakers",
+  "start": 6.38,
+  "end": 6.91
+ },
+ {
+  "word": "gain",
+  "start": 6.91,
+  "end": 7.09
+ },
+ {
+  "word": "a",
+  "start": 7.09,
+  "end": 7.15
+ },
+ {
+  "word": "pound",
+  "start": 7.15,
+  "end": 7.61
+ },
+ {
+  "word": "Do",
+  "start": 7.75,
+  "end": 7.97
+ },
+ {
+  "word": "it",
+  "start": 7.97,
+  "end": 8.03
+ },
+ {
+  "word": "every",
+  "start": 8.03,
+  "end": 8.26
+ },
+ {
+  "word": "day",
+  "start": 8.26,
+  "end": 8.69
+ },
+ {
+  "word": "and",
+  "start": 8.69,
+  "end": 8.99
+ },
+ {
+  "word": "you",
+  "start": 8.99,
+  "end": 9.1
+ },
+ {
+  "word": "can",
+  "start": 9.1,
+  "end": 9.27
+ },
+ {
+  "word": "barely",
+  "start": 9.27,
+  "end": 9.75
+ },
+ {
+  "word": "lift",
+  "start": 9.75,
+  "end": 9.99
+ },
+ {
+  "word": "your",
+  "start": 9.99,
+  "end": 10.11
+ },
+ {
+  "word": "feet",
+  "start": 10.11,
+  "end": 10.58
+ },
+ {
+  "word": "And",
+  "start": 10.72,
+  "end": 11.0
+ },
+ {
+  "word": "nobody",
+  "start": 11.0,
+  "end": 11.52
+ },
+ {
+  "word": "had",
+  "start": 11.52,
+  "end": 11.73
+ },
+ {
+  "word": "heavier",
+  "start": 11.73,
+  "end": 12.24
+ },
+ {
+  "word": "shoes",
+  "start": 12.24,
+  "end": 12.68
+ },
+ {
+  "word": "than",
+  "start": 12.68,
+  "end": 12.88
+ },
+ {
+  "word": "Theo",
+  "start": 12.88,
+  "end": 13.46
+ },
+ {
+  "word": "He",
+  "start": 13.6,
+  "end": 13.73
+ },
+ {
+  "word": "stomped",
+  "start": 13.73,
+  "end": 14.24
+ },
+ {
+  "word": "down",
+  "start": 14.24,
+  "end": 14.47
+ },
+ {
+  "word": "the",
+  "start": 14.47,
+  "end": 14.55
+ },
+ {
+  "word": "hallway",
+  "start": 14.55,
+  "end": 15.05
+ },
+ {
+  "word": "like",
+  "start": 15.05,
+  "end": 15.26
+ },
+ {
+  "word": "a",
+  "start": 15.26,
+  "end": 15.29
+ },
+ {
+  "word": "robot",
+  "start": 15.29,
+  "end": 16.02
+ },
+ {
+  "word": "He",
+  "start": 16.16,
+  "end": 16.28
+ },
+ {
+  "word": "came",
+  "start": 16.28,
+  "end": 16.57
+ },
+ {
+  "word": "last",
+  "start": 16.57,
+  "end": 17.03
+ },
+ {
+  "word": "in",
+  "start": 17.03,
+  "end": 17.17
+ },
+ {
+  "word": "every",
+  "start": 17.17,
+  "end": 17.68
+ },
+ {
+  "word": "race",
+  "start": 17.68,
+  "end": 18.21
+ },
+ {
+  "word": "Kids",
+  "start": 18.35,
+  "end": 18.64
+ },
+ {
+  "word": "called",
+  "start": 18.64,
+  "end": 18.89
+ },
+ {
+  "word": "him",
+  "start": 18.89,
+  "end": 19.04
+ },
+ {
+  "word": "Bricks",
+  "start": 19.04,
+  "end": 19.65
+ },
+ {
+  "word": "and",
+  "start": 19.7,
+  "end": 19.86
+ },
+ {
+  "word": "laughed",
+  "start": 19.86,
+  "end": 20.41
+ },
+ {
+  "word": "every",
+  "start": 20.41,
+  "end": 20.73
+ },
+ {
+  "word": "time",
+  "start": 20.73,
+  "end": 20.99
+ },
+ {
+  "word": "he",
+  "start": 20.99,
+  "end": 21.08
+ },
+ {
+  "word": "tripped",
+  "start": 21.08,
+  "end": 21.56
+ },
+ {
+  "word": "Then",
+  "start": 21.7,
+  "end": 22.15
+ },
+ {
+  "word": "one",
+  "start": 22.15,
+  "end": 22.41
+ },
+ {
+  "word": "afternoon",
+  "start": 22.41,
+  "end": 23.07
+ },
+ {
+  "word": "a",
+  "start": 23.16,
+  "end": 23.23
+ },
+ {
+  "word": "giant",
+  "start": 23.23,
+  "end": 23.77
+ },
+ {
+  "word": "windstorm",
+  "start": 23.77,
+  "end": 24.51
+ },
+ {
+  "word": "hit",
+  "start": 24.51,
+  "end": 24.69
+ },
+ {
+  "word": "the",
+  "start": 24.69,
+  "end": 24.77
+ },
+ {
+  "word": "playground",
+  "start": 24.77,
+  "end": 25.47
+ },
+ {
+  "word": "Kids",
+  "start": 25.61,
+  "end": 25.97
+ },
+ {
+  "word": "started",
+  "start": 25.97,
+  "end": 26.33
+ },
+ {
+  "word": "sliding",
+  "start": 26.33,
+  "end": 26.87
+ },
+ {
+  "word": "across",
+  "start": 26.87,
+  "end": 27.27
+ },
+ {
+  "word": "the",
+  "start": 27.27,
+  "end": 27.35
+ },
+ {
+  "word": "grass",
+  "start": 27.35,
+  "end": 27.94
+ },
+ {
+  "word": "Then",
+  "start": 28.08,
+  "end": 28.53
+ },
+ {
+  "word": "their",
+  "start": 28.53,
+  "end": 28.71
+ },
+ {
+  "word": "feet",
+  "start": 28.71,
+  "end": 29.11
+ },
+ {
+  "word": "left",
+  "start": 29.11,
+  "end": 29.34
+ },
+ {
+  "word": "the",
+  "start": 29.34,
+  "end": 29.41
+ },
+ {
+  "word": "ground",
+  "start": 29.41,
+  "end": 29.92
+ },
+ {
+  "word": "Teachers",
+  "start": 30.06,
+  "end": 30.52
+ },
+ {
+  "word": "grabbed",
+  "start": 30.52,
+  "end": 30.88
+ },
+ {
+  "word": "the",
+  "start": 30.88,
+  "end": 30.96
+ },
+ {
+  "word": "fence",
+  "start": 30.96,
+  "end": 31.42
+ },
+ {
+  "word": "and",
+  "start": 31.42,
+  "end": 31.59
+ },
+ {
+  "word": "got",
+  "start": 31.59,
+  "end": 31.77
+ },
+ {
+  "word": "blown",
+  "start": 31.77,
+  "end": 32.22
+ },
+ {
+  "word": "off",
+  "start": 32.22,
+  "end": 32.48
+ },
+ {
+  "word": "it",
+  "start": 32.48,
+  "end": 32.73
+ },
+ {
+  "word": "But",
+  "start": 32.87,
+  "end": 33.04
+ },
+ {
+  "word": "Theo",
+  "start": 33.04,
+  "end": 33.63
+ },
+ {
+  "word": "didn't",
+  "start": 33.63,
+  "end": 34.1
+ },
+ {
+  "word": "move",
+  "start": 34.1,
+  "end": 34.35
+ },
+ {
+  "word": "an",
+  "start": 34.35,
+  "end": 34.45
+ },
+ {
+  "word": "inch",
+  "start": 34.45,
+  "end": 35.05
+ },
+ {
+  "word": "He",
+  "start": 35.19,
+  "end": 35.28
+ },
+ {
+  "word": "grabbed",
+  "start": 35.28,
+  "end": 35.59
+ },
+ {
+  "word": "one",
+  "start": 35.59,
+  "end": 35.88
+ },
+ {
+  "word": "kid",
+  "start": 35.88,
+  "end": 36.41
+ },
+ {
+  "word": "then",
+  "start": 36.41,
+  "end": 36.59
+ },
+ {
+  "word": "another",
+  "start": 36.59,
+  "end": 37.1
+ },
+ {
+  "word": "until",
+  "start": 37.24,
+  "end": 37.52
+ },
+ {
+  "word": "the",
+  "start": 37.52,
+  "end": 37.6
+ },
+ {
+  "word": "whole",
+  "start": 37.6,
+  "end": 38.0
+ },
+ {
+  "word": "class",
+  "start": 38.0,
+  "end": 38.51
+ },
+ {
+  "word": "was",
+  "start": 38.51,
+  "end": 38.66
+ },
+ {
+  "word": "holding",
+  "start": 38.66,
+  "end": 38.98
+ },
+ {
+  "word": "onto",
+  "start": 38.98,
+  "end": 39.36
+ },
+ {
+  "word": "him",
+  "start": 39.36,
+  "end": 39.54
+ },
+ {
+  "word": "Turns",
+  "start": 39.68,
+  "end": 40.0
+ },
+ {
+  "word": "out",
+  "start": 40.0,
+  "end": 40.3
+ },
+ {
+  "word": "his",
+  "start": 40.46,
+  "end": 40.67
+ },
+ {
+  "word": "kindness",
+  "start": 40.67,
+  "end": 41.26
+ },
+ {
+  "word": "was",
+  "start": 41.26,
+  "end": 41.48
+ },
+ {
+  "word": "never",
+  "start": 41.48,
+  "end": 41.86
+ },
+ {
+  "word": "weighing",
+  "start": 41.86,
+  "end": 42.18
+ },
+ {
+  "word": "him",
+  "start": 42.18,
+  "end": 42.33
+ },
+ {
+  "word": "down",
+  "start": 42.33,
+  "end": 42.8
+ },
+ {
+  "word": "It",
+  "start": 42.94,
+  "end": 43.02
+ },
+ {
+  "word": "was",
+  "start": 43.02,
+  "end": 43.2
+ },
+ {
+  "word": "keeping",
+  "start": 43.2,
+  "end": 43.6
+ },
+ {
+  "word": "everyone",
+  "start": 43.6,
+  "end": 44.14
+ },
+ {
+  "word": "else",
+  "start": 44.14,
+  "end": 44.57
+ },
+ {
+  "word": "on",
+  "start": 44.57,
+  "end": 44.75
+ },
+ {
+  "word": "the",
+  "start": 44.75,
+  "end": 44.83
+ },
+ {
+  "word": "ground",
+  "start": 44.83,
+  "end": 45.56
+ }
+]
