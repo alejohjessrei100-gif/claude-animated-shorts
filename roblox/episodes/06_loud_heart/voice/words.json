@@ -1,697 +1,697 @@
 [
 {
 "word": "In",
-"start": 0.004,
-"end": 0.097
+"start": 0.073,
+"end": 0.153
 },
 {
 "word": "my",
-"start": 0.11,
-"end": 0.199
+"start": 0.153,
+"end": 0.28
 },
 {
-"word": "town,",
-"start": 0.212,
-"end": 0.491
+"word": "town",
+"start": 0.28,
+"end": 0.607
 },
 {
 "word": "when",
-"start": 0.504,
-"end": 0.537
+"start": 0.707,
+"end": 0.807
 },
 {
 "word": "you",
-"start": 0.547,
-"end": 0.735
+"start": 0.807,
+"end": 0.873
 },
 {
 "word": "get",
-"start": 0.748,
-"end": 0.823
+"start": 0.873,
+"end": 0.973
 },
 {
-"word": "nervous,",
-"start": 0.837,
-"end": 1.193
+"word": "nervous",
+"start": 0.973,
+"end": 1.44
 },
 {
 "word": "everyone",
-"start": 1.206,
-"end": 1.622
+"start": 1.533,
+"end": 1.94
 },
 {
 "word": "can",
-"start": 1.635,
-"end": 1.782
+"start": 1.94,
+"end": 2.04
 },
 {
 "word": "hear",
-"start": 1.795,
-"end": 1.913
+"start": 2.04,
+"end": 2.207
 },
 {
 "word": "your",
-"start": 1.927,
-"end": 2.035
+"start": 2.207,
+"end": 2.287
 },
 {
-"word": "heartbeat.",
-"start": 2.048,
-"end": 2.573
+"word": "heartbeat",
+"start": 2.287,
+"end": 2.713
 },
 {
 "word": "A",
-"start": 2.663,
-"end": 2.772
+"start": 2.807,
+"end": 2.84
 },
 {
 "word": "little",
-"start": 2.785,
+"start": 2.84,
 "end": 3.04
 },
 {
-"word": "nervous,",
-"start": 3.053,
-"end": 3.38
+"word": "nervous",
+"start": 3.04,
+"end": 3.46
 },
 {
 "word": "and",
-"start": 3.393,
-"end": 3.511
+"start": 3.507,
+"end": 3.6
 },
 {
 "word": "the",
-"start": 3.524,
-"end": 3.557
+"start": 3.6,
+"end": 3.64
 },
 {
 "word": "kid",
-"start": 3.559,
-"end": 3.705
+"start": 3.64,
+"end": 3.787
 },
 {
 "word": "next",
-"start": 3.719,
-"end": 3.857
+"start": 3.787,
+"end": 3.987
 },
 {
 "word": "to",
-"start": 3.87,
-"end": 3.927
+"start": 3.987,
+"end": 4.047
 },
 {
 "word": "you",
-"start": 3.94,
-"end": 4.034
+"start": 4.047,
+"end": 4.16
 },
 {
 "word": "hears",
-"start": 4.047,
-"end": 4.182
+"start": 4.16,
+"end": 4.353
 },
 {
-"word": "it.",
-"start": 4.195,
-"end": 4.505
+"word": "it",
+"start": 4.353,
+"end": 4.473
 },
 {
 "word": "Really",
-"start": 4.596,
-"end": 4.786
+"start": 4.567,
+"end": 4.84
 },
 {
-"word": "scared,",
-"start": 4.799,
-"end": 5.155
+"word": "scared",
+"start": 4.84,
+"end": 5.26
 },
 {
 "word": "and",
-"start": 5.169,
-"end": 5.283
+"start": 5.26,
+"end": 5.413
 },
 {
 "word": "the",
-"start": 5.296,
-"end": 5.335
+"start": 5.413,
+"end": 5.467
 },
 {
 "word": "whole",
-"start": 5.348,
-"end": 5.615
+"start": 5.467,
+"end": 5.767
 },
 {
 "word": "room",
-"start": 5.628,
-"end": 5.672
+"start": 5.767,
+"end": 5.967
 },
 {
-"word": "does.",
-"start": 5.685,
-"end": 5.979
+"word": "does",
+"start": 5.967,
+"end": 6.267
 },
 {
 "word": "And",
-"start": 6.069,
-"end": 6.151
+"start": 6.36,
+"end": 6.58
 },
 {
 "word": "nobody's",
-"start": 6.165,
-"end": 6.537
+"start": 6.58,
+"end": 6.94
 },
 {
 "word": "heart",
-"start": 6.55,
-"end": 6.703
+"start": 6.94,
+"end": 7.153
 },
 {
 "word": "was",
-"start": 6.717,
-"end": 6.75
+"start": 7.153,
+"end": 7.273
 },
 {
 "word": "louder",
-"start": 6.751,
-"end": 6.979
+"start": 7.273,
+"end": 7.56
 },
 {
 "word": "than",
-"start": 6.992,
-"end": 7.167
+"start": 7.56,
+"end": 7.653
 },
 {
-"word": "mine.",
-"start": 7.181,
-"end": 7.549
+"word": "mine",
+"start": 7.653,
+"end": 7.947
 },
 {
 "word": "It",
-"start": 7.639,
-"end": 7.695
+"start": 8.04,
+"end": 8.16
 },
 {
 "word": "boomed",
-"start": 7.708,
-"end": 7.977
+"start": 8.16,
+"end": 8.58
 },
 {
 "word": "every",
-"start": 7.991,
-"end": 8.245
+"start": 8.58,
+"end": 8.913
 },
 {
 "word": "time",
-"start": 8.259,
-"end": 8.479
+"start": 8.913,
+"end": 9.12
 },
 {
 "word": "a",
-"start": 8.492,
-"end": 8.549
+"start": 9.12,
+"end": 9.153
 },
 {
 "word": "teacher",
-"start": 8.563,
-"end": 8.82
+"start": 9.153,
+"end": 9.393
 },
 {
 "word": "called",
-"start": 8.833,
-"end": 9.015
+"start": 9.393,
+"end": 9.567
 },
 {
 "word": "my",
-"start": 9.029,
-"end": 9.062
+"start": 9.567,
+"end": 9.653
 },
 {
-"word": "name.",
-"start": 9.065,
-"end": 9.459
+"word": "name",
+"start": 9.653,
+"end": 9.96
 },
 {
 "word": "Kids",
-"start": 9.549,
-"end": 9.734
+"start": 10.053,
+"end": 10.227
 },
 {
 "word": "called",
-"start": 9.747,
-"end": 9.921
+"start": 10.227,
+"end": 10.413
 },
 {
 "word": "me",
-"start": 9.934,
-"end": 10.055
+"start": 10.413,
+"end": 10.533
 },
 {
-"word": "Drum,",
-"start": 10.069,
-"end": 10.352
+"word": "Drum",
+"start": 10.533,
+"end": 10.94
 },
 {
 "word": "and",
-"start": 10.365,
-"end": 10.511
+"start": 10.94,
+"end": 11.153
 },
 {
 "word": "slammed",
-"start": 10.524,
-"end": 10.752
+"start": 11.153,
+"end": 11.46
 },
 {
 "word": "lockers",
-"start": 10.765,
-"end": 11.105
+"start": 11.46,
+"end": 11.86
 },
 {
 "word": "just",
-"start": 11.119,
-"end": 11.274
+"start": 11.86,
+"end": 12.067
 },
 {
 "word": "to",
-"start": 11.287,
-"end": 11.321
+"start": 12.067,
+"end": 12.127
 },
 {
 "word": "make",
-"start": 11.322,
-"end": 11.657
+"start": 12.127,
+"end": 12.26
 },
 {
 "word": "it",
-"start": 11.671,
-"end": 11.704
+"start": 12.26,
+"end": 12.327
 },
 {
-"word": "pound.",
-"start": 11.708,
-"end": 12.078
+"word": "pound",
+"start": 12.327,
+"end": 12.7
 },
 {
-"word": "Then,",
-"start": 12.167,
-"end": 12.392
+"word": "Then",
+"start": 12.793,
+"end": 13.08
 },
 {
 "word": "on",
-"start": 12.405,
-"end": 12.574
+"start": 13.08,
+"end": 13.267
 },
 {
 "word": "our",
-"start": 12.587,
-"end": 12.685
+"start": 13.267,
+"end": 13.34
 },
 {
 "word": "class",
-"start": 12.699,
-"end": 12.874
+"start": 13.34,
+"end": 13.587
 },
 {
 "word": "ferry",
-"start": 12.887,
-"end": 13.123
+"start": 13.587,
+"end": 13.8
 },
 {
-"word": "trip,",
-"start": 13.136,
-"end": 13.319
+"word": "trip",
+"start": 13.8,
+"end": 14.02
 },
 {
 "word": "a",
-"start": 13.333,
-"end": 13.505
+"start": 14.113,
+"end": 14.167
 },
 {
 "word": "fog",
-"start": 13.518,
-"end": 13.645
+"start": 14.167,
+"end": 14.473
 },
 {
 "word": "rolled",
-"start": 13.659,
-"end": 13.855
+"start": 14.473,
+"end": 14.64
 },
 {
 "word": "in",
-"start": 13.868,
-"end": 14.075
+"start": 14.64,
+"end": 14.747
 },
 {
 "word": "so",
-"start": 14.089,
-"end": 14.122
+"start": 14.747,
+"end": 15.027
 },
 {
 "word": "thick",
-"start": 14.124,
-"end": 14.311
+"start": 15.027,
+"end": 15.347
 },
 {
 "word": "we",
-"start": 14.325,
-"end": 14.49
+"start": 15.347,
+"end": 15.467
 },
 {
 "word": "couldn't",
-"start": 14.503,
-"end": 14.671
+"start": 15.467,
+"end": 15.66
 },
 {
 "word": "see",
-"start": 14.684,
-"end": 14.808
+"start": 15.66,
+"end": 15.787
 },
 {
 "word": "the",
-"start": 14.821,
-"end": 14.926
+"start": 15.787,
+"end": 15.847
 },
 {
 "word": "front",
-"start": 14.939,
-"end": 15.099
+"start": 15.847,
+"end": 16.047
 },
 {
 "word": "of",
-"start": 15.112,
-"end": 15.216
+"start": 16.047,
+"end": 16.1
 },
 {
 "word": "the",
-"start": 15.229,
-"end": 15.364
+"start": 16.1,
+"end": 16.153
 },
 {
-"word": "boat.",
-"start": 15.377,
-"end": 15.695
+"word": "boat",
+"start": 16.153,
+"end": 16.46
 },
 {
 "word": "The",
-"start": 15.786,
-"end": 15.855
+"start": 16.553,
+"end": 16.613
 },
 {
 "word": "lighthouse",
-"start": 15.868,
-"end": 16.255
+"start": 16.613,
+"end": 16.96
 },
 {
 "word": "went",
-"start": 16.268,
-"end": 16.413
+"start": 16.96,
+"end": 17.133
 },
 {
-"word": "dark.",
-"start": 16.427,
-"end": 16.745
+"word": "dark",
+"start": 17.133,
+"end": 17.413
 },
 {
 "word": "The",
-"start": 16.835,
-"end": 16.899
+"start": 17.507,
+"end": 17.553
 },
 {
 "word": "captain",
-"start": 16.913,
-"end": 17.173
+"start": 17.553,
+"end": 17.873
 },
 {
 "word": "couldn't",
-"start": 17.187,
-"end": 17.37
+"start": 17.873,
+"end": 18.04
 },
 {
 "word": "see",
-"start": 17.383,
-"end": 17.454
+"start": 18.04,
+"end": 18.153
 },
 {
 "word": "the",
-"start": 17.467,
-"end": 17.665
+"start": 18.153,
+"end": 18.2
 },
 {
-"word": "rocks.",
-"start": 17.679,
-"end": 17.937
+"word": "rocks",
+"start": 18.2,
+"end": 18.6
 },
 {
 "word": "Everyone",
-"start": 18.027,
-"end": 18.479
+"start": 18.693,
+"end": 19.113
 },
 {
 "word": "went",
-"start": 18.492,
-"end": 18.566
+"start": 19.113,
+"end": 19.313
 },
 {
-"word": "quiet.",
-"start": 18.579,
-"end": 18.919
+"word": "quiet",
+"start": 19.313,
+"end": 19.72
 },
 {
 "word": "Except",
-"start": 19.009,
-"end": 19.252
+"start": 19.813,
+"end": 20.073
 },
 {
-"word": "me.",
-"start": 19.265,
-"end": 19.598
+"word": "me",
+"start": 20.073,
+"end": 20.313
 },
 {
 "word": "My",
-"start": 19.689,
-"end": 19.802
+"start": 20.407,
+"end": 20.527
 },
 {
 "word": "heart",
-"start": 19.815,
-"end": 19.999
+"start": 20.527,
+"end": 20.733
 },
 {
 "word": "was",
-"start": 20.012,
-"end": 20.117
+"start": 20.733,
+"end": 20.86
 },
 {
 "word": "pounding",
-"start": 20.131,
-"end": 20.488
+"start": 20.86,
+"end": 21.147
 },
 {
 "word": "so",
-"start": 20.501,
-"end": 20.601
-},
-{
-"word": "loud,",
-"start": 20.615,
-"end": 20.923
-},
-{
-"word": "it",
-"start": 20.937,
-"end": 21.11
-},
-{
-"word": "bounced",
-"start": 21.123,
-"end": 21.427
-},
-{
-"word": "off",
-"start": 21.441,
-"end": 21.607
-},
-{
-"word": "the",
-"start": 21.621,
-"end": 21.739
-},
-{
-"word": "cliffs.",
-"start": 21.752,
-"end": 22.11
-},
-{
-"word": "The",
-"start": 22.201,
-"end": 22.362
-},
-{
-"word": "captain",
-"start": 22.375,
-"end": 22.535
-},
-{
-"word": "heard",
-"start": 22.549,
-"end": 22.779
-},
-{
-"word": "the",
-"start": 22.793,
-"end": 22.899
-},
-{
-"word": "echo,",
-"start": 22.913,
-"end": 23.158
-},
-{
-"word": "and",
-"start": 23.171,
-"end": 23.277
-},
-{
-"word": "steered",
-"start": 23.29,
-"end": 23.628
-},
-{
-"word": "toward",
-"start": 23.641,
-"end": 23.841
-},
-{
-"word": "the",
-"start": 23.855,
-"end": 23.992
-},
-{
-"word": "silence,",
-"start": 24.005,
-"end": 24.461
-},
-{
-"word": "all",
-"start": 24.474,
-"end": 24.556
-},
-{
-"word": "the",
-"start": 24.569,
-"end": 24.719
-},
-{
-"word": "way",
-"start": 24.733,
-"end": 24.834
-},
-{
-"word": "to",
-"start": 24.847,
-"end": 24.881
-},
-{
-"word": "the",
-"start": 24.893,
-"end": 25.029
-},
-{
-"word": "harbor.",
-"start": 25.043,
-"end": 25.495
-},
-{
-"word": "Turns",
-"start": 25.584,
-"end": 25.735
-},
-{
-"word": "out",
-"start": 25.749,
-"end": 25.879
-},
-{
-"word": "my",
-"start": 25.892,
-"end": 26.051
-},
-{
-"word": "heart",
-"start": 26.065,
-"end": 26.225
-},
-{
-"word": "was",
-"start": 26.239,
-"end": 26.296
-},
-{
-"word": "never",
-"start": 26.309,
-"end": 26.64
-},
-{
-"word": "too",
-"start": 26.653,
-"end": 26.728
-},
-{
-"word": "loud.",
-"start": 26.741,
-"end": 27.184
-},
-{
-"word": "It",
-"start": 27.273,
-"end": 27.323
-},
-{
-"word": "was",
-"start": 27.336,
-"end": 27.465
-},
-{
-"word": "the",
-"start": 27.479,
-"end": 27.584
-},
-{
-"word": "only",
-"start": 27.597,
-"end": 27.804
-},
-{
-"word": "one",
-"start": 27.817,
-"end": 27.903
+"start": 21.147,
+"end": 21.407
 },
 {
 "word": "loud",
-"start": 27.916,
-"end": 28.095
+"start": 21.407,
+"end": 21.693
 },
 {
-"word": "enough",
-"start": 28.108,
-"end": 28.286
+"word": "it",
+"start": 21.693,
+"end": 21.773
+},
+{
+"word": "bounced",
+"start": 21.773,
+"end": 22.147
+},
+{
+"word": "off",
+"start": 22.147,
+"end": 22.233
+},
+{
+"word": "the",
+"start": 22.233,
+"end": 22.307
+},
+{
+"word": "cliffs",
+"start": 22.307,
+"end": 22.707
+},
+{
+"word": "The",
+"start": 22.8,
+"end": 22.86
+},
+{
+"word": "captain",
+"start": 22.86,
+"end": 23.16
+},
+{
+"word": "heard",
+"start": 23.16,
+"end": 23.313
+},
+{
+"word": "the",
+"start": 23.313,
+"end": 23.413
+},
+{
+"word": "echo",
+"start": 23.413,
+"end": 23.733
+},
+{
+"word": "and",
+"start": 23.733,
+"end": 23.847
+},
+{
+"word": "steered",
+"start": 23.847,
+"end": 24.147
+},
+{
+"word": "toward",
+"start": 24.147,
+"end": 24.353
+},
+{
+"word": "the",
+"start": 24.353,
+"end": 24.4
+},
+{
+"word": "silence",
+"start": 24.4,
+"end": 24.847
+},
+{
+"word": "all",
+"start": 24.94,
+"end": 25.093
+},
+{
+"word": "the",
+"start": 25.093,
+"end": 25.14
+},
+{
+"word": "way",
+"start": 25.14,
+"end": 25.333
 },
 {
 "word": "to",
-"start": 28.299,
-"end": 28.347
+"start": 25.333,
+"end": 25.413
+},
+{
+"word": "the",
+"start": 25.413,
+"end": 25.493
+},
+{
+"word": "harbor",
+"start": 25.493,
+"end": 25.847
+},
+{
+"word": "Turns",
+"start": 25.94,
+"end": 26.147
+},
+{
+"word": "out",
+"start": 26.147,
+"end": 26.427
+},
+{
+"word": "my",
+"start": 26.427,
+"end": 26.56
+},
+{
+"word": "heart",
+"start": 26.56,
+"end": 26.707
+},
+{
+"word": "was",
+"start": 26.707,
+"end": 26.833
+},
+{
+"word": "never",
+"start": 26.833,
+"end": 27.007
+},
+{
+"word": "too",
+"start": 27.007,
+"end": 27.14
+},
+{
+"word": "loud",
+"start": 27.14,
+"end": 27.42
+},
+{
+"word": "It",
+"start": 27.513,
+"end": 27.573
+},
+{
+"word": "was",
+"start": 27.573,
+"end": 27.693
+},
+{
+"word": "the",
+"start": 27.693,
+"end": 27.787
+},
+{
+"word": "only",
+"start": 27.787,
+"end": 28.02
+},
+{
+"word": "one",
+"start": 28.02,
+"end": 28.193
+},
+{
+"word": "loud",
+"start": 28.193,
+"end": 28.427
+},
+{
+"word": "enough",
+"start": 28.427,
+"end": 28.667
+},
+{
+"word": "to",
+"start": 28.667,
+"end": 28.76
 },
 {
 "word": "bring",
-"start": 28.361,
-"end": 28.453
+"start": 28.76,
+"end": 28.947
 },
 {
 "word": "us",
-"start": 28.466,
-"end": 28.615
+"start": 28.947,
+"end": 29.067
 },
 {
-"word": "home.",
-"start": 28.629,
-"end": 28.943
+"word": "home",
+"start": 29.067,
+"end": 29.333
 }
 ]

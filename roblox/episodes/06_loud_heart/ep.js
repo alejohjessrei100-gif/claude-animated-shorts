@@ -153,7 +153,7 @@ export async function build(ctx) {
   D.poster(S, CLASS - 15.65, 6, -6, Math.PI / 2, "BE BRAVE", "#f0a0c0", "#d64545"); D.poster(S, CLASS - 15.65, 6, 2, Math.PI / 2, "OCEANS", "#8fd0f0", "#1f3a66"); D.poster(S, CLASS + 6.5, 9, -14.65, 0, "A+", "#a0e0a0", "#1e7a3a", 1.6, 1.6);
   D.wallClock(S, CLASS - 6, 9.4, -14.6, 0); D.bulletin(S, CLASS - 15.65, 5.6, 9, Math.PI / 2);
   for (let k = 0; k < 6; k++) D.backpackOnHook(S, CLASS + 15.6, 3.2, 8 + k * 1.6 - 4, -Math.PI / 2, ["#d64545", "#3d7be0", "#f2c230", "#3dbf7a", "#8a5ad6", "#e8601c"][k]);
-  for (let r = 0; r < 3; r++) for (let c = -1; c <= 1; c++) { T.desk(S, CLASS + c * 7, -3 + r * 6.5, 0, ["#c8a06a", "#b8905a"][(r + c + 2) % 2]); T.chair(S, CLASS + c * 7, -0.6 + r * 6.5, Math.PI, ["#3f6fb0", "#d9a03a", "#3dbf7a"][r]); }
+  for (let r = 0; r < 3; r++) for (let c = -1; c <= 1; c++) { T.desk(S, CLASS + c * 7, -3 + r * 6.5, 0, ["#c8a06a", "#b8905a"][(r + c + 2) % 2]); T.chair(S, CLASS + c * 7, -0.4 + r * 6.5, Math.PI, ["#3f6fb0", "#d9a03a", "#3dbf7a"][r]); }
   for (let r = 0; r < 3; r++) for (let c = -1; c <= 1; c++) { add(S, new THREE.BoxGeometry(1.1, 0.06, 1.4), M("#f4f1ea", 0.9), CLASS + c * 7 - 0.4, 2.74, -3 + r * 6.5); add(S, new THREE.CylinderGeometry(0.06, 0.06, 1.2, 6), M("#f2c230", 0.5), CLASS + c * 7 + 0.8, 2.77, -3 + r * 6.5).rotation.z = Math.PI / 2; }
   // windowsill plants + globe + fish tank
   for (const x of [-13, -9, 9, 13]) { add(S, new THREE.CylinderGeometry(0.45, 0.35, 0.8, 10), M("#c0592b", 0.8), CLASS + x, 3.5 - 0.6, -13.9); for (let k = 0; k < 4; k++) add(S, new THREE.SphereGeometry(0.42, 8, 6), M("#3f9a3a", 0.8), CLASS + x + (k % 2 - 0.5) * 0.4, 3.5 + 0.2 * k, -13.9 + (k > 1 ? 0.25 : -0.2)); }
@@ -238,12 +238,14 @@ export async function build(ctx) {
 
 // ------------------------------------------------------------------ staging helpers
 const place = (name, x, y, z, ry = 0) => { const av = C[name]; used.add(name); av.root.visible = true; av.root.position.set(x, y, z); av.root.rotation.set(0, ry, 0); return av; };
-const actor = (name, x, y, z, ry, keys, t, o = {}) => { const av = place(name, x, y, z, ry); act(av, keys, t, { t, blinkSeed: name.length * 1.3 + (o.seed ?? 0), cycle: o.cycle, speed: o.speed, talk: o.talk, look: o.look }); return av; };
+const actor = (name, x, y, z, ry, keys, t, o = {}) => { const av = place(name, x, y, z, ry); act(av, keys, t, { t, blinkSeed: name.length * 1.3 + (o.seed ?? 0), cycle: o.cycle, speed: o.speed, talk: o.talk, look: o.look, add: o.add }); return av; };
 const face = (x, z, tx, tz) => Math.atan2(tx - x, tz - z);
 const bob = (t) => 0.12 * Math.sin(t * 1.3);
 
-// seats (desk z0 -> kid at z0 + 3.5, facing the board)
-const SEAT = (r, c) => [CLASS + c * 7, -3 + r * 6.5 + 3.5];
+// seats (desk z0, chair z0 + 2.6 -> kid hips over the seat at z0 + 2.7, thighs resting on the seat top y 1.85)
+const SEAT = (r, c) => [CLASS + c * 7, -3 + r * 6.5 + 2.7];
+const SY = (av) => 1.86 - 0.5 * av.root.scale.y; // root height so a "sit" pose rests on the seat
+const COVER = { rs: [-2.5, 0, -0.5], ls: [-2.5, 0, 0.5], torso: [0.35, 0, 0], neck: [0.3, 0, 0] }; // seated, arms over the head
 const RUDY_SEAT = SEAT(2, 1), K1 = SEAT(1, -1), K2 = SEAT(1, 0);
 
 const SC = {
@@ -256,19 +258,21 @@ const SC = {
       const [x, z] = SEAT(r, c), turn = t > tw(7) + 0.2 ? Math.max(-1.2, Math.min(1.2, face(x, z, tgt[0], tgt[1]) - Math.PI)) : 0;
       const look = [-(((turn + Math.PI) % (2 * Math.PI)) - Math.PI) * 0.5, 0];
       const fc = t < tw(7) ? "neutral" : t < tw(37) ? "surprised" : t < tw(43) ? "smirk" : "shock";
-      actor(n, x, 0, z, Math.PI, track([0, "sitWrite", fc], [tw(43), "sitWrite", "shock"], [tw(43) + 0.25, "scared", "shock", { ease: "back" }]), t, { seed: i, look: [turn * 0.8, 0] });
+      const cov = smooth(tw(43), tw(43) + 0.3, t), add = cov > 0 ? Object.fromEntries(Object.entries(COVER).map(([k, v]) => [k, v.map((q) => q * cov)])) : undefined;
+      actor(n, x, SY(C[n]), z, Math.PI, track([0, "sitWrite", fc], [tw(43), "sit", "shock"]), t, { seed: i, look: [turn * 0.8 * (1 - cov), 0], add });
     });
     // kid1: a little nervous (small fast rings), kid2 leans in to hear
-    actor("kid1", K1[0], 0, K1[1], Math.PI, track([0, "sit", "nervous"], [tw(14), "sit", "worried"]), t, { seed: 1 });
+    actor("kid1", K1[0], SY(C.kid1), K1[1], Math.PI, track([0, "sit", "nervous"], [tw(14), "sit", "worried"]), t, { seed: 1 });
     if (t < tw(23)) heart(C.kid1, t, { bpm: 130, size: 0.6, life: 0.7 });
-    actor("kid3", K2[0], 0, K2[1], Math.PI, track([0, "sit", "neutral"], [tw(15), "sit", "surprised", { ease: "back" }], [tw(21), "sit", "smirk"]), t, { seed: 3, look: [t > tw(15) ? -0.9 : 0, 0] });
+    actor("kid3", K2[0], SY(C.kid3), K2[1], Math.PI, track([0, "sit", "neutral"], [tw(15), "sit", "surprised", { ease: "back" }], [tw(21), "sit", "smirk"]), t, { seed: 3, look: [t > tw(15) ? -0.9 : 0, 0] });
     // the presenter at the board: really scared, rings fill the room
     if (t >= tw(23) && t < tw(30)) { actor("kid6", CLASS + 1.5, 0, -11.2, 0.15, track([0, "scared", "nervous"], [tw(26), "hold", "worried"]), t, { seed: 6 }); heart(C.kid6, t, { bpm: 150, size: 1.6, life: 1.2 }); }
     // the teacher
     actor("teacher", CLASS - 9, 0, -7, face(CLASS - 9, -7, RUDY_SEAT[0], RUDY_SEAT[1]), track([0, "idle", "neutral"], [tw(39), "talk", "smile"], [tw(41), "point", "smile", { ease: "back" }], [tw(43) + 0.3, "scared", "shock", { ease: "back" }]), t, { talk: t > tw(40) && t < tw(43) ? 0.6 : 0 });
     // Rudy at the back
     const big = t >= tw(43);
-    actor("rudy", RUDY_SEAT[0], 0, RUDY_SEAT[1], Math.PI, track([0, "sit", "neutral"], [tw(30), "sit", "nervous"], [tw(41) + 0.1, "scared", "shock", { ease: "back" }], [tw(44), "duck", "worried"]), t);
+    const rc = smooth(tw(44), tw(44) + 0.3, t);
+    actor("rudy", RUDY_SEAT[0], SY(C.rudy), RUDY_SEAT[1], Math.PI, track([0, "sit", "neutral"], [tw(30), "sit", "nervous"], [tw(41) + 0.1, "sit", "shock", { ease: "back" }], [tw(44), "sit", "worried"]), t, { add: rc > 0 ? Object.fromEntries(Object.entries(COVER).map(([k, v]) => [k, v.map((q) => q * rc)])) : undefined });
     heart(C.rudy, t, big ? { bpm: 140, size: 3.4, life: 1.6, t0: tw(43) } : { bpm: 110, size: 0.55, life: 0.7, t0: tw(30) });
     // papers lift off the desks when it booms
     papers.forEach((p, k) => { const on = big && t < tw(46); p.visible = on; if (!on) return; const u = t - tw(43), r = k % 3, c = (k % 3) - 1; p.position.set(CLASS + c * 7 + Math.sin(k) * 1.5 + u * (k % 2 ? 2 : -2), 2.9 + u * (3 + k * 0.3) - u * u * 1.4, -3 + (k % 3) * 6.5 + Math.cos(k) * 1.2); p.rotation.set(u * (2 + k), u * 3, u * (1 + k * 0.4)); });
