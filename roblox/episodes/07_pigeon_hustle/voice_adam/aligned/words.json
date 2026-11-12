@@ -1,0 +1,1067 @@
+[
+ {
+  "word": "In",
+  "start": 0.05,
+  "end": 0.23
+ },
+ {
+  "word": "my",
+  "start": 0.23,
+  "end": 0.43
+ },
+ {
+  "word": "town",
+  "start": 0.43,
+  "end": 0.92
+ },
+ {
+  "word": "every",
+  "start": 1.06,
+  "end": 1.31
+ },
+ {
+  "word": "time",
+  "start": 1.31,
+  "end": 1.57
+ },
+ {
+  "word": "you",
+  "start": 1.57,
+  "end": 1.67
+ },
+ {
+  "word": "complain",
+  "start": 1.67,
+  "end": 2.45
+ },
+ {
+  "word": "a",
+  "start": 2.51,
+  "end": 2.58
+ },
+ {
+  "word": "pigeon",
+  "start": 2.58,
+  "end": 3.07
+ },
+ {
+  "word": "lands",
+  "start": 3.07,
+  "end": 3.43
+ },
+ {
+  "word": "on",
+  "start": 3.43,
+  "end": 3.58
+ },
+ {
+  "word": "you",
+  "start": 3.58,
+  "end": 3.84
+ },
+ {
+  "word": "And",
+  "start": 3.98,
+  "end": 4.1
+ },
+ {
+  "word": "it",
+  "start": 4.1,
+  "end": 4.16
+ },
+ {
+  "word": "won't",
+  "start": 4.16,
+  "end": 4.45
+ },
+ {
+  "word": "leave",
+  "start": 4.45,
+  "end": 4.82
+ },
+ {
+  "word": "until",
+  "start": 4.82,
+  "end": 5.08
+ },
+ {
+  "word": "you",
+  "start": 5.08,
+  "end": 5.22
+ },
+ {
+  "word": "say",
+  "start": 5.22,
+  "end": 5.44
+ },
+ {
+  "word": "something",
+  "start": 5.44,
+  "end": 5.77
+ },
+ {
+  "word": "nice",
+  "start": 5.77,
+  "end": 6.34
+ },
+ {
+  "word": "Grumpy",
+  "start": 6.48,
+  "end": 6.88
+ },
+ {
+  "word": "people",
+  "start": 6.88,
+  "end": 7.22
+ },
+ {
+  "word": "walk",
+  "start": 7.22,
+  "end": 7.5
+ },
+ {
+  "word": "around",
+  "start": 7.5,
+  "end": 7.88
+ },
+ {
+  "word": "looking",
+  "start": 7.88,
+  "end": 8.22
+ },
+ {
+  "word": "like",
+  "start": 8.22,
+  "end": 8.4
+ },
+ {
+  "word": "statues",
+  "start": 8.4,
+  "end": 9.09
+ },
+ {
+  "word": "in",
+  "start": 9.09,
+  "end": 9.17
+ },
+ {
+  "word": "the",
+  "start": 9.17,
+  "end": 9.25
+ },
+ {
+  "word": "park",
+  "start": 9.25,
+  "end": 9.74
+ },
+ {
+  "word": "So",
+  "start": 9.88,
+  "end": 10.2
+ },
+ {
+  "word": "when",
+  "start": 10.2,
+  "end": 10.45
+ },
+ {
+  "word": "I",
+  "start": 10.45,
+  "end": 10.52
+ },
+ {
+  "word": "was",
+  "start": 10.52,
+  "end": 10.72
+ },
+ {
+  "word": "twelve",
+  "start": 10.72,
+  "end": 11.31
+ },
+ {
+  "word": "I",
+  "start": 11.42,
+  "end": 11.53
+ },
+ {
+  "word": "did",
+  "start": 11.53,
+  "end": 11.7
+ },
+ {
+  "word": "the",
+  "start": 11.7,
+  "end": 11.77
+ },
+ {
+  "word": "smart",
+  "start": 11.77,
+  "end": 12.12
+ },
+ {
+  "word": "thing",
+  "start": 12.12,
+  "end": 12.48
+ },
+ {
+  "word": "I",
+  "start": 12.62,
+  "end": 12.72
+ },
+ {
+  "word": "started",
+  "start": 12.72,
+  "end": 13.14
+ },
+ {
+  "word": "selling",
+  "start": 13.14,
+  "end": 13.62
+ },
+ {
+  "word": "compliments",
+  "start": 13.62,
+  "end": 14.35
+ },
+ {
+  "word": "One",
+  "start": 14.49,
+  "end": 14.75
+ },
+ {
+  "word": "dollar",
+  "start": 14.75,
+  "end": 15.09
+ },
+ {
+  "word": "each",
+  "start": 15.09,
+  "end": 15.42
+ },
+ {
+  "word": "read",
+  "start": 15.56,
+  "end": 15.78
+ },
+ {
+  "word": "out",
+  "start": 15.78,
+  "end": 15.95
+ },
+ {
+  "word": "loud",
+  "start": 15.95,
+  "end": 16.38
+ },
+ {
+  "word": "and",
+  "start": 16.38,
+  "end": 16.61
+ },
+ {
+  "word": "the",
+  "start": 16.61,
+  "end": 16.71
+ },
+ {
+  "word": "pigeon",
+  "start": 16.71,
+  "end": 17.1
+ },
+ {
+  "word": "flies",
+  "start": 17.1,
+  "end": 17.5
+ },
+ {
+  "word": "away",
+  "start": 17.5,
+  "end": 17.94
+ },
+ {
+  "word": "Business",
+  "start": 18.08,
+  "end": 18.5
+ },
+ {
+  "word": "was",
+  "start": 18.5,
+  "end": 18.63
+ },
+ {
+  "word": "slow",
+  "start": 18.63,
+  "end": 19.18
+ },
+ {
+  "word": "A",
+  "start": 19.35,
+  "end": 19.45
+ },
+ {
+  "word": "kid",
+  "start": 19.45,
+  "end": 19.81
+ },
+ {
+  "word": "who",
+  "start": 19.81,
+  "end": 20.0
+ },
+ {
+  "word": "hated",
+  "start": 20.0,
+  "end": 20.45
+ },
+ {
+  "word": "broccoli",
+  "start": 20.45,
+  "end": 21.16
+ },
+ {
+  "word": "A",
+  "start": 21.3,
+  "end": 21.4
+ },
+ {
+  "word": "dad",
+  "start": 21.4,
+  "end": 21.9
+ },
+ {
+  "word": "stuck",
+  "start": 21.9,
+  "end": 22.21
+ },
+ {
+  "word": "in",
+  "start": 22.21,
+  "end": 22.33
+ },
+ {
+  "word": "traffic",
+  "start": 22.33,
+  "end": 22.97
+ },
+ {
+  "word": "Then",
+  "start": 23.11,
+  "end": 23.54
+ },
+ {
+  "word": "my",
+  "start": 23.54,
+  "end": 23.68
+ },
+ {
+  "word": "neighbor",
+  "start": 23.68,
+  "end": 24.0
+ },
+ {
+  "word": "Tessa",
+  "start": 24.0,
+  "end": 24.46
+ },
+ {
+  "word": "started",
+  "start": 24.46,
+  "end": 24.87
+ },
+ {
+  "word": "giving",
+  "start": 24.87,
+  "end": 25.14
+ },
+ {
+  "word": "compliments",
+  "start": 25.14,
+  "end": 25.72
+ },
+ {
+  "word": "for",
+  "start": 25.72,
+  "end": 25.88
+ },
+ {
+  "word": "free",
+  "start": 25.88,
+  "end": 26.46
+ },
+ {
+  "word": "So",
+  "start": 26.6,
+  "end": 26.93
+ },
+ {
+  "word": "I",
+  "start": 27.03,
+  "end": 27.2
+ },
+ {
+  "word": "needed",
+  "start": 27.2,
+  "end": 27.52
+ },
+ {
+  "word": "more",
+  "start": 27.52,
+  "end": 27.7
+ },
+ {
+  "word": "complaining",
+  "start": 27.7,
+  "end": 28.39
+ },
+ {
+  "word": "I",
+  "start": 28.53,
+  "end": 28.66
+ },
+ {
+  "word": "opened",
+  "start": 28.66,
+  "end": 28.95
+ },
+ {
+  "word": "a",
+  "start": 28.95,
+  "end": 28.98
+ },
+ {
+  "word": "lemonade",
+  "start": 28.98,
+  "end": 29.52
+ },
+ {
+  "word": "stand",
+  "start": 29.52,
+  "end": 29.93
+ },
+ {
+  "word": "next",
+  "start": 29.93,
+  "end": 30.16
+ },
+ {
+  "word": "to",
+  "start": 30.16,
+  "end": 30.26
+ },
+ {
+  "word": "the",
+  "start": 30.26,
+  "end": 30.34
+ },
+ {
+  "word": "bus",
+  "start": 30.34,
+  "end": 30.61
+ },
+ {
+  "word": "stop",
+  "start": 30.61,
+  "end": 30.99
+ },
+ {
+  "word": "No",
+  "start": 31.13,
+  "end": 31.34
+ },
+ {
+  "word": "sugar",
+  "start": 31.34,
+  "end": 31.78
+ },
+ {
+  "word": "Extra",
+  "start": 31.92,
+  "end": 32.26
+ },
+ {
+  "word": "lemons",
+  "start": 32.26,
+  "end": 32.81
+ },
+ {
+  "word": "One",
+  "start": 32.95,
+  "end": 33.21
+ },
+ {
+  "word": "sip",
+  "start": 33.21,
+  "end": 33.53
+ },
+ {
+  "word": "and",
+  "start": 33.53,
+  "end": 33.97
+ },
+ {
+  "word": "everyone",
+  "start": 33.97,
+  "end": 34.54
+ },
+ {
+  "word": "complained",
+  "start": 34.54,
+  "end": 35.21
+ },
+ {
+  "word": "Pigeon",
+  "start": 35.35,
+  "end": 35.94
+ },
+ {
+  "word": "Pigeon",
+  "start": 36.04,
+  "end": 36.65
+ },
+ {
+  "word": "Pigeon",
+  "start": 36.79,
+  "end": 37.38
+ },
+ {
+  "word": "Then",
+  "start": 37.52,
+  "end": 37.95
+ },
+ {
+  "word": "came",
+  "start": 37.95,
+  "end": 38.27
+ },
+ {
+  "word": "the",
+  "start": 38.27,
+  "end": 38.35
+ },
+ {
+  "word": "heat",
+  "start": 38.35,
+  "end": 38.69
+ },
+ {
+  "word": "wave",
+  "start": 38.69,
+  "end": 39.16
+ },
+ {
+  "word": "The",
+  "start": 39.3,
+  "end": 39.47
+ },
+ {
+  "word": "air",
+  "start": 39.47,
+  "end": 39.62
+ },
+ {
+  "word": "conditioners",
+  "start": 39.62,
+  "end": 40.2
+ },
+ {
+  "word": "broke",
+  "start": 40.2,
+  "end": 40.82
+ },
+ {
+  "word": "The",
+  "start": 40.82,
+  "end": 40.9
+ },
+ {
+  "word": "pool",
+  "start": 40.9,
+  "end": 41.29
+ },
+ {
+  "word": "closed",
+  "start": 41.29,
+  "end": 41.92
+ },
+ {
+  "word": "The",
+  "start": 42.04,
+  "end": 42.19
+ },
+ {
+  "word": "ice",
+  "start": 42.19,
+  "end": 42.43
+ },
+ {
+  "word": "cream",
+  "start": 42.43,
+  "end": 42.67
+ },
+ {
+  "word": "truck",
+  "start": 42.67,
+  "end": 42.98
+ },
+ {
+  "word": "ran",
+  "start": 42.98,
+  "end": 43.21
+ },
+ {
+  "word": "out",
+  "start": 43.21,
+  "end": 43.34
+ },
+ {
+  "word": "of",
+  "start": 43.34,
+  "end": 43.46
+ },
+ {
+  "word": "ice",
+  "start": 43.46,
+  "end": 43.68
+ },
+ {
+  "word": "cream",
+  "start": 43.68,
+  "end": 44.13
+ },
+ {
+  "word": "By",
+  "start": 44.27,
+  "end": 44.42
+ },
+ {
+  "word": "Friday",
+  "start": 44.42,
+  "end": 45.02
+ },
+ {
+  "word": "the",
+  "start": 45.02,
+  "end": 45.25
+ },
+ {
+  "word": "whole",
+  "start": 45.25,
+  "end": 45.65
+ },
+ {
+  "word": "town",
+  "start": 45.65,
+  "end": 46.09
+ },
+ {
+  "word": "was",
+  "start": 46.09,
+  "end": 46.3
+ },
+ {
+  "word": "covered",
+  "start": 46.3,
+  "end": 46.76
+ },
+ {
+  "word": "in",
+  "start": 46.76,
+  "end": 46.9
+ },
+ {
+  "word": "birds",
+  "start": 46.9,
+  "end": 47.48
+ },
+ {
+  "word": "and",
+  "start": 47.62,
+  "end": 47.77
+ },
+ {
+  "word": "I",
+  "start": 47.77,
+  "end": 47.94
+ },
+ {
+  "word": "had",
+  "start": 47.94,
+  "end": 48.07
+ },
+ {
+  "word": "sold",
+  "start": 48.07,
+  "end": 48.4
+ },
+ {
+  "word": "four",
+  "start": 48.4,
+  "end": 48.87
+ },
+ {
+  "word": "hundred",
+  "start": 48.87,
+  "end": 49.41
+ },
+ {
+  "word": "compliments",
+  "start": 49.41,
+  "end": 50.16
+ },
+ {
+  "word": "I",
+  "start": 50.3,
+  "end": 50.39
+ },
+ {
+  "word": "bought",
+  "start": 50.39,
+  "end": 50.62
+ },
+ {
+  "word": "a",
+  "start": 50.62,
+  "end": 50.67
+ },
+ {
+  "word": "new",
+  "start": 50.67,
+  "end": 50.83
+ },
+ {
+  "word": "bike",
+  "start": 50.83,
+  "end": 51.31
+ },
+ {
+  "word": "Then",
+  "start": 51.45,
+  "end": 51.83
+ },
+ {
+  "word": "a",
+  "start": 51.83,
+  "end": 51.97
+ },
+ {
+  "word": "better",
+  "start": 51.97,
+  "end": 52.29
+ },
+ {
+  "word": "bike",
+  "start": 52.29,
+  "end": 52.69
+ },
+ {
+  "word": "Then",
+  "start": 52.83,
+  "end": 53.16
+ },
+ {
+  "word": "a",
+  "start": 53.16,
+  "end": 53.35
+ },
+ {
+  "word": "helmet",
+  "start": 53.35,
+  "end": 53.77
+ },
+ {
+  "word": "with",
+  "start": 53.77,
+  "end": 53.92
+ },
+ {
+  "word": "spikes",
+  "start": 53.92,
+  "end": 54.56
+ },
+ {
+  "word": "just",
+  "start": 54.7,
+  "end": 54.98
+ },
+ {
+  "word": "in",
+  "start": 54.98,
+  "end": 55.1
+ },
+ {
+  "word": "case",
+  "start": 55.1,
+  "end": 55.55
+ },
+ {
+  "word": "On",
+  "start": 55.69,
+  "end": 55.85
+ },
+ {
+  "word": "Saturday",
+  "start": 55.85,
+  "end": 56.5
+ },
+ {
+  "word": "the",
+  "start": 56.5,
+  "end": 56.71
+ },
+ {
+  "word": "mayor",
+  "start": 56.71,
+  "end": 57.09
+ },
+ {
+  "word": "called",
+  "start": 57.09,
+  "end": 57.38
+ },
+ {
+  "word": "me",
+  "start": 57.38,
+  "end": 57.5
+ },
+ {
+  "word": "up",
+  "start": 57.5,
+  "end": 57.64
+ },
+ {
+  "word": "on",
+  "start": 57.64,
+  "end": 57.8
+ },
+ {
+  "word": "stage",
+  "start": 57.8,
+  "end": 58.43
+ },
+ {
+  "word": "He",
+  "start": 58.57,
+  "end": 58.75
+ },
+ {
+  "word": "said",
+  "start": 58.75,
+  "end": 59.1
+ },
+ {
+  "word": "I",
+  "start": 59.1,
+  "end": 59.28
+ },
+ {
+  "word": "had",
+  "start": 59.28,
+  "end": 59.41
+ },
+ {
+  "word": "made",
+  "start": 59.41,
+  "end": 59.66
+ },
+ {
+  "word": "this",
+  "start": 59.66,
+  "end": 59.86
+ },
+ {
+  "word": "town",
+  "start": 59.86,
+  "end": 60.19
+ },
+ {
+  "word": "kinder",
+  "start": 60.19,
+  "end": 60.8
+ },
+ {
+  "word": "all",
+  "start": 60.8,
+  "end": 61.07
+ },
+ {
+  "word": "week",
+  "start": 61.07,
+  "end": 61.52
+ },
+ {
+  "word": "and",
+  "start": 61.66,
+  "end": 61.78
+ },
+ {
+  "word": "he",
+  "start": 61.78,
+  "end": 61.84
+ },
+ {
+  "word": "gave",
+  "start": 61.84,
+  "end": 62.12
+ },
+ {
+  "word": "me",
+  "start": 62.12,
+  "end": 62.25
+ },
+ {
+  "word": "a",
+  "start": 62.25,
+  "end": 62.3
+ },
+ {
+  "word": "medal",
+  "start": 62.3,
+  "end": 62.74
+ },
+ {
+  "word": "The",
+  "start": 62.88,
+  "end": 62.97
+ },
+ {
+  "word": "whole",
+  "start": 62.97,
+  "end": 63.37
+ },
+ {
+  "word": "crowd",
+  "start": 63.37,
+  "end": 63.84
+ },
+ {
+  "word": "clapped",
+  "start": 63.84,
+  "end": 64.48
+ },
+ {
+  "word": "Tessa",
+  "start": 64.62,
+  "end": 65.04
+ },
+ {
+  "word": "just",
+  "start": 65.04,
+  "end": 65.3
+ },
+ {
+  "word": "stared",
+  "start": 65.3,
+  "end": 65.72
+ },
+ {
+  "word": "at",
+  "start": 65.72,
+  "end": 65.85
+ },
+ {
+  "word": "me",
+  "start": 65.85,
+  "end": 66.11
+ },
+ {
+  "word": "I",
+  "start": 66.25,
+  "end": 66.32
+ },
+ {
+  "word": "looked",
+  "start": 66.32,
+  "end": 66.56
+ },
+ {
+  "word": "at",
+  "start": 66.56,
+  "end": 66.64
+ },
+ {
+  "word": "the",
+  "start": 66.64,
+  "end": 66.72
+ },
+ {
+  "word": "medal",
+  "start": 66.72,
+  "end": 67.11
+ },
+ {
+  "word": "and",
+  "start": 67.11,
+  "end": 67.22
+ },
+ {
+  "word": "said",
+  "start": 67.22,
+  "end": 67.62
+ },
+ {
+  "word": "really",
+  "start": 67.76,
+  "end": 68.2
+ },
+ {
+  "word": "It's",
+  "start": 68.35,
+  "end": 68.53
+ },
+ {
+  "word": "not",
+  "start": 68.53,
+  "end": 68.72
+ },
+ {
+  "word": "even",
+  "start": 68.72,
+  "end": 68.89
+ },
+ {
+  "word": "real",
+  "start": 68.89,
+  "end": 69.23
+ },
+ {
+  "word": "gold",
+  "start": 69.23,
+  "end": 69.74
+ },
+ {
+  "word": "And",
+  "start": 69.88,
+  "end": 70.15
+ },
+ {
+  "word": "every",
+  "start": 70.15,
+  "end": 70.51
+ },
+ {
+  "word": "pigeon",
+  "start": 70.51,
+  "end": 70.89
+ },
+ {
+  "word": "in",
+  "start": 70.89,
+  "end": 71.03
+ },
+ {
+  "word": "town",
+  "start": 71.03,
+  "end": 71.51
+ },
+ {
+  "word": "turned",
+  "start": 71.51,
+  "end": 71.89
+ },
+ {
+  "word": "around",
+  "start": 71.89,
+  "end": 72.52
+ }
+]
