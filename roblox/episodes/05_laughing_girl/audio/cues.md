@@ -1,0 +1,2 @@
+- mix -14.5 LUFS, true peak -3.7 dBTP, 31.903 s
+- voice -14.1 LUFS, music -28.8 LUFS (-14.7 LU vs the voice; bgm bgm.wav at x0.25), accent 'flooded' at None

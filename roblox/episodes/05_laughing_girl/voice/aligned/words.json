@@ -1,0 +1,677 @@
+[
+ {
+  "word": "In",
+  "start": 0.05,
+  "end": 0.13
+ },
+ {
+  "word": "this",
+  "start": 0.13,
+  "end": 0.35
+ },
+ {
+  "word": "town",
+  "start": 0.35,
+  "end": 0.82
+ },
+ {
+  "word": "every",
+  "start": 0.96,
+  "end": 1.2
+ },
+ {
+  "word": "time",
+  "start": 1.2,
+  "end": 1.48
+ },
+ {
+  "word": "you",
+  "start": 1.48,
+  "end": 1.61
+ },
+ {
+  "word": "laugh",
+  "start": 1.61,
+  "end": 2.12
+ },
+ {
+  "word": "flowers",
+  "start": 2.26,
+  "end": 2.84
+ },
+ {
+  "word": "grow",
+  "start": 2.84,
+  "end": 3.12
+ },
+ {
+  "word": "where",
+  "start": 3.12,
+  "end": 3.28
+ },
+ {
+  "word": "you're",
+  "start": 3.28,
+  "end": 3.43
+ },
+ {
+  "word": "standing",
+  "start": 3.43,
+  "end": 4.06
+ },
+ {
+  "word": "Giggle",
+  "start": 4.2,
+  "end": 4.57
+ },
+ {
+  "word": "once",
+  "start": 4.57,
+  "end": 5.09
+ },
+ {
+  "word": "and",
+  "start": 5.09,
+  "end": 5.35
+ },
+ {
+  "word": "you",
+  "start": 5.35,
+  "end": 5.44
+ },
+ {
+  "word": "get",
+  "start": 5.44,
+  "end": 5.63
+ },
+ {
+  "word": "a",
+  "start": 5.63,
+  "end": 5.7
+ },
+ {
+  "word": "daisy",
+  "start": 5.7,
+  "end": 6.27
+ },
+ {
+  "word": "Laugh",
+  "start": 6.41,
+  "end": 6.66
+ },
+ {
+  "word": "for",
+  "start": 6.66,
+  "end": 6.9
+ },
+ {
+  "word": "a",
+  "start": 6.9,
+  "end": 7.02
+ },
+ {
+  "word": "minute",
+  "start": 7.02,
+  "end": 7.5
+ },
+ {
+  "word": "and",
+  "start": 7.5,
+  "end": 7.71
+ },
+ {
+  "word": "you're",
+  "start": 7.71,
+  "end": 7.87
+ },
+ {
+  "word": "knee",
+  "start": 7.87,
+  "end": 8.2
+ },
+ {
+  "word": "deep",
+  "start": 8.2,
+  "end": 8.52
+ },
+ {
+  "word": "in",
+  "start": 8.52,
+  "end": 8.67
+ },
+ {
+  "word": "tulips",
+  "start": 8.67,
+  "end": 9.3
+ },
+ {
+  "word": "And",
+  "start": 9.44,
+  "end": 9.79
+ },
+ {
+  "word": "nobody",
+  "start": 9.79,
+  "end": 10.26
+ },
+ {
+  "word": "laughed",
+  "start": 10.26,
+  "end": 10.62
+ },
+ {
+  "word": "more",
+  "start": 10.62,
+  "end": 10.84
+ },
+ {
+  "word": "than",
+  "start": 10.84,
+  "end": 11.04
+ },
+ {
+  "word": "Dot",
+  "start": 11.04,
+  "end": 11.52
+ },
+ {
+  "word": "Her",
+  "start": 11.66,
+  "end": 11.81
+ },
+ {
+  "word": "front",
+  "start": 11.81,
+  "end": 12.15
+ },
+ {
+  "word": "yard",
+  "start": 12.15,
+  "end": 12.47
+ },
+ {
+  "word": "was",
+  "start": 12.47,
+  "end": 12.79
+ },
+ {
+  "word": "a",
+  "start": 12.79,
+  "end": 12.88
+ },
+ {
+  "word": "jungle",
+  "start": 12.88,
+  "end": 13.65
+ },
+ {
+  "word": "Sunflowers",
+  "start": 13.79,
+  "end": 14.53
+ },
+ {
+  "word": "blocked",
+  "start": 14.53,
+  "end": 14.89
+ },
+ {
+  "word": "the",
+  "start": 14.89,
+  "end": 14.98
+ },
+ {
+  "word": "sidewalk",
+  "start": 14.98,
+  "end": 15.72
+ },
+ {
+  "word": "Vines",
+  "start": 15.86,
+  "end": 16.42
+ },
+ {
+  "word": "climbed",
+  "start": 16.42,
+  "end": 16.82
+ },
+ {
+  "word": "over",
+  "start": 16.82,
+  "end": 17.09
+ },
+ {
+  "word": "the",
+  "start": 17.09,
+  "end": 17.19
+ },
+ {
+  "word": "neighbors'",
+  "start": 17.19,
+  "end": 17.58
+ },
+ {
+  "word": "cars",
+  "start": 17.58,
+  "end": 18.15
+ },
+ {
+  "word": "The",
+  "start": 18.29,
+  "end": 18.37
+ },
+ {
+  "word": "mayor",
+  "start": 18.37,
+  "end": 18.73
+ },
+ {
+  "word": "gave",
+  "start": 18.73,
+  "end": 18.97
+ },
+ {
+  "word": "her",
+  "start": 18.97,
+  "end": 19.1
+ },
+ {
+  "word": "a",
+  "start": 19.1,
+  "end": 19.14
+ },
+ {
+  "word": "ticket",
+  "start": 19.14,
+  "end": 19.62
+ },
+ {
+  "word": "every",
+  "start": 19.62,
+  "end": 19.98
+ },
+ {
+  "word": "week",
+  "start": 19.98,
+  "end": 20.53
+ },
+ {
+  "word": "and",
+  "start": 20.65,
+  "end": 20.78
+ },
+ {
+  "word": "kids",
+  "start": 20.78,
+  "end": 21.24
+ },
+ {
+  "word": "called",
+  "start": 21.24,
+  "end": 21.5
+ },
+ {
+  "word": "her",
+  "start": 21.5,
+  "end": 21.62
+ },
+ {
+  "word": "Weed",
+  "start": 21.62,
+  "end": 22.23
+ },
+ {
+  "word": "So",
+  "start": 22.37,
+  "end": 22.77
+ },
+ {
+  "word": "Dot",
+  "start": 22.98,
+  "end": 23.37
+ },
+ {
+  "word": "stopped",
+  "start": 23.37,
+  "end": 23.73
+ },
+ {
+  "word": "laughing",
+  "start": 23.73,
+  "end": 24.24
+ },
+ {
+  "word": "Then",
+  "start": 24.38,
+  "end": 24.82
+ },
+ {
+  "word": "one",
+  "start": 24.82,
+  "end": 25.18
+ },
+ {
+  "word": "summer",
+  "start": 25.18,
+  "end": 25.69
+ },
+ {
+  "word": "the",
+  "start": 25.84,
+  "end": 25.96
+ },
+ {
+  "word": "rain",
+  "start": 25.96,
+  "end": 26.43
+ },
+ {
+  "word": "never",
+  "start": 26.43,
+  "end": 26.73
+ },
+ {
+  "word": "came",
+  "start": 26.73,
+  "end": 27.23
+ },
+ {
+  "word": "Every",
+  "start": 27.37,
+  "end": 27.71
+ },
+ {
+  "word": "farm",
+  "start": 27.71,
+  "end": 28.1
+ },
+ {
+  "word": "in",
+  "start": 28.1,
+  "end": 28.22
+ },
+ {
+  "word": "town",
+  "start": 28.22,
+  "end": 28.65
+ },
+ {
+  "word": "dried",
+  "start": 28.65,
+  "end": 29.08
+ },
+ {
+  "word": "up",
+  "start": 29.08,
+  "end": 29.36
+ },
+ {
+  "word": "and",
+  "start": 29.36,
+  "end": 29.58
+ },
+ {
+  "word": "turned",
+  "start": 29.58,
+  "end": 29.88
+ },
+ {
+  "word": "to",
+  "start": 29.88,
+  "end": 29.97
+ },
+ {
+  "word": "dust",
+  "start": 29.97,
+  "end": 30.59
+ },
+ {
+  "word": "The",
+  "start": 30.73,
+  "end": 30.8
+ },
+ {
+  "word": "stores",
+  "start": 30.8,
+  "end": 31.4
+ },
+ {
+  "word": "ran",
+  "start": 31.4,
+  "end": 31.66
+ },
+ {
+  "word": "out",
+  "start": 31.66,
+  "end": 31.79
+ },
+ {
+  "word": "of",
+  "start": 31.79,
+  "end": 31.87
+ },
+ {
+  "word": "food",
+  "start": 31.87,
+  "end": 32.38
+ },
+ {
+  "word": "Dot",
+  "start": 32.52,
+  "end": 32.84
+ },
+ {
+  "word": "walked",
+  "start": 32.84,
+  "end": 33.21
+ },
+ {
+  "word": "into",
+  "start": 33.21,
+  "end": 33.41
+ },
+ {
+  "word": "the",
+  "start": 33.41,
+  "end": 33.49
+ },
+ {
+  "word": "middle",
+  "start": 33.49,
+  "end": 33.88
+ },
+ {
+  "word": "of",
+  "start": 33.88,
+  "end": 33.97
+ },
+ {
+  "word": "the",
+  "start": 33.97,
+  "end": 34.06
+ },
+ {
+  "word": "dead",
+  "start": 34.06,
+  "end": 34.37
+ },
+ {
+  "word": "fields",
+  "start": 34.37,
+  "end": 34.87
+ },
+ {
+  "word": "with",
+  "start": 34.87,
+  "end": 34.99
+ },
+ {
+  "word": "her",
+  "start": 34.99,
+  "end": 35.09
+ },
+ {
+  "word": "best",
+  "start": 35.09,
+  "end": 35.49
+ },
+ {
+  "word": "friend",
+  "start": 35.49,
+  "end": 35.94
+ },
+ {
+  "word": "who",
+  "start": 36.05,
+  "end": 36.15
+ },
+ {
+  "word": "told",
+  "start": 36.15,
+  "end": 36.44
+ },
+ {
+  "word": "her",
+  "start": 36.44,
+  "end": 36.58
+ },
+ {
+  "word": "the",
+  "start": 36.58,
+  "end": 36.7
+ },
+ {
+  "word": "worst",
+  "start": 36.7,
+  "end": 37.23
+ },
+ {
+  "word": "jokes",
+  "start": 37.23,
+  "end": 37.54
+ },
+ {
+  "word": "he",
+  "start": 37.54,
+  "end": 37.66
+ },
+ {
+  "word": "knew",
+  "start": 37.66,
+  "end": 38.11
+ },
+ {
+  "word": "She",
+  "start": 38.24,
+  "end": 38.54
+ },
+ {
+  "word": "laughed",
+  "start": 38.54,
+  "end": 39.08
+ },
+ {
+  "word": "until",
+  "start": 39.08,
+  "end": 39.47
+ },
+ {
+  "word": "sunset",
+  "start": 39.47,
+  "end": 40.19
+ },
+ {
+  "word": "By",
+  "start": 40.33,
+  "end": 40.46
+ },
+ {
+  "word": "morning",
+  "start": 40.46,
+  "end": 40.98
+ },
+ {
+  "word": "the",
+  "start": 41.12,
+  "end": 41.2
+ },
+ {
+  "word": "whole",
+  "start": 41.2,
+  "end": 41.71
+ },
+ {
+  "word": "valley",
+  "start": 41.71,
+  "end": 42.17
+ },
+ {
+  "word": "was",
+  "start": 42.17,
+  "end": 42.4
+ },
+ {
+  "word": "green",
+  "start": 42.4,
+  "end": 42.89
+ },
+ {
+  "word": "Now",
+  "start": 43.03,
+  "end": 43.49
+ },
+ {
+  "word": "everyone",
+  "start": 43.49,
+  "end": 44.01
+ },
+ {
+  "word": "in",
+  "start": 44.01,
+  "end": 44.11
+ },
+ {
+  "word": "town",
+  "start": 44.11,
+  "end": 44.46
+ },
+ {
+  "word": "tells",
+  "start": 44.46,
+  "end": 44.78
+ },
+ {
+  "word": "Dot",
+  "start": 44.78,
+  "end": 45.03
+ },
+ {
+  "word": "jokes",
+  "start": 45.03,
+  "end": 45.6
+ },
+ {
+  "word": "The",
+  "start": 45.74,
+  "end": 45.86
+ },
+ {
+  "word": "bad",
+  "start": 45.86,
+  "end": 46.14
+ },
+ {
+  "word": "ones",
+  "start": 46.14,
+  "end": 46.43
+ },
+ {
+  "word": "work",
+  "start": 46.43,
+  "end": 46.69
+ },
+ {
+  "word": "best",
+  "start": 46.69,
+  "end": 47.18
+ }
+]

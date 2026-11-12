@@ -1,0 +1,677 @@
+[
+{
+"word": "In",
+"start": 0.033,
+"end": 0.087
+},
+{
+"word": "this",
+"start": 0.087,
+"end": 0.233
+},
+{
+"word": "town",
+"start": 0.233,
+"end": 0.547
+},
+{
+"word": "every",
+"start": 0.64,
+"end": 0.8
+},
+{
+"word": "time",
+"start": 0.8,
+"end": 0.987
+},
+{
+"word": "you",
+"start": 0.987,
+"end": 1.073
+},
+{
+"word": "laugh",
+"start": 1.073,
+"end": 1.413
+},
+{
+"word": "flowers",
+"start": 1.507,
+"end": 1.893
+},
+{
+"word": "grow",
+"start": 1.893,
+"end": 2.08
+},
+{
+"word": "where",
+"start": 2.08,
+"end": 2.187
+},
+{
+"word": "you're",
+"start": 2.187,
+"end": 2.287
+},
+{
+"word": "standing",
+"start": 2.287,
+"end": 2.707
+},
+{
+"word": "Giggle",
+"start": 2.8,
+"end": 3.047
+},
+{
+"word": "once",
+"start": 3.047,
+"end": 3.393
+},
+{
+"word": "and",
+"start": 3.393,
+"end": 3.567
+},
+{
+"word": "you",
+"start": 3.567,
+"end": 3.627
+},
+{
+"word": "get",
+"start": 3.627,
+"end": 3.753
+},
+{
+"word": "a",
+"start": 3.753,
+"end": 3.8
+},
+{
+"word": "daisy",
+"start": 3.8,
+"end": 4.18
+},
+{
+"word": "Laugh",
+"start": 4.273,
+"end": 4.44
+},
+{
+"word": "for",
+"start": 4.44,
+"end": 4.6
+},
+{
+"word": "a",
+"start": 4.6,
+"end": 4.68
+},
+{
+"word": "minute",
+"start": 4.68,
+"end": 5.0
+},
+{
+"word": "and",
+"start": 5.0,
+"end": 5.14
+},
+{
+"word": "you're",
+"start": 5.14,
+"end": 5.247
+},
+{
+"word": "knee",
+"start": 5.247,
+"end": 5.467
+},
+{
+"word": "deep",
+"start": 5.467,
+"end": 5.68
+},
+{
+"word": "in",
+"start": 5.68,
+"end": 5.78
+},
+{
+"word": "tulips",
+"start": 5.78,
+"end": 6.2
+},
+{
+"word": "And",
+"start": 6.293,
+"end": 6.527
+},
+{
+"word": "nobody",
+"start": 6.527,
+"end": 6.84
+},
+{
+"word": "laughed",
+"start": 6.84,
+"end": 7.08
+},
+{
+"word": "more",
+"start": 7.08,
+"end": 7.227
+},
+{
+"word": "than",
+"start": 7.227,
+"end": 7.36
+},
+{
+"word": "Dot",
+"start": 7.36,
+"end": 7.68
+},
+{
+"word": "Her",
+"start": 7.773,
+"end": 7.873
+},
+{
+"word": "front",
+"start": 7.873,
+"end": 8.1
+},
+{
+"word": "yard",
+"start": 8.1,
+"end": 8.313
+},
+{
+"word": "was",
+"start": 8.313,
+"end": 8.527
+},
+{
+"word": "a",
+"start": 8.527,
+"end": 8.587
+},
+{
+"word": "jungle",
+"start": 8.587,
+"end": 9.1
+},
+{
+"word": "Sunflowers",
+"start": 9.193,
+"end": 9.687
+},
+{
+"word": "blocked",
+"start": 9.687,
+"end": 9.927
+},
+{
+"word": "the",
+"start": 9.927,
+"end": 9.987
+},
+{
+"word": "sidewalk",
+"start": 9.987,
+"end": 10.48
+},
+{
+"word": "Vines",
+"start": 10.573,
+"end": 10.947
+},
+{
+"word": "climbed",
+"start": 10.947,
+"end": 11.213
+},
+{
+"word": "over",
+"start": 11.213,
+"end": 11.393
+},
+{
+"word": "the",
+"start": 11.393,
+"end": 11.46
+},
+{
+"word": "neighbors'",
+"start": 11.46,
+"end": 11.72
+},
+{
+"word": "cars",
+"start": 11.72,
+"end": 12.1
+},
+{
+"word": "The",
+"start": 12.193,
+"end": 12.247
+},
+{
+"word": "mayor",
+"start": 12.247,
+"end": 12.487
+},
+{
+"word": "gave",
+"start": 12.487,
+"end": 12.647
+},
+{
+"word": "her",
+"start": 12.647,
+"end": 12.733
+},
+{
+"word": "a",
+"start": 12.733,
+"end": 12.76
+},
+{
+"word": "ticket",
+"start": 12.76,
+"end": 13.08
+},
+{
+"word": "every",
+"start": 13.08,
+"end": 13.32
+},
+{
+"word": "week",
+"start": 13.32,
+"end": 13.687
+},
+{
+"word": "and",
+"start": 13.767,
+"end": 13.853
+},
+{
+"word": "kids",
+"start": 13.853,
+"end": 14.16
+},
+{
+"word": "called",
+"start": 14.16,
+"end": 14.333
+},
+{
+"word": "her",
+"start": 14.333,
+"end": 14.413
+},
+{
+"word": "Weed",
+"start": 14.413,
+"end": 14.82
+},
+{
+"word": "So",
+"start": 14.913,
+"end": 15.18
+},
+{
+"word": "Dot",
+"start": 15.32,
+"end": 15.58
+},
+{
+"word": "stopped",
+"start": 15.58,
+"end": 15.82
+},
+{
+"word": "laughing",
+"start": 15.82,
+"end": 16.16
+},
+{
+"word": "Then",
+"start": 16.253,
+"end": 16.547
+},
+{
+"word": "one",
+"start": 16.547,
+"end": 16.787
+},
+{
+"word": "summer",
+"start": 16.787,
+"end": 17.127
+},
+{
+"word": "the",
+"start": 17.227,
+"end": 17.307
+},
+{
+"word": "rain",
+"start": 17.307,
+"end": 17.62
+},
+{
+"word": "never",
+"start": 17.62,
+"end": 17.82
+},
+{
+"word": "came",
+"start": 17.82,
+"end": 18.153
+},
+{
+"word": "Every",
+"start": 18.247,
+"end": 18.473
+},
+{
+"word": "farm",
+"start": 18.473,
+"end": 18.733
+},
+{
+"word": "in",
+"start": 18.733,
+"end": 18.813
+},
+{
+"word": "town",
+"start": 18.813,
+"end": 19.1
+},
+{
+"word": "dried",
+"start": 19.1,
+"end": 19.387
+},
+{
+"word": "up",
+"start": 19.387,
+"end": 19.573
+},
+{
+"word": "and",
+"start": 19.573,
+"end": 19.72
+},
+{
+"word": "turned",
+"start": 19.72,
+"end": 19.92
+},
+{
+"word": "to",
+"start": 19.92,
+"end": 19.98
+},
+{
+"word": "dust",
+"start": 19.98,
+"end": 20.393
+},
+{
+"word": "The",
+"start": 20.487,
+"end": 20.533
+},
+{
+"word": "stores",
+"start": 20.533,
+"end": 20.933
+},
+{
+"word": "ran",
+"start": 20.933,
+"end": 21.107
+},
+{
+"word": "out",
+"start": 21.107,
+"end": 21.193
+},
+{
+"word": "of",
+"start": 21.193,
+"end": 21.247
+},
+{
+"word": "food",
+"start": 21.247,
+"end": 21.587
+},
+{
+"word": "Dot",
+"start": 21.68,
+"end": 21.893
+},
+{
+"word": "walked",
+"start": 21.893,
+"end": 22.14
+},
+{
+"word": "into",
+"start": 22.14,
+"end": 22.273
+},
+{
+"word": "the",
+"start": 22.273,
+"end": 22.327
+},
+{
+"word": "middle",
+"start": 22.327,
+"end": 22.587
+},
+{
+"word": "of",
+"start": 22.587,
+"end": 22.647
+},
+{
+"word": "the",
+"start": 22.647,
+"end": 22.707
+},
+{
+"word": "dead",
+"start": 22.707,
+"end": 22.913
+},
+{
+"word": "fields",
+"start": 22.913,
+"end": 23.247
+},
+{
+"word": "with",
+"start": 23.247,
+"end": 23.327
+},
+{
+"word": "her",
+"start": 23.327,
+"end": 23.393
+},
+{
+"word": "best",
+"start": 23.393,
+"end": 23.66
+},
+{
+"word": "friend",
+"start": 23.66,
+"end": 23.96
+},
+{
+"word": "who",
+"start": 24.033,
+"end": 24.1
+},
+{
+"word": "told",
+"start": 24.1,
+"end": 24.293
+},
+{
+"word": "her",
+"start": 24.293,
+"end": 24.387
+},
+{
+"word": "the",
+"start": 24.387,
+"end": 24.467
+},
+{
+"word": "worst",
+"start": 24.467,
+"end": 24.82
+},
+{
+"word": "jokes",
+"start": 24.82,
+"end": 25.027
+},
+{
+"word": "he",
+"start": 25.027,
+"end": 25.107
+},
+{
+"word": "knew",
+"start": 25.107,
+"end": 25.407
+},
+{
+"word": "She",
+"start": 25.493,
+"end": 25.693
+},
+{
+"word": "laughed",
+"start": 25.693,
+"end": 26.053
+},
+{
+"word": "until",
+"start": 26.053,
+"end": 26.313
+},
+{
+"word": "sunset",
+"start": 26.313,
+"end": 26.793
+},
+{
+"word": "By",
+"start": 26.887,
+"end": 26.973
+},
+{
+"word": "morning",
+"start": 26.973,
+"end": 27.32
+},
+{
+"word": "the",
+"start": 27.413,
+"end": 27.467
+},
+{
+"word": "whole",
+"start": 27.467,
+"end": 27.807
+},
+{
+"word": "valley",
+"start": 27.807,
+"end": 28.113
+},
+{
+"word": "was",
+"start": 28.113,
+"end": 28.267
+},
+{
+"word": "green",
+"start": 28.267,
+"end": 28.593
+},
+{
+"word": "Now",
+"start": 28.687,
+"end": 28.993
+},
+{
+"word": "everyone",
+"start": 28.993,
+"end": 29.34
+},
+{
+"word": "in",
+"start": 29.34,
+"end": 29.407
+},
+{
+"word": "town",
+"start": 29.407,
+"end": 29.64
+},
+{
+"word": "tells",
+"start": 29.64,
+"end": 29.853
+},
+{
+"word": "Dot",
+"start": 29.853,
+"end": 30.02
+},
+{
+"word": "jokes",
+"start": 30.02,
+"end": 30.4
+},
+{
+"word": "The",
+"start": 30.493,
+"end": 30.573
+},
+{
+"word": "bad",
+"start": 30.573,
+"end": 30.76
+},
+{
+"word": "ones",
+"start": 30.76,
+"end": 30.953
+},
+{
+"word": "work",
+"start": 30.953,
+"end": 31.127
+},
+{
+"word": "best",
+"start": 31.127,
+"end": 31.453
+}
+]
