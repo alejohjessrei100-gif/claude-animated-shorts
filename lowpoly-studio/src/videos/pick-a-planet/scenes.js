@@ -299,7 +299,6 @@ function bazaar(ctx, loc, depth = 9) { // a golden street: columns, domes, stall
   for (let i = 0; i < depth; i++) for (const s of [-1, 1]) { const x = s * 7.4, z = -i * 8 - 1; add(palm(ctx, r.range(5, 7.5))).position.set(x, loc.height(x, z), z); }
   for (let i = 0; i < depth; i++) for (const s of [-1, 1]) { const x = s * 4.3, z = -i * 8 + 3; add(banner(ctx, cloths[(i + (s > 0)) % 4])).position.set(x, loc.height(x, z), z); }
   for (let i = 0; i < 14; i++) { const x = r.range(-4, 4) * (r() > 0.5 ? 1 : -1), z = -r.range(0, depth * 8); if (Math.abs(x) < 2) continue; add(r() > 0.5 ? P.crate({ s: r.range(0.5, 0.8) }) : P.barrel({ c: '#8a5a2a' })).position.set(x, loc.height(x, z), z); }
-  for (let i = 0; i < 6; i++) { const z = -i * 12 - 2, l = add(P.lantern({ glow: '#ffc060', s: 0.6 })); l.position.set(0, 6.5, z); }
   scatter(ctx, loc, 16, 30, 100, () => P.rock({ s: r.range(0.6, 2), c: ['#a87a4a', '#c89a6a', '#8a6a3a'] }), -20);
 }
 
