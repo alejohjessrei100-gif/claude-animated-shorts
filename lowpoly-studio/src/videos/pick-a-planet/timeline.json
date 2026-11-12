@@ -1,0 +1,464 @@
+{
+ "slug": "pick-a-planet",
+ "fps": 30,
+ "width": 270,
+ "height": 480,
+ "scale": 4,
+ "frames": 2353,
+ "seconds": 78.43,
+ "caption_style": "phrase",
+ "shots": [
+  {
+   "id": "intro",
+   "scene": "planets",
+   "from": 0,
+   "to": 126,
+   "params": {}
+  },
+  {
+   "id": "card1",
+   "scene": "card",
+   "from": 126,
+   "to": 180,
+   "params": {
+    "n": 1
+   }
+  },
+  {
+   "id": "p1a",
+   "scene": "summer_wide",
+   "from": 180,
+   "to": 257,
+   "params": {}
+  },
+  {
+   "id": "p1b",
+   "scene": "summer_walk",
+   "from": 257,
+   "to": 387,
+   "params": {}
+  },
+  {
+   "id": "p1c",
+   "scene": "summer_dock",
+   "from": 387,
+   "to": 496,
+   "params": {}
+  },
+  {
+   "id": "p1d",
+   "scene": "summer_sun",
+   "from": 496,
+   "to": 557,
+   "params": {}
+  },
+  {
+   "id": "p1e",
+   "scene": "summer_close",
+   "from": 557,
+   "to": 647,
+   "params": {}
+  },
+  {
+   "id": "card2",
+   "scene": "card",
+   "from": 647,
+   "to": 701,
+   "params": {
+    "n": 2
+   }
+  },
+  {
+   "id": "p2a",
+   "scene": "ocean_wide",
+   "from": 701,
+   "to": 798,
+   "params": {}
+  },
+  {
+   "id": "p2b",
+   "scene": "ocean_boat",
+   "from": 798,
+   "to": 912,
+   "params": {}
+  },
+  {
+   "id": "p2c",
+   "scene": "ocean_glow",
+   "from": 912,
+   "to": 999,
+   "params": {}
+  },
+  {
+   "id": "p2d",
+   "scene": "ocean_empty",
+   "from": 999,
+   "to": 1087,
+   "params": {}
+  },
+  {
+   "id": "p2e",
+   "scene": "ocean_thing",
+   "from": 1087,
+   "to": 1198,
+   "params": {}
+  },
+  {
+   "id": "card3",
+   "scene": "card",
+   "from": 1198,
+   "to": 1252,
+   "params": {
+    "n": 3
+   }
+  },
+  {
+   "id": "p3a",
+   "scene": "snow_cabin",
+   "from": 1252,
+   "to": 1364,
+   "params": {}
+  },
+  {
+   "id": "p3b",
+   "scene": "snow_inside",
+   "from": 1364,
+   "to": 1502,
+   "params": {}
+  },
+  {
+   "id": "p3c",
+   "scene": "snow_window",
+   "from": 1502,
+   "to": 1581,
+   "params": {}
+  },
+  {
+   "id": "p3d",
+   "scene": "snow_prints",
+   "from": 1581,
+   "to": 1696,
+   "params": {}
+  },
+  {
+   "id": "p3e",
+   "scene": "snow_prints_big",
+   "from": 1696,
+   "to": 1773,
+   "params": {}
+  },
+  {
+   "id": "card4",
+   "scene": "card",
+   "from": 1773,
+   "to": 1827,
+   "params": {
+    "n": 4
+   }
+  },
+  {
+   "id": "p4a",
+   "scene": "desert_city",
+   "from": 1827,
+   "to": 1910,
+   "params": {}
+  },
+  {
+   "id": "p4b",
+   "scene": "desert_walk",
+   "from": 1910,
+   "to": 1993,
+   "params": {}
+  },
+  {
+   "id": "p4c",
+   "scene": "desert_sunset",
+   "from": 1993,
+   "to": 2070,
+   "params": {}
+  },
+  {
+   "id": "p4d",
+   "scene": "desert_dunes",
+   "from": 2070,
+   "to": 2132,
+   "params": {}
+  },
+  {
+   "id": "p4e",
+   "scene": "desert_gone",
+   "from": 2132,
+   "to": 2251,
+   "params": {}
+  },
+  {
+   "id": "end",
+   "scene": "planets",
+   "from": 2251,
+   "to": 2353,
+   "params": {
+    "ending": true
+   }
+  }
+ ],
+ "captions": [
+  {
+   "from": 5,
+   "to": 45,
+   "text": "Four planets.",
+   "kind": "phrase"
+  },
+  {
+   "from": 45,
+   "to": 101,
+   "text": "You can only land on one.",
+   "kind": "phrase"
+  },
+  {
+   "from": 0,
+   "to": 126,
+   "text": "Pick a Planet",
+   "kind": "title"
+  },
+  {
+   "from": 131,
+   "to": 166,
+   "text": "Planet one.",
+   "kind": "phrase"
+  },
+  {
+   "from": 126,
+   "to": 180,
+   "text": "Planet 1",
+   "kind": "title"
+  },
+  {
+   "from": 185,
+   "to": 252,
+   "text": "A planet where it is always summer.",
+   "kind": "phrase"
+  },
+  {
+   "from": 262,
+   "to": 300,
+   "text": "Warm grass.",
+   "kind": "phrase"
+  },
+  {
+   "from": 300,
+   "to": 382,
+   "text": "A lake so clear you can see the bottom.",
+   "kind": "phrase"
+  },
+  {
+   "from": 392,
+   "to": 439,
+   "text": "There is a little dock,",
+   "kind": "phrase"
+  },
+  {
+   "from": 439,
+   "to": 491,
+   "text": "and a boat just for you.",
+   "kind": "phrase"
+  },
+  {
+   "from": 501,
+   "to": 552,
+   "text": "But the sun never sets.",
+   "kind": "phrase"
+  },
+  {
+   "from": 562,
+   "to": 642,
+   "text": "And every day, it gets a little closer.",
+   "kind": "phrase"
+  },
+  {
+   "from": 652,
+   "to": 689,
+   "text": "Planet two.",
+   "kind": "phrase"
+  },
+  {
+   "from": 647,
+   "to": 701,
+   "text": "Planet 2",
+   "kind": "title"
+  },
+  {
+   "from": 706,
+   "to": 793,
+   "text": "An ocean planet, warm as bathwater.",
+   "kind": "phrase"
+  },
+  {
+   "from": 803,
+   "to": 858,
+   "text": "You drift in a little boat",
+   "kind": "phrase"
+  },
+  {
+   "from": 858,
+   "to": 907,
+   "text": "while the stars come out.",
+   "kind": "phrase"
+  },
+  {
+   "from": 917,
+   "to": 994,
+   "text": "The water glows wherever you touch it.",
+   "kind": "phrase"
+  },
+  {
+   "from": 1004,
+   "to": 1053,
+   "text": "But there is no land.",
+   "kind": "phrase"
+  },
+  {
+   "from": 1053,
+   "to": 1082,
+   "text": "Anywhere.",
+   "kind": "phrase"
+  },
+  {
+   "from": 1092,
+   "to": 1139,
+   "text": "And something huge",
+   "kind": "phrase"
+  },
+  {
+   "from": 1139,
+   "to": 1194,
+   "text": "is swimming under your boat.",
+   "kind": "phrase"
+  },
+  {
+   "from": 1203,
+   "to": 1239,
+   "text": "Planet three.",
+   "kind": "phrase"
+  },
+  {
+   "from": 1198,
+   "to": 1252,
+   "text": "Planet 3",
+   "kind": "title"
+  },
+  {
+   "from": 1257,
+   "to": 1296,
+   "text": "A snow planet,",
+   "kind": "phrase"
+  },
+  {
+   "from": 1296,
+   "to": 1359,
+   "text": "with a cabin all to yourself.",
+   "kind": "phrase"
+  },
+  {
+   "from": 1369,
+   "to": 1409,
+   "text": "A warm fire.",
+   "kind": "phrase"
+  },
+  {
+   "from": 1409,
+   "to": 1449,
+   "text": "Hot cocoa.",
+   "kind": "phrase"
+  },
+  {
+   "from": 1449,
+   "to": 1498,
+   "text": "Not a single sound.",
+   "kind": "phrase"
+  },
+  {
+   "from": 1507,
+   "to": 1576,
+   "text": "Outside, the snow falls all night.",
+   "kind": "phrase"
+  },
+  {
+   "from": 1586,
+   "to": 1627,
+   "text": "But every morning,",
+   "kind": "phrase"
+  },
+  {
+   "from": 1627,
+   "to": 1691,
+   "text": "there are footprints by your door.",
+   "kind": "phrase"
+  },
+  {
+   "from": 1701,
+   "to": 1768,
+   "text": "And they get a little bigger each time.",
+   "kind": "phrase"
+  },
+  {
+   "from": 1778,
+   "to": 1815,
+   "text": "Planet four.",
+   "kind": "phrase"
+  },
+  {
+   "from": 1773,
+   "to": 1827,
+   "text": "Planet 4",
+   "kind": "title"
+  },
+  {
+   "from": 1832,
+   "to": 1905,
+   "text": "A desert planet with a city of gold.",
+   "kind": "phrase"
+  },
+  {
+   "from": 1915,
+   "to": 1988,
+   "text": "Every street is yours to explore.",
+   "kind": "phrase"
+  },
+  {
+   "from": 1998,
+   "to": 2065,
+   "text": "And the sunsets last for hours.",
+   "kind": "phrase"
+  },
+  {
+   "from": 2075,
+   "to": 2128,
+   "text": "But the dunes are moving.",
+   "kind": "phrase"
+  },
+  {
+   "from": 2137,
+   "to": 2198,
+   "text": "By morning, the city is gone.",
+   "kind": "phrase"
+  },
+  {
+   "from": 2198,
+   "to": 2246,
+   "text": "And so is your ship.",
+   "kind": "phrase"
+  },
+  {
+   "from": 2256,
+   "to": 2323,
+   "text": "So which planet are you landing on?",
+   "kind": "phrase"
+  },
+  {
+   "from": 2251,
+   "to": 2353,
+   "text": "Which One?",
+   "kind": "title"
+  }
+ ]
+}

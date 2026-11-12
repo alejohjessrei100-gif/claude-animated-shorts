@@ -1,0 +1,409 @@
+{
+ "title": "Pick a Planet",
+ "aspect": "9:16",
+ "seed": 88,
+ "mood": "wonder",
+ "root": "G",
+ "music_gain": 0.5,
+ "caption_style": "phrase",
+ "voice": {
+  "gender": "male",
+  "rate": -1
+ },
+ "shots": [
+  {
+   "id": "intro",
+   "scene": "planets",
+   "lines": [
+    "Four planets.",
+    "You can only land on one."
+   ],
+   "title": "Pick a Planet",
+   "min_s": 4.2,
+   "ambience": "space",
+   "amb_gain": 0.5,
+   "sfx": [
+    {
+     "name": "select",
+     "at": 0.2,
+     "gain": 0.6
+    }
+   ]
+  },
+  {
+   "id": "card1",
+   "scene": "card",
+   "lines": [
+    "Planet one."
+   ],
+   "params": {
+    "n": 1
+   },
+   "title": "Planet 1",
+   "min_s": 1.8,
+   "music": {
+    "mood": "wonder",
+    "root": "G",
+    "gain": 0.5
+   },
+   "sfx": [
+    {
+     "name": "whoosh",
+     "at": 0.0,
+     "gain": 0.7
+    }
+   ]
+  },
+  {
+   "id": "p1a",
+   "scene": "summer_wide",
+   "lines": [
+    "A planet where it is always summer."
+   ],
+   "ambience": "birds",
+   "amb_gain": 0.45
+  },
+  {
+   "id": "p1b",
+   "scene": "summer_walk",
+   "lines": [
+    "Warm grass.",
+    "A lake so clear you can see the bottom."
+   ],
+   "ambience": "wind",
+   "amb_gain": 0.3
+  },
+  {
+   "id": "p1c",
+   "scene": "summer_dock",
+   "lines": [
+    "There is a little dock,",
+    "and a boat just for you."
+   ],
+   "ambience": "sea",
+   "amb_gain": 0.35
+  },
+  {
+   "id": "p1d",
+   "scene": "summer_sun",
+   "lines": [
+    "But the sun never sets."
+   ],
+   "ambience": "wind",
+   "amb_gain": 0.45,
+   "music": {
+    "mood": "uneasy",
+    "root": "G",
+    "gain": 0.45
+   }
+  },
+  {
+   "id": "p1e",
+   "scene": "summer_close",
+   "lines": [
+    "And every day, it gets a little closer."
+   ],
+   "ambience": "fire",
+   "amb_gain": 0.4,
+   "sfx": [
+    {
+     "name": "rumble",
+     "at": 0.3,
+     "gain": 0.5
+    }
+   ]
+  },
+  {
+   "id": "card2",
+   "scene": "card",
+   "lines": [
+    "Planet two."
+   ],
+   "params": {
+    "n": 2
+   },
+   "title": "Planet 2",
+   "min_s": 1.8,
+   "music": {
+    "mood": "calm",
+    "root": "D",
+    "gain": 0.5
+   },
+   "sfx": [
+    {
+     "name": "whoosh",
+     "at": 0.0,
+     "gain": 0.7
+    }
+   ]
+  },
+  {
+   "id": "p2a",
+   "scene": "ocean_wide",
+   "lines": [
+    "An ocean planet, warm as bathwater."
+   ],
+   "ambience": "sea",
+   "amb_gain": 0.5
+  },
+  {
+   "id": "p2b",
+   "scene": "ocean_boat",
+   "lines": [
+    "You drift in a little boat",
+    "while the stars come out."
+   ],
+   "ambience": "sea",
+   "amb_gain": 0.4
+  },
+  {
+   "id": "p2c",
+   "scene": "ocean_glow",
+   "lines": [
+    "The water glows wherever you touch it."
+   ],
+   "ambience": "sea",
+   "amb_gain": 0.35,
+   "sfx": [
+    {
+     "name": "sparkle",
+     "at": 0.6,
+     "gain": 0.5
+    }
+   ]
+  },
+  {
+   "id": "p2d",
+   "scene": "ocean_empty",
+   "lines": [
+    "But there is no land.",
+    "Anywhere."
+   ],
+   "ambience": "wind",
+   "amb_gain": 0.45,
+   "music": {
+    "mood": "uneasy",
+    "root": "D",
+    "gain": 0.45
+   }
+  },
+  {
+   "id": "p2e",
+   "scene": "ocean_thing",
+   "lines": [
+    "And something huge",
+    "is swimming under your boat."
+   ],
+   "ambience": "sea",
+   "amb_gain": 0.55,
+   "music": {
+    "mood": "dread",
+    "root": "D",
+    "gain": 0.45
+   },
+   "sfx": [
+    {
+     "name": "splash",
+     "on": "swimming",
+     "gain": 0.6
+    }
+   ]
+  },
+  {
+   "id": "card3",
+   "scene": "card",
+   "lines": [
+    "Planet three."
+   ],
+   "params": {
+    "n": 3
+   },
+   "title": "Planet 3",
+   "min_s": 1.8,
+   "music": {
+    "mood": "calm",
+    "root": "A",
+    "gain": 0.5
+   },
+   "sfx": [
+    {
+     "name": "whoosh",
+     "at": 0.0,
+     "gain": 0.7
+    }
+   ]
+  },
+  {
+   "id": "p3a",
+   "scene": "snow_cabin",
+   "lines": [
+    "A snow planet,",
+    "with a cabin all to yourself."
+   ],
+   "ambience": "wind",
+   "amb_gain": 0.45
+  },
+  {
+   "id": "p3b",
+   "scene": "snow_inside",
+   "lines": [
+    "A warm fire.",
+    "Hot cocoa.",
+    "Not a single sound."
+   ],
+   "ambience": "fire",
+   "amb_gain": 0.4
+  },
+  {
+   "id": "p3c",
+   "scene": "snow_window",
+   "lines": [
+    "Outside, the snow falls all night."
+   ],
+   "ambience": "wind",
+   "amb_gain": 0.4
+  },
+  {
+   "id": "p3d",
+   "scene": "snow_prints",
+   "lines": [
+    "But every morning,",
+    "there are footprints by your door."
+   ],
+   "ambience": "wind",
+   "amb_gain": 0.5,
+   "music": {
+    "mood": "uneasy",
+    "root": "A",
+    "gain": 0.45
+   }
+  },
+  {
+   "id": "p3e",
+   "scene": "snow_prints_big",
+   "lines": [
+    "And they get a little bigger each time."
+   ],
+   "ambience": "wind",
+   "amb_gain": 0.55,
+   "music": {
+    "mood": "dread",
+    "root": "A",
+    "gain": 0.45
+   },
+   "sfx": [
+    {
+     "name": "heartbeat",
+     "at": 0.4,
+     "gain": 0.5
+    }
+   ]
+  },
+  {
+   "id": "card4",
+   "scene": "card",
+   "lines": [
+    "Planet four."
+   ],
+   "params": {
+    "n": 4
+   },
+   "title": "Planet 4",
+   "min_s": 1.8,
+   "music": {
+    "mood": "wonder",
+    "root": "E",
+    "gain": 0.5
+   },
+   "sfx": [
+    {
+     "name": "whoosh",
+     "at": 0.0,
+     "gain": 0.7
+    }
+   ]
+  },
+  {
+   "id": "p4a",
+   "scene": "desert_city",
+   "lines": [
+    "A desert planet with a city of gold."
+   ],
+   "ambience": "wind",
+   "amb_gain": 0.45
+  },
+  {
+   "id": "p4b",
+   "scene": "desert_walk",
+   "lines": [
+    "Every street is yours to explore."
+   ],
+   "ambience": "wind",
+   "amb_gain": 0.4
+  },
+  {
+   "id": "p4c",
+   "scene": "desert_sunset",
+   "lines": [
+    "And the sunsets last for hours."
+   ],
+   "ambience": "wind",
+   "amb_gain": 0.35
+  },
+  {
+   "id": "p4d",
+   "scene": "desert_dunes",
+   "lines": [
+    "But the dunes are moving."
+   ],
+   "ambience": "wind",
+   "amb_gain": 0.6,
+   "music": {
+    "mood": "uneasy",
+    "root": "E",
+    "gain": 0.45
+   }
+  },
+  {
+   "id": "p4e",
+   "scene": "desert_gone",
+   "lines": [
+    "By morning, the city is gone.",
+    "And so is your ship."
+   ],
+   "ambience": "wind",
+   "amb_gain": 0.6,
+   "music": {
+    "mood": "dread",
+    "root": "E",
+    "gain": 0.45
+   },
+   "sfx": [
+    {
+     "name": "thud",
+     "on": "ship",
+     "gain": 0.6
+    }
+   ]
+  },
+  {
+   "id": "end",
+   "scene": "planets",
+   "lines": [
+    "So which planet are you landing on?"
+   ],
+   "params": {
+    "ending": true
+   },
+   "title": "Which One?",
+   "min_s": 3.4,
+   "ambience": "space",
+   "amb_gain": 0.5,
+   "music": {
+    "mood": "mystery",
+    "root": "G",
+    "gain": 0.5
+   }
+  }
+ ]
+}
