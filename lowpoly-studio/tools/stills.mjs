@@ -1,7 +1,7 @@
 // Renders the middle frame of every shot, or the frames you name, to out/SLUG/stills/.
 //   node tools/stills.mjs SLUG            node tools/stills.mjs SLUG 12,90,300
 // On a machine with no GPU, set GL=swangle first.
-import {readFileSync, mkdirSync, rmSync} from 'node:fs';
+import {readFileSync, mkdirSync, rmSync, existsSync} from 'node:fs';
 import path from 'node:path';
 import {bundle} from '@remotion/bundler';
 import {renderStill, selectComposition} from '@remotion/renderer';
@@ -18,13 +18,15 @@ rmSync(dir, {recursive: true, force: true});
 mkdirSync(dir, {recursive: true});
 
 const serveUrl = await bundle({entryPoint: path.resolve('src/index.js')});
-const chromiumOptions = {gl: process.env.GL ?? 'angle'};
+const LOCAL_SHELL = process.env.CHROME || '/opt/pw-browsers/chromium_headless_shell-1243/chrome-headless-shell-linux64/chrome-headless-shell';
+const browserExecutable = existsSync(LOCAL_SHELL) ? LOCAL_SHELL : null;
+const chromiumOptions = {gl: process.env.GL ?? (browserExecutable ? 'swangle' : 'angle')};
 const timeoutInMilliseconds = 120000;
-const composition = await selectComposition({serveUrl, id: slug, chromiumOptions, timeoutInMilliseconds});
+const composition = await selectComposition({serveUrl, id: slug, chromiumOptions, timeoutInMilliseconds, browserExecutable});
 const start = Date.now();
 for (const frame of frames) {
   const output = path.join(dir, `${String(frame).padStart(5, '0')}.png`);
-  await renderStill({composition, serveUrl, frame, output, chromiumOptions, timeoutInMilliseconds});
+  await renderStill({composition, serveUrl, frame, output, chromiumOptions, timeoutInMilliseconds, browserExecutable});
   console.log(output);
 }
 console.log(`${frames.length} stills in ${((Date.now() - start) / 1000).toFixed(1)} s`);

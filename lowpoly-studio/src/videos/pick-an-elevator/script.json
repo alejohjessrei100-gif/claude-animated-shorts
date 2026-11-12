@@ -1,0 +1,262 @@
+{
+ "title": "Pick an Elevator",
+ "aspect": "9:16",
+ "seed": 73,
+ "mood": "wonder",
+ "root": "G",
+ "music_gain": 0.5,
+ "caption_style": "phrase",
+ "voice": {
+  "gender": "male",
+  "rate": -1
+ },
+ "shots": [
+  {
+   "id": "intro",
+   "scene": "lobby",
+   "lines": [
+    "Two elevators.",
+    "You only get one ride."
+   ],
+   "title": "Pick an Elevator",
+   "min_s": 4.0,
+   "ambience": "room",
+   "amb_gain": 0.4,
+   "sfx": [
+    {
+     "name": "select",
+     "at": 0.2,
+     "gain": 0.6
+    }
+   ]
+  },
+  {
+   "id": "card1",
+   "scene": "card",
+   "lines": [
+    "Elevator one."
+   ],
+   "params": {
+    "n": 1,
+    "c": "#c9a24a"
+   },
+   "title": "Elevator 1",
+   "min_s": 1.8,
+   "music": {
+    "mood": "wonder",
+    "root": "G",
+    "gain": 0.5
+   },
+   "sfx": [
+    {
+     "name": "whoosh",
+     "at": 0.0,
+     "gain": 0.7
+    }
+   ]
+  },
+  {
+   "id": "g1",
+   "scene": "garden_wide",
+   "lines": [
+    "The doors open on a garden above the clouds."
+   ],
+   "ambience": "wind",
+   "amb_gain": 0.4,
+   "sfx": [
+    {
+     "name": "blip",
+     "at": 0.1,
+     "gain": 0.5
+    }
+   ]
+  },
+  {
+   "id": "g2",
+   "scene": "garden_walk",
+   "lines": [
+    "Warm sun.",
+    "Soft grass.",
+    "Not a single sound."
+   ],
+   "ambience": "wind",
+   "amb_gain": 0.3
+  },
+  {
+   "id": "g3",
+   "scene": "garden_picnic",
+   "lines": [
+    "There's a picnic blanket, set for two."
+   ],
+   "ambience": "birds",
+   "amb_gain": 0.35
+  },
+  {
+   "id": "g4",
+   "scene": "garden_figure",
+   "lines": [
+    "Someone has been waiting for you."
+   ],
+   "ambience": "wind",
+   "amb_gain": 0.4,
+   "music": {
+    "mood": "uneasy",
+    "root": "G",
+    "gain": 0.45
+   }
+  },
+  {
+   "id": "g5",
+   "scene": "panel",
+   "lines": [
+    "But the panel inside has no down button."
+   ],
+   "ambience": "room",
+   "amb_gain": 0.35,
+   "sfx": [
+    {
+     "name": "tick",
+     "on": "down",
+     "gain": 0.6
+    }
+   ]
+  },
+  {
+   "id": "g6",
+   "scene": "garden_rise",
+   "lines": [
+    "And every day, the clouds rise a little higher."
+   ],
+   "ambience": "wind",
+   "amb_gain": 0.55,
+   "music": {
+    "mood": "dread",
+    "root": "G",
+    "gain": 0.45
+   }
+  },
+  {
+   "id": "card2",
+   "scene": "card",
+   "lines": [
+    "Elevator two."
+   ],
+   "params": {
+    "n": 2,
+    "c": "#8a96a6"
+   },
+   "title": "Elevator 2",
+   "min_s": 1.8,
+   "music": {
+    "mood": "calm",
+    "root": "D",
+    "gain": 0.5
+   },
+   "sfx": [
+    {
+     "name": "whoosh",
+     "at": 0.0,
+     "gain": 0.7
+    }
+   ]
+  },
+  {
+   "id": "m1",
+   "scene": "mall_wide",
+   "lines": [
+    "The doors open on a shopping mall at midnight."
+   ],
+   "ambience": "room",
+   "amb_gain": 0.45,
+   "sfx": [
+    {
+     "name": "blip",
+     "at": 0.1,
+     "gain": 0.5
+    }
+   ]
+  },
+  {
+   "id": "m2",
+   "scene": "mall_free",
+   "lines": [
+    "Every store is open.",
+    "Everything is free."
+   ],
+   "ambience": "room",
+   "amb_gain": 0.4
+  },
+  {
+   "id": "m3",
+   "scene": "mall_music",
+   "lines": [
+    "The speakers are playing your favorite song."
+   ],
+   "ambience": "room",
+   "amb_gain": 0.35
+  },
+  {
+   "id": "m4",
+   "scene": "mall_bags",
+   "lines": [
+    "You fill three bags before you notice something."
+   ],
+   "ambience": "room",
+   "amb_gain": 0.4,
+   "music": {
+    "mood": "uneasy",
+    "root": "D",
+    "gain": 0.45
+   }
+  },
+  {
+   "id": "m5",
+   "scene": "mall_escalator",
+   "lines": [
+    "The escalators only go down."
+   ],
+   "ambience": "machine",
+   "amb_gain": 0.4,
+   "sfx": [
+    {
+     "name": "thud",
+     "on": "down",
+     "gain": 0.6
+    }
+   ]
+  },
+  {
+   "id": "m6",
+   "scene": "mall_floors",
+   "lines": [
+    "And every floor below looks exactly like this one."
+   ],
+   "ambience": "room",
+   "amb_gain": 0.5,
+   "music": {
+    "mood": "dread",
+    "root": "D",
+    "gain": 0.45
+   }
+  },
+  {
+   "id": "end",
+   "scene": "lobby",
+   "lines": [
+    "So which elevator are you taking?"
+   ],
+   "params": {
+    "ending": true
+   },
+   "title": "Which One?",
+   "min_s": 3.2,
+   "ambience": "room",
+   "amb_gain": 0.4,
+   "music": {
+    "mood": "mystery",
+    "root": "D",
+    "gain": 0.5
+   }
+  }
+ ]
+}

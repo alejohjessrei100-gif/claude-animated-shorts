@@ -1,0 +1,278 @@
+{
+ "slug": "pick-an-elevator",
+ "fps": 30,
+ "width": 270,
+ "height": 480,
+ "scale": 4,
+ "frames": 1497,
+ "seconds": 49.9,
+ "caption_style": "phrase",
+ "shots": [
+  {
+   "id": "intro",
+   "scene": "lobby",
+   "from": 0,
+   "to": 120,
+   "params": {}
+  },
+  {
+   "id": "card1",
+   "scene": "card",
+   "from": 120,
+   "to": 174,
+   "params": {
+    "n": 1,
+    "c": "#c9a24a"
+   }
+  },
+  {
+   "id": "g1",
+   "scene": "garden_wide",
+   "from": 174,
+   "to": 280,
+   "params": {}
+  },
+  {
+   "id": "g2",
+   "scene": "garden_walk",
+   "from": 280,
+   "to": 412,
+   "params": {}
+  },
+  {
+   "id": "g3",
+   "scene": "garden_picnic",
+   "from": 412,
+   "to": 500,
+   "params": {}
+  },
+  {
+   "id": "g4",
+   "scene": "garden_figure",
+   "from": 500,
+   "to": 573,
+   "params": {}
+  },
+  {
+   "id": "g5",
+   "scene": "panel",
+   "from": 573,
+   "to": 669,
+   "params": {}
+  },
+  {
+   "id": "g6",
+   "scene": "garden_rise",
+   "from": 669,
+   "to": 773,
+   "params": {}
+  },
+  {
+   "id": "card2",
+   "scene": "card",
+   "from": 773,
+   "to": 827,
+   "params": {
+    "n": 2,
+    "c": "#8a96a6"
+   }
+  },
+  {
+   "id": "m1",
+   "scene": "mall_wide",
+   "from": 827,
+   "to": 927,
+   "params": {}
+  },
+  {
+   "id": "m2",
+   "scene": "mall_free",
+   "from": 927,
+   "to": 1032,
+   "params": {}
+  },
+  {
+   "id": "m3",
+   "scene": "mall_music",
+   "from": 1032,
+   "to": 1118,
+   "params": {}
+  },
+  {
+   "id": "m4",
+   "scene": "mall_bags",
+   "from": 1118,
+   "to": 1215,
+   "params": {}
+  },
+  {
+   "id": "m5",
+   "scene": "mall_escalator",
+   "from": 1215,
+   "to": 1292,
+   "params": {}
+  },
+  {
+   "id": "m6",
+   "scene": "mall_floors",
+   "from": 1292,
+   "to": 1401,
+   "params": {}
+  },
+  {
+   "id": "end",
+   "scene": "lobby",
+   "from": 1401,
+   "to": 1497,
+   "params": {
+    "ending": true
+   }
+  }
+ ],
+ "captions": [
+  {
+   "from": 5,
+   "to": 46,
+   "text": "Two elevators.",
+   "kind": "phrase"
+  },
+  {
+   "from": 46,
+   "to": 99,
+   "text": "You only get one ride.",
+   "kind": "phrase"
+  },
+  {
+   "from": 0,
+   "to": 120,
+   "text": "Pick an Elevator",
+   "kind": "title"
+  },
+  {
+   "from": 125,
+   "to": 164,
+   "text": "Elevator one.",
+   "kind": "phrase"
+  },
+  {
+   "from": 120,
+   "to": 174,
+   "text": "Elevator 1",
+   "kind": "title"
+  },
+  {
+   "from": 179,
+   "to": 275,
+   "text": "The doors open on a garden above the clouds.",
+   "kind": "phrase"
+  },
+  {
+   "from": 285,
+   "to": 321,
+   "text": "Warm sun.",
+   "kind": "phrase"
+  },
+  {
+   "from": 321,
+   "to": 359,
+   "text": "Soft grass.",
+   "kind": "phrase"
+  },
+  {
+   "from": 359,
+   "to": 408,
+   "text": "Not a single sound.",
+   "kind": "phrase"
+  },
+  {
+   "from": 417,
+   "to": 495,
+   "text": "There's a picnic blanket, set for two.",
+   "kind": "phrase"
+  },
+  {
+   "from": 505,
+   "to": 569,
+   "text": "Someone has been waiting for you.",
+   "kind": "phrase"
+  },
+  {
+   "from": 578,
+   "to": 664,
+   "text": "But the panel inside has no down button.",
+   "kind": "phrase"
+  },
+  {
+   "from": 674,
+   "to": 768,
+   "text": "And every day, the clouds rise a little higher.",
+   "kind": "phrase"
+  },
+  {
+   "from": 778,
+   "to": 820,
+   "text": "Elevator two.",
+   "kind": "phrase"
+  },
+  {
+   "from": 773,
+   "to": 827,
+   "text": "Elevator 2",
+   "kind": "title"
+  },
+  {
+   "from": 832,
+   "to": 922,
+   "text": "The doors open on a shopping mall at midnight.",
+   "kind": "phrase"
+  },
+  {
+   "from": 932,
+   "to": 981,
+   "text": "Every store is open.",
+   "kind": "phrase"
+  },
+  {
+   "from": 981,
+   "to": 1027,
+   "text": "Everything is free.",
+   "kind": "phrase"
+  },
+  {
+   "from": 1037,
+   "to": 1113,
+   "text": "The speakers are playing your favorite song.",
+   "kind": "phrase"
+  },
+  {
+   "from": 1123,
+   "to": 1211,
+   "text": "You fill three bags before you notice something.",
+   "kind": "phrase"
+  },
+  {
+   "from": 1220,
+   "to": 1288,
+   "text": "The escalators only go down.",
+   "kind": "phrase"
+  },
+  {
+   "from": 1297,
+   "to": 1396,
+   "text": "And every floor below looks exactly like this one.",
+   "kind": "phrase"
+  },
+  {
+   "from": 1406,
+   "to": 1473,
+   "text": "So which elevator are you taking?",
+   "kind": "phrase"
+  },
+  {
+   "from": 1401,
+   "to": 1497,
+   "text": "Which One?",
+   "kind": "title"
+  }
+ ]
+}

@@ -1,0 +1,259 @@
+{
+ "slug": "pick-a-door",
+ "fps": 30,
+ "width": 270,
+ "height": 480,
+ "scale": 4,
+ "frames": 1325,
+ "seconds": 44.17,
+ "caption_style": "phrase",
+ "shots": [
+  {
+   "id": "intro",
+   "scene": "doors",
+   "from": 0,
+   "to": 126,
+   "params": {}
+  },
+  {
+   "id": "door1_card",
+   "scene": "card",
+   "from": 126,
+   "to": 180,
+   "params": {
+    "n": 1,
+    "name": "The Long Meadow",
+    "bg": "#2f6a2a"
+   }
+  },
+  {
+   "id": "m1",
+   "scene": "meadow_wide",
+   "from": 180,
+   "to": 269,
+   "params": {}
+  },
+  {
+   "id": "m2",
+   "scene": "meadow_walker",
+   "from": 269,
+   "to": 386,
+   "params": {}
+  },
+  {
+   "id": "m3",
+   "scene": "meadow_house",
+   "from": 386,
+   "to": 500,
+   "params": {}
+  },
+  {
+   "id": "m4",
+   "scene": "meadow_door",
+   "from": 500,
+   "to": 626,
+   "params": {}
+  },
+  {
+   "id": "m5",
+   "scene": "meadow_figure",
+   "from": 626,
+   "to": 722,
+   "params": {}
+  },
+  {
+   "id": "door2_card",
+   "scene": "card",
+   "from": 722,
+   "to": 776,
+   "params": {
+    "n": 2,
+    "name": "Floor Nine",
+    "bg": "#7b7350"
+   }
+  },
+  {
+   "id": "o1",
+   "scene": "office_wide",
+   "from": 776,
+   "to": 887,
+   "params": {}
+  },
+  {
+   "id": "o2",
+   "scene": "office_desk",
+   "from": 887,
+   "to": 1016,
+   "params": {}
+  },
+  {
+   "id": "o3",
+   "scene": "office_hall",
+   "from": 1016,
+   "to": 1127,
+   "params": {}
+  },
+  {
+   "id": "o4",
+   "scene": "office_lights",
+   "from": 1127,
+   "to": 1229,
+   "params": {}
+  },
+  {
+   "id": "end",
+   "scene": "doors",
+   "from": 1229,
+   "to": 1325,
+   "params": {
+    "ending": true
+   }
+  }
+ ],
+ "captions": [
+  {
+   "from": 5,
+   "to": 42,
+   "text": "Two doors.",
+   "kind": "phrase"
+  },
+  {
+   "from": 42,
+   "to": 96,
+   "text": "You can only open one.",
+   "kind": "phrase"
+  },
+  {
+   "from": 0,
+   "to": 126,
+   "text": "Pick a Door",
+   "kind": "title"
+  },
+  {
+   "from": 131,
+   "to": 165,
+   "text": "Door one.",
+   "kind": "phrase"
+  },
+  {
+   "from": 126,
+   "to": 180,
+   "text": "Door 1",
+   "kind": "title"
+  },
+  {
+   "from": 185,
+   "to": 264,
+   "text": "Behind it, a meadow that never ends.",
+   "kind": "phrase"
+  },
+  {
+   "from": 274,
+   "to": 322,
+   "text": "You walk for hours.",
+   "kind": "phrase"
+  },
+  {
+   "from": 322,
+   "to": 381,
+   "text": "Your legs never get tired.",
+   "kind": "phrase"
+  },
+  {
+   "from": 391,
+   "to": 449,
+   "text": "There's a little house up ahead.",
+   "kind": "phrase"
+  },
+  {
+   "from": 449,
+   "to": 496,
+   "text": "You've seen it before.",
+   "kind": "phrase"
+  },
+  {
+   "from": 505,
+   "to": 564,
+   "text": "Every hour, the same house.",
+   "kind": "phrase"
+  },
+  {
+   "from": 564,
+   "to": 622,
+   "text": "The door is always open.",
+   "kind": "phrase"
+  },
+  {
+   "from": 631,
+   "to": 701,
+   "text": "And now someone's standing inside it.",
+   "kind": "phrase"
+  },
+  {
+   "from": 727,
+   "to": 762,
+   "text": "Door two.",
+   "kind": "phrase"
+  },
+  {
+   "from": 722,
+   "to": 776,
+   "text": "Door 2",
+   "kind": "title"
+  },
+  {
+   "from": 781,
+   "to": 838,
+   "text": "An office, late at night.",
+   "kind": "phrase"
+  },
+  {
+   "from": 838,
+   "to": 882,
+   "text": "Every light is on.",
+   "kind": "phrase"
+  },
+  {
+   "from": 892,
+   "to": 955,
+   "text": "There's a desk with your name on it.",
+   "kind": "phrase"
+  },
+  {
+   "from": 955,
+   "to": 1011,
+   "text": "The coffee is still warm.",
+   "kind": "phrase"
+  },
+  {
+   "from": 1021,
+   "to": 1068,
+   "text": "You look for the way out.",
+   "kind": "phrase"
+  },
+  {
+   "from": 1068,
+   "to": 1122,
+   "text": "The corridor keeps going.",
+   "kind": "phrase"
+  },
+  {
+   "from": 1132,
+   "to": 1210,
+   "text": "Then the lights behind you start going out.",
+   "kind": "phrase"
+  },
+  {
+   "from": 1234,
+   "to": 1294,
+   "text": "So which door are you opening?",
+   "kind": "phrase"
+  },
+  {
+   "from": 1229,
+   "to": 1325,
+   "text": "Which One?",
+   "kind": "title"
+  }
+ ]
+}
