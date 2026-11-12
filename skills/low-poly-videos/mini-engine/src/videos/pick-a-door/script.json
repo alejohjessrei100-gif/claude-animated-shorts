@@ -1,0 +1,276 @@
+{
+ "title": "Pick a Door",
+ "aspect": "9:16",
+ "seed": 41,
+ "mood": "wonder",
+ "root": "D",
+ "music_gain": 0.5,
+ "caption_style": "phrase",
+ "voice": {
+  "gender": "male",
+  "rate": -1
+ },
+ "shots": [
+  {
+   "id": "intro",
+   "scene": "doors",
+   "title": "Pick a Door",
+   "lines": [
+    "Two doors.",
+    "You can only open one."
+   ],
+   "min_s": 4.2,
+   "ambience": "room",
+   "amb_gain": 0.4,
+   "sfx": [
+    {
+     "name": "select",
+     "at": 0.2,
+     "gain": 0.6
+    }
+   ]
+  },
+  {
+   "id": "door1_card",
+   "scene": "card",
+   "params": {
+    "n": 1,
+    "name": "The Long Meadow",
+    "bg": "#2f6a2a"
+   },
+   "title": "Door 1",
+   "lines": [
+    "Door one."
+   ],
+   "min_s": 1.8,
+   "music": {
+    "mood": "calm",
+    "root": "G",
+    "gain": 0.5
+   },
+   "sfx": [
+    {
+     "name": "whoosh",
+     "at": 0.0,
+     "gain": 0.7
+    }
+   ]
+  },
+  {
+   "id": "m1",
+   "scene": "meadow_wide",
+   "lines": [
+    "Behind it, a meadow that never ends."
+   ],
+   "ambience": "birds",
+   "amb_gain": 0.5
+  },
+  {
+   "id": "m2",
+   "scene": "meadow_walker",
+   "lines": [
+    "You walk for hours.",
+    "Your legs never get tired."
+   ],
+   "ambience": "wind",
+   "amb_gain": 0.45,
+   "sfx": [
+    {
+     "name": "footstep_grass",
+     "at": 0.5,
+     "gain": 0.5
+    },
+    {
+     "name": "footstep_grass",
+     "at": 1.0,
+     "gain": 0.5
+    }
+   ]
+  },
+  {
+   "id": "m3",
+   "scene": "meadow_house",
+   "lines": [
+    "There's a little house up ahead.",
+    "You've seen it before."
+   ],
+   "ambience": "wind",
+   "amb_gain": 0.5,
+   "music": {
+    "mood": "uneasy",
+    "root": "G",
+    "gain": 0.55
+   }
+  },
+  {
+   "id": "m4",
+   "scene": "meadow_door",
+   "lines": [
+    "Every hour, the same house.",
+    "The door is always open."
+   ],
+   "ambience": "wind",
+   "amb_gain": 0.6,
+   "sfx": [
+    {
+     "name": "door_creak",
+     "at": 1.2,
+     "gain": 0.7
+    }
+   ]
+  },
+  {
+   "id": "m5",
+   "scene": "meadow_figure",
+   "lines": [
+    "And now someone's standing inside it."
+   ],
+   "ambience": "wind",
+   "amb_gain": 0.3,
+   "min_s": 3.2,
+   "music": {
+    "mood": "dread",
+    "root": "G",
+    "gain": 0.6
+   },
+   "sfx": [
+    {
+     "name": "heartbeat",
+     "at": 0.4,
+     "gain": 0.8
+    }
+   ]
+  },
+  {
+   "id": "door2_card",
+   "scene": "card",
+   "params": {
+    "n": 2,
+    "name": "Floor Nine",
+    "bg": "#7b7350"
+   },
+   "title": "Door 2",
+   "lines": [
+    "Door two."
+   ],
+   "min_s": 1.8,
+   "music": {
+    "mood": "mystery",
+    "root": "E",
+    "gain": 0.5
+   },
+   "sfx": [
+    {
+     "name": "whoosh",
+     "at": 0.0,
+     "gain": 0.7
+    }
+   ]
+  },
+  {
+   "id": "o1",
+   "scene": "office_wide",
+   "lines": [
+    "An office, late at night.",
+    "Every light is on."
+   ],
+   "ambience": "office",
+   "amb_gain": 0.8
+  },
+  {
+   "id": "o2",
+   "scene": "office_desk",
+   "lines": [
+    "There's a desk with your name on it.",
+    "The coffee is still warm."
+   ],
+   "ambience": "office",
+   "amb_gain": 0.7
+  },
+  {
+   "id": "o3",
+   "scene": "office_hall",
+   "lines": [
+    "You look for the way out.",
+    "The corridor keeps going."
+   ],
+   "ambience": "office",
+   "amb_gain": 0.8,
+   "music": {
+    "mood": "uneasy",
+    "root": "E",
+    "gain": 0.55
+   },
+   "sfx": [
+    {
+     "name": "footstep_hard",
+     "at": 0.4,
+     "gain": 0.5
+    },
+    {
+     "name": "footstep_hard",
+     "at": 0.95,
+     "gain": 0.5
+    }
+   ]
+  },
+  {
+   "id": "o4",
+   "scene": "office_lights",
+   "lines": [
+    "Then the lights behind you start going out."
+   ],
+   "ambience": "office",
+   "amb_gain": 0.4,
+   "min_s": 3.4,
+   "music": {
+    "mood": "dread",
+    "root": "E",
+    "gain": 0.6
+   },
+   "sfx": [
+    {
+     "name": "thud",
+     "at": 1.6,
+     "gain": 0.7
+    },
+    {
+     "name": "thud",
+     "at": 2.4,
+     "gain": 0.8
+    },
+    {
+     "name": "thud",
+     "at": 3.1,
+     "gain": 0.9
+    }
+   ]
+  },
+  {
+   "id": "end",
+   "scene": "doors",
+   "params": {
+    "ending": true
+   },
+   "title": "Which One?",
+   "lines": [
+    "So which door are you opening?"
+   ],
+   "min_s": 3.2,
+   "ambience": "room",
+   "amb_gain": 0.4,
+   "music": {
+    "mood": "wonder",
+    "root": "D",
+    "gain": 0.5
+   },
+   "sfx": [
+    {
+     "name": "riser",
+     "at": 0.2,
+     "gain": 0.5
+    }
+   ]
+  }
+ ]
+}

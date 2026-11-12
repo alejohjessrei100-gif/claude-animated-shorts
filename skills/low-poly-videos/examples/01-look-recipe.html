@@ -1,0 +1,80 @@
+<!doctype html>
+<!-- WHAT THIS TEACHES: the whole look is one recipe. Low-detail objects + modern light + tiny render + ordered dither + nearest-neighbour upscale.
+     Use the buttons to switch each ingredient off and see what it contributes. Opens by double click; needs internet for three.js from the CDN. -->
+<html><head><meta charset="utf-8"><title>01 Look recipe</title>
+<style>body{margin:0;background:#15161a;color:#ddd;font:14px monospace;display:flex;gap:24px;height:100vh;align-items:center;justify-content:center}
+canvas{height:min(94vh,calc(44vw*16/9));aspect-ratio:9/16;image-rendering:pixelated}button{display:block;width:190px;margin:6px 0;padding:8px;background:#2b2d36;color:#eee;border:0;font:inherit;cursor:pointer}button.off{opacity:.45;text-decoration:line-through}</style>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"}}</script>
+</head><body><canvas id="c"></canvas><div id="ui"></div>
+<script type="module">
+import * as THREE from 'three';
+import {EffectComposer} from 'three/addons/postprocessing/EffectComposer.js';
+import {RenderPass} from 'three/addons/postprocessing/RenderPass.js';
+import {GTAOPass} from 'three/addons/postprocessing/GTAOPass.js';
+import {UnrealBloomPass} from 'three/addons/postprocessing/UnrealBloomPass.js';
+import {OutputPass} from 'three/addons/postprocessing/OutputPass.js';
+import {ShaderPass} from 'three/addons/postprocessing/ShaderPass.js';
+
+const opts = {lowres: true, ao: true, bloom: true, dither: true, shadows: true};
+const cv = document.getElementById('c');
+const renderer = new THREE.WebGLRenderer({canvas: cv, antialias: true});
+renderer.setPixelRatio(1);
+renderer.toneMapping = THREE.NoToneMapping;          // colours stay exactly as painted, like a console game
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+// Low-detail objects. Six-sided columns and 8-segment spheres are correct here.
+const scene = new THREE.Scene();
+scene.background = new THREE.Color('#7fb2e0');
+scene.fog = new THREE.Fog('#c5dbe9', 14, 60);
+const camera = new THREE.PerspectiveCamera(40, 9 / 16, .1, 200);
+const mat = (c, o = {}) => new THREE.MeshStandardMaterial({color: c, roughness: .8, ...o});
+const add = (g, m, x, y, z) => { const o = new THREE.Mesh(g, m); o.position.set(x, y, z); o.castShadow = o.receiveShadow = true; scene.add(o); return o; };
+add(new THREE.BoxGeometry(80, .2, 80), mat('#4f8a2a'), 0, -.1, 0);
+for (let i = 0; i < 7; i++) add(new THREE.CylinderGeometry(.35, .42, 5, 6), mat('#b9a98f'), i % 2 ? 3 : -3, 2.5, -i * 5);
+add(new THREE.BoxGeometry(1.4, 1.4, 1.4), mat('#b53a2c'), -1.1, .7, 0);
+add(new THREE.SphereGeometry(.9, 8, 6), mat('#2e5f83'), 1.1, .9, 1);
+const lamp = add(new THREE.SphereGeometry(.3, 8, 6), new THREE.MeshStandardMaterial({color: '#ffcf85', emissive: '#ffcf85', emissiveIntensity: 2.2}), 0, 3.2, -2);
+
+// Modern light on top: one strong sun, soft shadows, sky fill.
+scene.add(new THREE.HemisphereLight('#b9d6ff', '#58603a', 1.1));
+const sun = new THREE.DirectionalLight('#fff0d2', 3.1);
+sun.position.set(-20, 30, 16); sun.castShadow = true; sun.shadow.mapSize.set(2048, 2048); sun.shadow.radius = 2.5; sun.shadow.bias = -.0005;
+Object.assign(sun.shadow.camera, {left: -30, right: 30, top: 30, bottom: -30, near: 1, far: 90});
+scene.add(sun);
+
+// 4x4 ordered dither to 40 levels per channel. Runs last, at render resolution.
+const DITHER = {uniforms: {tDiffuse: {value: null}},
+  vertexShader: 'varying vec2 vUv; void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',
+  fragmentShader: `uniform sampler2D tDiffuse;varying vec2 vUv;const float B[16]=float[16](0.,8.,2.,10.,12.,4.,14.,6.,3.,11.,1.,9.,15.,7.,13.,5.);
+  void main(){vec4 c=texture2D(tDiffuse,vUv);ivec2 p=ivec2(mod(gl_FragCoord.xy,4.));float d=B[p.x+p.y*4]/16.-.47;gl_FragColor=vec4(clamp(floor(c.rgb*39.+.5+d)/39.,0.,1.),1.);}`};
+
+let composer;
+function build() {
+  const W = opts.lowres ? 270 : 810, H = opts.lowres ? 480 : 1440;
+  renderer.setSize(W, H, false);
+  cv.style.imageRendering = opts.lowres ? 'pixelated' : 'auto';   // nearest-neighbour upscale: hard pixels, never smoothed
+  renderer.shadowMap.enabled = opts.shadows; sun.castShadow = opts.shadows;
+  scene.traverse((o) => { if (o.material) o.material.needsUpdate = true; });
+  composer = new EffectComposer(renderer, new THREE.WebGLRenderTarget(W, H, {type: THREE.HalfFloatType, samples: 4}));
+  composer.addPass(new RenderPass(scene, camera));
+  if (opts.ao) { const a = new GTAOPass(scene, camera, W, H); a.updateGtaoMaterial({radius: .35, distanceExponent: 1.4, thickness: 1, scale: 1.25, samples: 12, screenSpaceRadius: false}); a.blendIntensity = 1; composer.addPass(a); }
+  if (opts.bloom) composer.addPass(new UnrealBloomPass(new THREE.Vector2(W, H), .35, .55, 1));
+  composer.addPass(new OutputPass());
+  if (opts.dither) composer.addPass(new ShaderPass(DITHER));
+}
+build();
+const ui = document.getElementById('ui');
+for (const [k, label] of [['lowres', '270x480 render'], ['dither', 'Bayer dither'], ['ao', 'ambient occlusion'], ['bloom', 'bloom'], ['shadows', 'soft shadows']]) {
+  const b = document.createElement('button'); b.textContent = label;
+  b.onclick = () => { opts[k] = !opts[k]; b.className = opts[k] ? '' : 'off'; build(); };
+  ui.appendChild(b);
+}
+renderer.setAnimationLoop((ms) => {
+  const t = ms / 1000;
+  camera.position.set(Math.sin(t * .2) * 1.2, 1.2, 14 - Math.sin(t * .15));   // low camera, tiny slow drift
+  camera.lookAt(0, 5.2, -8);                                                  // looking up leaves room for sky and captions
+  lamp.position.y = 3.2 + Math.sin(t) * .2;
+  composer.render();
+});
+</script></body></html>

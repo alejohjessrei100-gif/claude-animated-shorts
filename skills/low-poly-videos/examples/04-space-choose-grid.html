@@ -1,0 +1,50 @@
+<!doctype html>
+<!-- WHAT THIS TEACHES: the hook of the "choose" format. Numbered planets in a grid over a starfield, procedural planet maps,
+     a thin additive atmosphere shell, and one hard light from the side so each world has a night side. -->
+<html><head><meta charset="utf-8"><title>04 Space grid</title>
+<style>body{margin:0;background:#111;display:grid;place-items:center;height:100vh}#w{position:relative;height:min(96vh,calc(96vw*16/9));aspect-ratio:9/16}canvas{position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated}</style>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"}}</script>
+</head><body><div id="w"><canvas id="c"></canvas><canvas id="t" width="270" height="480"></canvas></div>
+<script type="module">
+import * as THREE from 'three';
+import {EffectComposer} from 'three/addons/postprocessing/EffectComposer.js';
+import {RenderPass} from 'three/addons/postprocessing/RenderPass.js';
+import {UnrealBloomPass} from 'three/addons/postprocessing/UnrealBloomPass.js';
+import {OutputPass} from 'three/addons/postprocessing/OutputPass.js';
+
+const W = 270, H = 480;
+let seed = 99; const R = () => (seed = (seed * 1664525 + 1013904223) >>> 0) / 4294967296;
+const grid = new Float32Array(4096).map(R);
+const vn = (x, y) => { const xi = Math.floor(x), yi = Math.floor(y), u = x - xi, v = y - yi, g = (a, b) => grid[((b & 63) << 6) + (a & 63)], s = (t) => t * t * (3 - 2 * t); return g(xi, yi) * (1 - s(u)) * (1 - s(v)) + g(xi + 1, yi) * s(u) * (1 - s(v)) + g(xi, yi + 1) * (1 - s(u)) * s(v) + g(xi + 1, yi + 1) * s(u) * s(v); };
+const fbm = (x, y) => vn(x, y) * .5 + vn(x * 2, y * 2) * .25 + vn(x * 4, y * 4) * .125 + vn(x * 8, y * 8) * .0625;
+
+const renderer = new THREE.WebGLRenderer({canvas: document.getElementById('c'), antialias: true});
+renderer.setPixelRatio(1); renderer.setSize(W, H, false); renderer.toneMapping = THREE.NoToneMapping;
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(34, W / H, .1, 500); camera.position.set(0, 0, 44);
+
+const pal = (colors, bands, off) => { const c = document.createElement('canvas'); c.width = 512; c.height = 256; const g = c.getContext('2d'), im = g.createImageData(512, 256);
+  for (let y = 0, i = 0; y < 256; y++) for (let x = 0; x < 512; x++, i += 4) { let n = fbm(x / 64 + off, y / 64 + off); if (bands) n = (y / 256 * 5 + n) % 1; else n = Math.min(.999, Math.max(0, (n - .47) * 2.4 + .5)); const f = n * (colors.length - 1), k = Math.floor(f), a = colors[k], b = colors[Math.min(colors.length - 1, k + 1)]; im.data.set([0, 1, 2].map((j) => a[j] + (b[j] - a[j]) * (f - k)).concat(255), i); }
+  g.putImageData(im, 0, 0); const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t; };
+const haloMat = (color) => new THREE.ShaderMaterial({transparent: true, side: THREE.BackSide, depthWrite: false, blending: THREE.AdditiveBlending, uniforms: {c: {value: new THREE.Color(color)}},
+  vertexShader: 'varying vec3 n;varying vec3 v;void main(){n=normalize(normalMatrix*normal);vec4 p=modelViewMatrix*vec4(position,1.);v=normalize(p.xyz);gl_Position=projectionMatrix*p;}',
+  fragmentShader: 'uniform vec3 c;varying vec3 n;varying vec3 v;void main(){float k=pow(clamp(1.+dot(n,v)*.95,0.,1.),3.)*clamp(dot(-n,v)*6.,0.,1.);gl_FragColor=vec4(c,1.)*k;}'});
+const PLANETS = [
+  {at: [-3.7, 6.8], map: pal([[18, 58, 102], [42, 122, 68], [201, 178, 124]], false, 3), halo: '#6fb5ff', n: '01'},
+  {at: [3.7, 6.8], map: pal([[184, 131, 74], [232, 201, 138], [138, 78, 46]], true, 11), halo: '#ffc98a', n: '02'},
+  {at: [-3.7, -2.4], map: pal([[20, 8, 6], [50, 22, 16], [255, 90, 26]], false, 21), halo: '#ff5a1a', n: '03'},
+  {at: [3.7, -2.4], map: pal([[150, 190, 215], [225, 240, 248], [255, 255, 255]], false, 31), halo: '#bfe6ff', n: '04'},
+];
+const bodies = PLANETS.map((p) => { const m = new THREE.Mesh(new THREE.SphereGeometry(3.1, 48, 32), new THREE.MeshStandardMaterial({map: p.map, roughness: .9})); m.position.set(p.at[0], p.at[1], 0); m.rotation.z = .32; scene.add(m); const h = new THREE.Mesh(new THREE.SphereGeometry(3.38, 48, 32), haloMat(p.halo)); h.position.copy(m.position); scene.add(h); return m; });
+const sun = new THREE.DirectionalLight('#fff4de', 3.4); sun.position.set(-20, 8, 14); scene.add(sun, new THREE.HemisphereLight('#1b2238', '#000', .18));
+const sc = document.createElement('canvas'); sc.width = 2048; sc.height = 1024; const sg = sc.getContext('2d'); sg.fillStyle = '#03040c'; sg.fillRect(0, 0, 2048, 1024); for (let i = 0; i < 5200; i++) { const v = 70 + R() * 185; sg.fillStyle = `rgb(${v},${v},${v * .96})`; sg.fillRect(R() * 2048, R() * 1024, 1, 1); }
+const stars = new THREE.CanvasTexture(sc); stars.colorSpace = THREE.SRGBColorSpace; stars.mapping = THREE.EquirectangularReflectionMapping; scene.background = stars;
+
+// Numbers and title drawn at render resolution, thresholded to hard pixels.
+const tc = document.getElementById('t').getContext('2d'); tc.textAlign = 'center'; tc.fillStyle = '#fff'; tc.font = 'bold 19px monospace'; tc.fillText('Pick a World', W / 2, 42); tc.font = 'bold 15px monospace'; PLANETS.forEach((p) => tc.fillText(p.n, W / 2 + p.at[0] * 17.84, H / 2 - (p.at[1] - 3.1) * 17.84 + 16));
+const id = tc.getImageData(0, 0, W, H); for (let i = 3; i < id.data.length; i += 4) id.data[i] = id.data[i] > 96 ? 255 : 0; tc.putImageData(id, 0, 0);
+
+const composer = new EffectComposer(renderer, new THREE.WebGLRenderTarget(W, H, {type: THREE.HalfFloatType, samples: 4}));
+composer.addPass(new RenderPass(scene, camera)); composer.addPass(new UnrealBloomPass(new THREE.Vector2(W, H), .5, .55, .92)); composer.addPass(new OutputPass());
+renderer.setAnimationLoop((ms) => { const t = ms / 1000; bodies.forEach((b, i) => { b.rotation.y = i + t * .12; }); composer.render(); });
+</script></body></html>

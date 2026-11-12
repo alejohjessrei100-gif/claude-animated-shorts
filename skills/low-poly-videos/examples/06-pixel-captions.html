@@ -1,0 +1,37 @@
+<!doctype html>
+<!-- WHAT THIS TEACHES: captions are part of the picture. Text is drawn at the 270x480 render size, antialiasing is thresholded away,
+     an outline is made by growing the shape, and the result is scaled up with nearest neighbour. Shows phrase mode (calm formats),
+     a title, and word mode with one yellow keyword (fast formats). The mini-engine loads these fonts from npm; here they come from Google Fonts. -->
+<html><head><meta charset="utf-8"><title>06 Pixel captions</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=VT323&display=block" rel="stylesheet">
+<style>body{margin:0;background:#111;display:flex;gap:18px;justify-content:center;align-items:center;height:100vh}canvas{height:min(94vh,calc(44vw*16/9));aspect-ratio:9/16;image-rendering:pixelated;background:linear-gradient(#7fb2e0 0 62%,#4f8a2a 62%)}</style>
+</head><body><canvas id="a" width="270" height="480"></canvas><canvas id="b" width="270" height="480"></canvas>
+<script>
+const W = 270, H = 480, YELLOW = [255, 214, 40], WHITE = [255, 255, 255];
+function wrap(g, text, max) { const out = []; let l = ''; for (const w of text.split(' ')) { const n = l ? l + ' ' + w : w; if (l && g.measureText(n).width > max) { out.push(l); l = w; } else l = n; } if (l) out.push(l); return out; }
+function stamp(canvas, items) {
+  const g = canvas.getContext('2d', {willReadFrequently: true}), out = g.createImageData(W, H);
+  for (const c of items) {
+    g.clearRect(0, 0, W, H); g.font = c.font; g.textBaseline = 'top'; g.fillStyle = '#fff';
+    wrap(g, c.text, W - 24).forEach((line, n) => g.fillText(line, Math.round((W - g.measureText(line).width) / 2), Math.round(c.top + n * c.step)));
+    const a = g.getImageData(0, 0, W, H).data, solid = new Uint8Array(W * H);
+    for (let i = 0; i < W * H; i++) solid[i] = a[i * 4 + 3] > 96 ? 1 : 0;                        // no soft edges survive this line
+    for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
+      const p = (y * W + x) * 4; if (solid[y * W + x]) { out.data.set([...(c.hi ? YELLOW : WHITE), 255], p); continue; }
+      let edge = false; for (let dy = -c.radius; dy <= c.radius; dy++) for (let dx = -c.radius; dx <= c.radius; dx++) { const X = x + dx, Y = y + dy; if (X >= 0 && Y >= 0 && X < W && Y < H && solid[Y * W + X]) edge = true; }
+      if (edge && !out.data[p + 3]) out.data.set([0, 0, 0, 255], p);
+    }
+  }
+  g.clearRect(0, 0, W, H); g.putImageData(out, 0, 0);
+}
+Promise.all([document.fonts.load('16px VT323'), document.fonts.load('21px "Archivo Black"')]).then(() => {
+  stamp(document.getElementById('a'), [
+    {text: 'Pick a Door', font: '24px VT323', top: 53, step: 22, radius: 1},
+    {text: 'There is a little house up ahead, and you have seen it before.', font: '16px VT323', top: 91, step: 14, radius: 1},
+  ]);
+  const words = ['First', 'we', 'pour', 'the', 'concrete'];
+  let i = 0;
+  const tick = () => { const w = words[i % words.length]; stamp(document.getElementById('b'), [{text: w, font: '21px "Archivo Black"', top: (Math.floor(i / 5) % 2 ? .72 : .13) * H, step: 24, radius: 2, hi: w === 'concrete'}]); i++; };
+  tick(); setInterval(tick, 380);
+});
+</script></body></html>
