@@ -24,8 +24,12 @@ export const KENNEY = ["car/taxi", "car/van", "car/delivery", "car/sedan", "car/
 let kitP: Promise<Kit> | null = null;
 export const loadKit = () => {
   if (!kitP) {
+    // all models ship in one JSON (base64 GLBs: hosts that refuse .glb still serve .json); textures stay PNG files
     const loader = new GLTFLoader();
-    kitP = Promise.all(KENNEY.map((n) => loader.loadAsync(asset(`fry/kenney/${n}.glb`)).then((g) => [n, g.scene] as const).catch(() => [n, null] as const)))
+    const b64 = (s: string) => { const bin = atob(s), u = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i); return u.buffer; };
+    kitP = fetch(asset("fry/kenney.json")).then((r) => r.json() as Promise<Record<string, string>>).then((pack) =>
+      Promise.all(KENNEY.map((n) => (pack[n] ? loader.parseAsync(b64(pack[n]), asset(`fry/kenney/${n.split("/")[0]}/`)).then((g) => [n, g.scene] as const) : Promise.reject())
+        .catch(() => [n, null] as const))))
       .then((list) => Object.fromEntries(list.filter((e) => e[1]).map(([n, s]) => [n, s!])) as Kit);
   }
   return kitP;

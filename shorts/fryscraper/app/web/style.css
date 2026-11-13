@@ -1,9 +1,9 @@
 :root { --bg: #f4efe6; --fg: #1d1a24; --muted: #6b6476; --card: #ffffff; --line: #e3dccf; --accent: #e2522e; --accent-fg: #ffffff; --bar: #f0b43c; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg: #14121a; --fg: #f3eee6; --muted: #a69fb2; --card: #1f1c27; --line: #302b3a; --accent: #ff6a3d; --accent-fg: #1a0f0a; --bar: #f0b43c; } }
-:root[data-theme="dark"] { --bg: #14121a; --fg: #f3eee6; --muted: #a69fb2; --card: #1f1c27; --line: #302b3a; --accent: #ff6a3d; --accent-fg: #1a0f0a; --bar: #f0b43c; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg: #14121a; --fg: #f3eee6; --muted: #a69fb2; --card: #1f1c27; --line: #302b3a; --accent: #ff6a3d; --accent-fg: #1a0f0a; --bar: #f0b43c; color-scheme: dark; } }
+:root[data-theme="dark"] { --bg: #14121a; --fg: #f3eee6; --muted: #a69fb2; --card: #1f1c27; --line: #302b3a; --accent: #ff6a3d; --accent-fg: #1a0f0a; --bar: #f0b43c; color-scheme: dark; }
 * { box-sizing: border-box; }
 html, body { margin: 0; background: var(--bg); color: var(--fg); font: 16px/1.45 Inter, system-ui, sans-serif; }
-main { max-width: 520px; margin: 0 auto; padding: 18px 16px 40px; }
+main { max-width: 520px; margin: 0 auto; padding-block: 18px 40px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
 h1 { font: 600 26px/1.15 Fredoka, Inter, sans-serif; margin: 6px 0 6px; }
 h2 { font: 600 18px/1.2 Fredoka, Inter, sans-serif; margin: 0 0 12px; }
 .sub { color: var(--muted); margin: 0 0 14px; font-size: 14px; }
@@ -23,3 +23,5 @@ h2 { font: 600 18px/1.2 Fredoka, Inter, sans-serif; margin: 0 0 12px; }
 .done video { width: 100%; border-radius: 12px; margin-bottom: 10px; background: #000; }
 .err { color: var(--accent); font-size: 14px; }
 footer { color: var(--muted); font-size: 12px; text-align: center; margin-top: 18px; }
+button:focus-visible, a:focus-visible { outline: 3px solid var(--bar); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) { .bar i { transition: none; } }

@@ -18,7 +18,7 @@ import { InkPass, noInkFallback } from "./ink";
 import { LensBlur, GrainEffect } from "./lensblur";
 import { GradeEffect, GRADES, GRADE_STRENGTH, gradeFor } from "./grade";
 import { Kit } from "./build";
-import { Audio } from "remotion";
+import { Audio } from "@remotion/media";
 import { asset } from "./assets";
 import { TOTAL, FLASH_AT, SHOTS, layersAt, dofAt } from "./story";
 
