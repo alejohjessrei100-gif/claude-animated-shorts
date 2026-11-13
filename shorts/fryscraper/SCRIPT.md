@@ -1,4 +1,4 @@
-# "The Skyscraper That Cooked a Car" — original script v1 (2026-11-13)
+# "The Skyscraper That Cooked a Car" — original script v2 (2026-11-13, trimmed for length)
 Format: ~60 s vertical short, ~3.7 words/s, one steady narrator voice, our own characters + story. No captions.
 
 ## Facts (sources)
@@ -17,11 +17,11 @@ Format: ~60 s vertical short, ~3.7 words/s, one steady narrator voice, our own c
   sunbathers and melting plastic bags; fixed with film and big umbrellas. (en.wikipedia.org/wiki/Vdara; abc7 archive)
 
 ## Script
-In 2013, a London skyscraper melted a car, without ever touching it.
-It's a hot September, and a shiny new tower is rising in the middle of the city. Locals call it the Walkie-Talkie.
+In 2013, a skyscraper melted a car, without ever touching it.
+It's a hot September, and a shiny new tower is rising in the middle of London. Locals call it the Walkie-Talkie.
 One morning, a man parks his brand new Jaguar across the street and heads off to work.
 An hour later, he comes back. The mirror has drooped like an ice cream. The badge has slid right off. The side of the car is bubbling.
-Down the road, people start testing it. A thermometer on the pavement hits ninety-one degrees.
+A thermometer on the pavement hits ninety-one degrees.
 A reporter brings a frying pan, cracks an egg onto it, and the egg actually fries.
 Luckily, the sun moves across the sky, so the hot spot keeps moving.
 Unluckily, the sun moves across the sky, so the hot spot keeps moving.
